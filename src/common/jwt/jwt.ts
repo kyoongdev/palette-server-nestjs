@@ -12,7 +12,7 @@ import type {
 import { TokenDTO } from '@/modules/auth/dto';
 
 @Injectable()
-export class Jsonwebtoken {
+export class JwtProvider {
   private readonly accessTokenExpiresIn = '2h' as const;
   private readonly refreshTokenExpiresIn = '14d' as const;
 
