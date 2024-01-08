@@ -1,0 +1,9 @@
+node_modules
+dist
+aws
+.husky
+prisma
+test
+
+*.js
+*.yml
