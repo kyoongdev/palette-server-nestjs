@@ -10,10 +10,10 @@ services:
       - mysqldata_master:/var/lib/mysql
       - ./docker/db/master/my.cnf:/etc/my.cnf
     environment:
-      - MYSQL_ROOT_PASSWORD=RoofS3cret
-      - MYSQL_USER=roof_user
-      - MYSQL_DATABASE=roof
-      - MYSQL_PASSWORD=RoofS3cret
+      - MYSQL_ROOT_PASSWORD=PaletteSecret
+      - MYSQL_USER=palette_user
+      - MYSQL_DATABASE=palette
+      - MYSQL_PASSWORD=PaletteSecret
     networks:
       - mynetwork
   database_slave:
@@ -28,10 +28,10 @@ services:
       - mysqldata_slave:/var/lib/mysql
       - ./docker/db/slave/my.cnf:/etc/my.cnf
     environment:
-      - MYSQL_ROOT_PASSWORD=RoofS3cret
-      - MYSQL_USER=roof_user
-      - MYSQL_DATABASE=roof
-      - MYSQL_PASSWORD=RoofS3cret
+      - MYSQL_ROOT_PASSWORD=PaletteSecret
+      - MYSQL_USER=palette_user
+      - MYSQL_DATABASE=palette
+      - MYSQL_PASSWORD=PaletteSecret
     networks:
       - mynetwork
 networks:
