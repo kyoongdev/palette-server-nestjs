@@ -5,14 +5,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import Interceptors from './common/interceptor';
 import { JwtProvider } from './common/jwt/jwt';
-import { typeORMConfig } from './database/config';
+import { MysqlConfigProvider } from './database/config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot(typeORMConfig),
+    TypeOrmModule.forRootAsync({
+      useClass: MysqlConfigProvider,
+    }),
   ],
   controllers: [AppController],
   providers: [JwtProvider, ...Interceptors],

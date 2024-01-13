@@ -1,28 +1,36 @@
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 
-const config = new ConfigService();
+@Injectable()
+export class MysqlConfigProvider implements TypeOrmOptionsFactory {
+  constructor(private configService: ConfigService) {}
 
-export const typeORMConfig: TypeOrmModuleOptions = {
-  type: 'mysql',
-  entities: [],
-  synchronize: false,
-  replication: {
-    master: {
-      host: config.get('DATABASE_HOST'),
-      port: config.get('DATABASE_PORT'),
-      username: config.get('DATABASE_USER_NAME'),
-      password: config.get('DATABASE_PASSWORD'),
-      database: config.get('DATABASE_NAME'),
-    },
-    slaves: [
-      {
-        host: config.get('SLAVE_DATABASE_HOST'),
-        port: config.get('SLAVE_DATABASE_PORT'),
-        username: config.get('SLAVE_DATABASE_USER_NAME'),
-        password: config.get('SLAVE_DATABASE_PASSWORD'),
-        database: config.get('SLAVE_DATABASE_NAME'),
+  createTypeOrmOptions(): TypeOrmModuleOptions {
+    return {
+      type: 'mysql',
+
+      autoLoadEntities: true,
+      synchronize: true,
+      logging: true,
+      replication: {
+        master: {
+          host: this.configService.get('DATABASE_HOST'),
+          port: this.configService.get<number>('DATABASE_PORT'),
+          username: this.configService.get('DATABASE_USER_NAME'),
+          password: this.configService.get('DATABASE_PASSWORD'),
+          database: this.configService.get('DATABASE_NAME'),
+        },
+        slaves: [
+          {
+            host: this.configService.get('SLAVE_DATABASE_HOST'),
+            port: this.configService.get<number>('SLAVE_DATABASE_PORT'),
+            username: this.configService.get('SLAVE_DATABASE_USER_NAME'),
+            password: this.configService.get('SLAVE_DATABASE_PASSWORD'),
+            database: this.configService.get('SLAVE_DATABASE_NAME'),
+          },
+        ],
       },
-    ],
-  },
-};
+    };
+  }
+}
