@@ -20,6 +20,7 @@ class AppConfig {
 
     return this;
   }
+
   async startServer() {
     await this.configureDatabase();
     await this.app.listen(8000, () => {

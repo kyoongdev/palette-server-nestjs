@@ -1,11 +1,580 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+
+  email        String? @db.VarChar(255)
+  password     String? @db.VarChar(255)
+  name         String? @db.VarChar(255)
+  nickname     String? @db.VarChar(255)
+  profileImage String? @db.VarChar(255)
+  phoneNumber  String? @db.Char(11)
+
+  isAlarmAccepted Boolean @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  social   UserSocial?
+  musician Musician?
+}
+
+model UserSocial {
+  id String @id @default(uuid())
+
+  socialType Int    @db.TinyInt
+  socialId   String @unique
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Musician {
+  id String @id @default(uuid())
+
+  // 기본 정보
+  stageName    String  @db.VarChar(200)
+  name         String  @db.VarChar(100)
+  groupType    Int     @db.TinyInt
+  introduction String? @db.MediumText
+  isPending    Boolean @default(true)
+  isAuthorized Boolean @default(false)
+
+  // 계좌 정보
+  bankCode             String @db.VarChar(10)
+  bankAccount          String @db.VarChar(30)
+  bankAccountOwnerName String @db.VarChar(20)
+
+  // 증빙자료
+  evidenceFileUrl String @db.VarChar(255)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  userId    String             @unique
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // 직책
+  positions MusicianPosition[]
+  // SNS 주소
+  snses     MusicianSns[]
+  services  MusicianService[]
+}
+
+model MusicianService {
+  id         String   @id @default(uuid())
+  musicianId String
+  musician   Musician @relation(fields: [musicianId], references: [id])
+
+  mrBeatId       String?
+  mrBeat         MrBeat?       @relation(fields: [mrBeatId], references: [id])
+  mixMasteringId String?
+  mixMastering   MixMastering? @relation(fields: [mixMasteringId], references: [id])
+  recordingId    String?
+  recording      Recording?    @relation(fields: [recordingId], references: [id])
+  artistId       String?
+  artist         Artist?       @relation(fields: [artistId], references: [id])
+  albumArtId     String?
+  albumArt       AlbumArt?     @relation(fields: [albumArtId], references: [id])
+}
+
+model MusicianPosition {
+  positionId String
+  position   Position @relation(fields: [positionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  musicianId String
+  musician   Musician @relation(fields: [musicianId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([positionId, musicianId])
+}
+
+model Position {
+  id String @id @default(uuid())
+
+  name String @db.VarChar(100)
+
+  musicianPositions MusicianPosition[]
+}
+
+model MusicianSns {
+  snsId      String
+  sns        Sns      @relation(fields: [snsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  musicianId String
+  musician   Musician @relation(fields: [musicianId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  link       String   @db.VarChar(255)
+
+  @@id([snsId, musicianId])
+}
+
+model Sns {
+  id String @id @default(uuid())
+
+  name String @db.VarChar(100)
+
+  MusicianSnS MusicianSns[]
+}
+
+model MrBeat {
+  id String @id @default(uuid())
+
+  name      String @db.VarChar(255)
+  groupType Int    @db.TinyInt
+
+  thumbmailId String
+  thumbnail   Image  @relation(fields: [thumbmailId], references: [id])
+
+  musicId String
+  music   File   @relation(fields: [musicId], references: [id])
+
+  genre   Genre  @relation(fields: [genreId], references: [id])
+  genreId String @unique
+
+  mood   Mood   @relation(fields: [moodId], references: [id])
+  moodId String @unique
+
+  isPending    Boolean @default(true)
+  isAuthorized Boolean @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  contacts         MrBeatContact[]
+  licenses         MrBeatLicense[]
+  musicianServices MusicianService[]
+}
+
+model MrBeatContact {
+  mrBeatId  String
+  mrBeat    MrBeat  @relation(fields: [mrBeatId], references: [id])
+  contactId String
+  contact   Contact @relation(fields: [contactId], references: [id])
+
+  method String
+
+  @@id([mrBeatId, contactId])
+}
+
+model MrBeatLicense {
+  id String @id @default(uuid())
+
+  usePeriod                    String?
+  cost                         Int     @db.SmallInt
+  isNewSongWithVoiceAllowed    Boolean
+  isProfitActivityAllowed      Boolean
+  isPerformanceActivityAllowed Boolean
+  isBackgrounMusicAllowed      Boolean
+  isMVProduceAllowed           Boolean
+  isShareAllowed               Boolean
+  isArrangeAllowed             Boolean
+
+  licenseId     String
+  license       License                     @relation(fields: [licenseId], references: [id])
+  mrBeatId      String
+  mrBeat        MrBeat                      @relation(fields: [mrBeatId], references: [id])
+  providedFiles MrBeatLicenseProvidedFile[]
+
+  @@unique([licenseId, mrBeatId])
+}
+
+model MrBeatLicenseProvidedFile {
+  id String @id @default(uuid())
+
+  extension String
+
+  mrBeatLicenseId String
+  mrBeatLicense   MrBeatLicense @relation(fields: [mrBeatLicenseId], references: [id])
+}
+
+model Artist {
+  id String @id @default(uuid())
+
+  name              String  @db.VarChar(255)
+  description       String  @db.LongText
+  updateDescription String  @db.MediumText
+  isPending         Boolean @default(true)
+  isAuthorized      Boolean @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  images           ArtistImage[]
+  saleTypes        ArtistSaleTypeBridge[]
+  contacts         ArtistContact[]
+  ArtistLicense    ArtistLicense[]
+  musicianServices MusicianService[]
+}
+
+model ArtistLicense {
+  id String @id @default(uuid())
+
+  cost        Int @db.SmallInt
+  updateCount Int @db.TinyInt
+  workPeriod  Int @db.SmallInt
+  draftCount  Int @db.SmallInt
+
+  isCopyRightTransferAllowed Boolean
+  isCommercialUseAllowed     Boolean
+  isOriginFileProvided       Boolean
+  isApplicationAvailable     Boolean
+
+  licenseId String
+  license   License @relation(fields: [licenseId], references: [id])
+  artistId  String
+  artist    Artist  @relation(fields: [artistId], references: [id])
+
+  providedFiles ArtistLicenseProvidedFile[]
+
+  @@unique([licenseId, artistId])
+}
+
+model ArtistLicenseProvidedFile {
+  id String @id @default(uuid())
+
+  extension String
+
+  ArtistLicense   ArtistLicense @relation(fields: [artistLicenseId], references: [id])
+  artistLicenseId String
+}
+
+model ArtistContact {
+  artistId  String
+  artist    Artist  @relation(fields: [artistId], references: [id])
+  contactId String
+  contact   Contact @relation(fields: [contactId], references: [id])
+
+  method String
+
+  @@id([artistId, contactId])
+}
+
+model ArtistSaleTypeBridge {
+  artistId   String
+  artist     Artist         @relation(fields: [artistId], references: [id])
+  saleTypeId String
+  saleType   ArtistSaleType @relation(fields: [saleTypeId], references: [id])
+
+  @@id([artistId, saleTypeId])
+}
+
+model ArtistSaleType {
+  id String @id @default(uuid())
+
+  name            String
+  artistSaleTypes ArtistSaleTypeBridge[]
+}
+
+model ArtistImage {
+  isThumbnail Boolean
+
+  artistId String
+  artist   Artist @relation(fields: [artistId], references: [id])
+  imageId  String
+  image    Image  @relation(fields: [imageId], references: [id])
+
+  @@id([artistId, imageId])
+}
+
+model Recording {
+  id String @id @default(uuid())
+
+  name                String  @db.VarChar(20)
+  studioName          String  @db.VarChar(20)
+  isEngineerSupported Boolean
+  reservationLink     String  @db.VarChar(255)
+  description         String  @db.MediumText
+  isPending           Boolean @default(true)
+  isAuthorized        Boolean @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  images RecordingImage[]
+
+  recordingRegion   RecordingRegion    @relation(fields: [recordingRegionId], references: [id])
+  recordingRegionId String
+  recordingLicense  RecordingLicense[]
+  musicianServices  MusicianService[]
+}
+
+model RecordingLicense {
+  id String @id @default(uuid())
+
+  useTime Int @db.TinyInt
+  cost    Int @db.SmallInt
+
+  recordingId String
+  recording   Recording @relation(fields: [recordingId], references: [id])
+  licenseId   String
+  license     License   @relation(fields: [licenseId], references: [id])
+
+  @@unique([recordingId, licenseId])
+}
+
+model RecordingRegion {
+  id String @id @default(uuid())
+
+  regionLargeGroupId String
+  regionLargeGroup   RegionLargeGroup  @relation(fields: [regionLargeGroupId], references: [id])
+  regionSmallGroupId String?
+  regionSmallGroup   RegionSmallGroup? @relation(fields: [regionSmallGroupId], references: [id])
+
+  recording Recording[]
+}
+
+model RecordingImage {
+  imageId     String
+  image       Image     @relation(fields: [imageId], references: [id])
+  recordingId String
+  recording   Recording @relation(fields: [recordingId], references: [id])
+
+  isThumbnail Boolean @default(false)
+
+  @@id([imageId, recordingId])
+}
+
+model RegionLargeGroup {
+  id   String @id @default(uuid())
+  name String @db.VarChar(20)
+
+  regions          RegionSmallGroup[]
+  recordingRegions RecordingRegion[]
+}
+
+model RegionSmallGroup {
+  id   String @id @default(uuid())
+  name String @db.VarChar(20)
+
+  largeGroupId String
+  largeGroup   RegionLargeGroup @relation(fields: [largeGroupId], references: [id])
+
+  recordingRegions RecordingRegion[]
+}
+
+model MixMastering {
+  id String @id @default(uuid())
+
+  name              String  @db.VarChar(20)
+  description       String  @db.MediumText
+  updateDescription String  @db.MediumText
+  isPending         Boolean @default(true)
+  isAuthorized      Boolean @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  thumbnailId      String
+  thumbnail        Image                 @relation(fields: [thumbnailId], references: [id])
+  musics           MixMasteringMusic[]
+  genres           MixMasteringGenre[]
+  contacts         MixMasteringContact[]
+  licenses         MixMasteringLicense[]
+  musicianServices MusicianService[]
+}
+
+model MixMasteringLicense {
+  id String @id @default(uuid())
+
+  cost        Int @db.SmallInt
+  updateCount Int @db.TinyInt
+  workPeriod  Int @db.SmallInt
+  draftCount  Int @db.SmallInt
+
+  isCopyRightTransferAllowed Boolean
+  isCommercialUseAllowed     Boolean
+  isOriginFileProvided       Boolean
+  isApplicationAvailable     Boolean
+
+  licenseId      String
+  license        License      @relation(fields: [licenseId], references: [id])
+  mixMasteringId String
+  mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id])
+
+  @@unique([mixMasteringId, licenseId])
+}
+
+model MixMasteringContact {
+  mixMasteringId String
+  mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id])
+  contactId      String
+  contact        Contact      @relation(fields: [contactId], references: [id])
+
+  method String
+
+  @@id([mixMasteringId, contactId])
+}
+
+model MixMasteringGenre {
+  mixMasteringId String
+  mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id])
+  genreId        String
+  genre          Genre        @relation(fields: [genreId], references: [id])
+
+  @@id([mixMasteringId, genreId])
+}
+
+model MixMasteringMusic {
+  mixMasteringId String
+  mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id])
+  musicId        String
+  music          File         @relation(fields: [musicId], references: [id])
+
+  isBefore Boolean
+  isAfter  Boolean
+
+  @@id([mixMasteringId, musicId])
+}
+
+model AlbumArt {
+  id String @id @default(uuid())
+
+  name              String  @db.VarChar(20)
+  description       String  @db.MediumText
+  updateDescription String  @db.MediumText
+  isPending         Boolean @default(true)
+  isAuthorized      Boolean @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  images           AlbumArtImage[]
+  saleTypes        AlbumArtSaleTypeBridge[]
+  contacts         AlbumArtContact[]
+  licenses         AlbumArtLicense[]
+  musicianServices MusicianService[]
+}
+
+model AlbumArtLicense {
+  id String @id @default(uuid())
+
+  cost        Int @db.SmallInt
+  updateCount Int @db.TinyInt
+  workPeriod  Int @db.SmallInt
+  draftCount  Int @db.SmallInt
+
+  isCopyRightTransferAllowed Boolean
+  isCommercialUseAllowed     Boolean
+  isOriginFileProvided       Boolean
+  isApplicationAvailable     Boolean
+
+  licenseId  String
+  license    License  @relation(fields: [licenseId], references: [id])
+  albumArtId String
+  albumArt   AlbumArt @relation(fields: [albumArtId], references: [id])
+
+  @@unique([albumArtId, licenseId])
+}
+
+model AlbumArtContact {
+  albumArtId String
+  albumArt   AlbumArt @relation(fields: [albumArtId], references: [id])
+  contactId  String
+  contact    Contact  @relation(fields: [contactId], references: [id])
+
+  method String
+
+  @@id([albumArtId, contactId])
+}
+
+model AlbumArtImage {
+  albumArtId String
+  albumArt   AlbumArt @relation(fields: [albumArtId], references: [id])
+  imageId    String
+  image      Image    @relation(fields: [imageId], references: [id])
+
+  isThumbnail Boolean @default(false)
+
+  @@id([albumArtId, imageId])
+}
+
+model AlbumArtSaleTypeBridge {
+  albumArtId String
+  albumArt   AlbumArt         @relation(fields: [albumArtId], references: [id])
+  saleTypeId String
+  saleType   AlbumArtSaleType @relation(fields: [saleTypeId], references: [id])
+
+  @@id([albumArtId, saleTypeId])
+}
+
+model AlbumArtSaleType {
+  id String @id @default(uuid())
+
+  name              String
+  albumArtSaleTypes AlbumArtSaleTypeBridge[]
+}
+
+model Image {
+  id String @id @default(uuid())
+
+  originalName String @db.VarChar(255)
+  extension    String @db.VarChar(20)
+
+  url String @db.VarChar(255)
+
+  mrBeatThumbnail       MrBeat[]
+  artistImages          ArtistImage[]
+  recordingImages       RecordingImage[]
+  mixMasteringThumbnail MixMastering[]
+  albumArtImages        AlbumArtImage[]
+}
+
+model File {
+  id String @id @default(uuid())
+
+  originalName String @db.VarChar(255)
+  extension    String @db.VarChar(20)
+
+  url String @db.VarChar(255)
+
+  mrBeatMusics       MrBeat[]
+  mixMasteringMusics MixMasteringMusic[]
+}
+
+model Contact {
+  id String @id @default(uuid())
+
+  name                 String                @db.VarChar(20)
+  mrBeatContacts       MrBeatContact[]
+  artistContacts       ArtistContact[]
+  mixMasteringContacts MixMasteringContact[]
+  albumArtContacts     AlbumArtContact[]
+}
+
+model Genre {
+  id String @id @default(uuid())
+
+  name String @db.VarChar(20)
+
+  mrBeatGenres       MrBeat[]
+  mixMasteringGenres MixMasteringGenre[]
+}
+
+model Mood {
+  id String @id @default(uuid())
+
+  name       String   @db.VarChar(20)
+  mrBeatMood MrBeat[]
+}
+
+model License {
+  id String @id @default(uuid())
+
+  name                 String                @db.VarChar(30)
+  mrBeatLicenses       MrBeatLicense[]
+  artistLicenses       ArtistLicense[]
+  recordingLicenses    RecordingLicense[]
+  mixMasteringLicenses MixMasteringLicense[]
+  albumArtLicenses     AlbumArtLicense[]
 }
