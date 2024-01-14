@@ -1,5 +1,3 @@
 import { UserModule } from './user/user.module';
-
-const Modules = [UserModule];
-
+declare const Modules: (typeof UserModule)[];
 export default Modules;
