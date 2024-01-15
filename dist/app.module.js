@@ -17,10 +17,14 @@ const appConfig_1 = __importDefault(require("./appConfig"));
 const filter_1 = require("./common/filter");
 const interceptor_1 = __importDefault(require("./common/interceptor"));
 const jwt_1 = require("./common/jwt/jwt");
+const transaction_middleware_1 = require("./common/middleware/transaction.middleware");
 const modules_1 = __importDefault(require("./modules"));
 const global_1 = require("./modules/global");
 const providers = [...filter_1.Filters, ...interceptor_1.default, jwt_1.JwtProvider, appConfig_1.default];
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer.apply(transaction_middleware_1.TransactionMiddleware).forRoutes({ path: '/**', method: common_1.RequestMethod.ALL });
+    }
 };
 AppModule = __decorate([
     (0, common_1.Module)({

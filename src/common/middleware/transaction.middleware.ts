@@ -16,7 +16,10 @@ export class TransactionMiddleware implements NestMiddleware {
     return namespace.runAndReturn(async () =>
       Promise.resolve()
         .then(() => this.setPrismaService())
-        .then(next)
+        .then(() => {
+          console.log(typeof namespace.get(PALETTE_PRISMA_SERVICE));
+          next();
+        })
     );
   }
 

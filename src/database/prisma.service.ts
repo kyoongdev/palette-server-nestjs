@@ -6,8 +6,6 @@ import { minimatch } from 'minimatch';
 
 import { logger } from '@/log';
 
-export type TransactionPrisma = Omit<PrismaService, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use'>;
-
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
   private slaveDatabase = new PrismaClient({

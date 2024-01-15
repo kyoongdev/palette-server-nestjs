@@ -4,8 +4,11 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import axios from 'axios';
+import { createNamespace, getNamespace, Namespace } from 'cls-hooked';
 
 import { PrismaService } from '@/database/prisma.service';
+
+import { PALETTE_NAMESPACE, PALETTE_PRISMA_SERVICE } from './common/decorator/transaction.decorator';
 
 @Injectable()
 class AppConfig {

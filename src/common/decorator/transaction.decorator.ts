@@ -17,6 +17,7 @@ export function Transactional() {
 
       return await em.$transaction(async (tx: TransactionPrisma) => {
         nameSpace.set(PALETTE_PRISMA_SERVICE, tx);
+
         return await originMethod.apply(this, args);
       });
     }
