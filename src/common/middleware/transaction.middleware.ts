@@ -10,7 +10,7 @@ import { PALETTE_NAMESPACE, PALETTE_PRISMA_SERVICE } from '../decorator/transact
 @Injectable()
 export class TransactionMiddleware implements NestMiddleware {
   constructor(private readonly database: PrismaService) {}
-  use(req: Request, res: Response, next: (error?: any) => void) {
+  use(_req: Request, _res: Response, next: (error?: any) => void) {
     const namespace = getNamespace(PALETTE_NAMESPACE) ?? createNamespace(PALETTE_NAMESPACE);
 
     return namespace.runAndReturn(async () =>

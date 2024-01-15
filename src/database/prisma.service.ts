@@ -31,10 +31,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     this.softDeleteInterceptors();
   }
 
-  tryThis() {
-    return 'sadf';
-  }
-
   async onModuleInit() {
     try {
       await this.$connect();
@@ -51,29 +47,35 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   }
 
   async routeDatabase() {
-    this.$use(async (params, next) => {
-      if (minimatch(params.action, '+(find*|count|aggregate)')) {
-        const res = await this.slaveDatabase[params.model][params.action](params.args);
+    this.$extends({
+      query: {
+        $allModels: {
+          $allOperations: async (params) => {
+            if (minimatch(params.operation, '+(find*|count|aggregate)')) {
+              const res = await this.slaveDatabase[params.model][params.operation](params.args);
 
-        return res;
-      } else if (minimatch(params.action, '+(query*)')) {
-        const res: any[] = await this.slaveDatabase.$queryRaw(params.args[0]);
-        return res.map((responseItem) => {
-          const result: Record<string, any> = {};
-          for (const [key, value] of Object.entries(responseItem)) {
-            result[key] = {
-              prisma__type: typeof value,
-              prisma__value: value,
-            };
-          }
+              return res;
+            } else if (minimatch(params.operation, '+(query*)')) {
+              const res: any[] = await this.slaveDatabase.$queryRaw(params.args[0]);
+              return res.map((responseItem) => {
+                const result: Record<string, any> = {};
+                for (const [key, value] of Object.entries(responseItem)) {
+                  result[key] = {
+                    prisma__type: typeof value,
+                    prisma__value: value,
+                  };
+                }
 
-          return result;
-        });
-      } else {
-        const res = await next(params);
+                return result;
+              });
+            } else {
+              const res = await this[params.model][params.operation](params.args);
 
-        return res;
-      }
+              return res;
+            }
+          },
+        },
+      },
     });
   }
 
