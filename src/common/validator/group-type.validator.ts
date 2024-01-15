@@ -28,7 +28,7 @@ export class GroupTypeValidateConstraint implements ValidatorConstraintInterface
 
 export const GroupTypeValidator = BaseValidator(
   GroupTypeValidateConstraint,
-  '판매 유형은 ALONE과 MANY 중에만 입력해주세요.'
+  '활동 인원은 ALONE과 MANY 중에만 입력해주세요.'
 );
 
 export const groupTypeNumberToString = (groupType: number) => {
@@ -59,7 +59,7 @@ export const GroupTypeReqDecorator = (nullable = false) =>
     GroupTypeReqDecorator(),
     ApiProperty({
       nullable,
-      description: '판매 유형',
+      description: '활동 인원',
       type: 'number',
       enum: GROUP_TYPE_VALUE,
       example: GROUP_TYPE_VALUE.join(' | '),
@@ -71,7 +71,7 @@ export const GroupTypeResDecorator = (nullable = false) =>
     GroupTypeResDecorator(),
     ApiProperty({
       nullable,
-      description: '판매 유형',
+      description: '활동 인원',
       type: 'string',
       enum: GROUP_TYPE_VALUE,
       example: GROUP_TYPE_VALUE.join(' | '),
