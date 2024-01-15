@@ -1,0 +1,79 @@
+import { applyDecorators } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
+
+import { Transform } from 'class-transformer';
+import { type ValidationArguments, ValidatorConstraint, type ValidatorConstraintInterface } from 'class-validator';
+
+import { BaseValidator } from './base.validator';
+
+export const GROUP_TYPE = {
+  ALONE: 'ALONE',
+  MANY: 'MANY',
+} as const;
+
+export enum GROUP_TYPE_ENUM {
+  ALONE = 1,
+  MANY,
+}
+
+export const GROUP_TYPE_VALUE = Object.keys(GROUP_TYPE);
+
+@ValidatorConstraint()
+export class GroupTypeValidateConstraint implements ValidatorConstraintInterface {
+  validate(value: number | null, validationArguments?: ValidationArguments): boolean | Promise<boolean> {
+    if (value !== GROUP_TYPE_ENUM.ALONE && value !== GROUP_TYPE_ENUM.MANY) return false;
+    return true;
+  }
+}
+
+export const GroupTypeValidator = BaseValidator(
+  GroupTypeValidateConstraint,
+  '판매 유형은 ALONE과 MANY 중에만 입력해주세요.'
+);
+
+export const groupTypeNumberToString = (groupType: number) => {
+  if (groupType === GROUP_TYPE_ENUM.ALONE) {
+    return GROUP_TYPE.ALONE;
+  } else if (groupType === GROUP_TYPE_ENUM.MANY) {
+    return GROUP_TYPE.MANY;
+  } else {
+    return null;
+  }
+};
+
+export const groupTypeStringToNumber = (groupType: string) => {
+  if (groupType === GROUP_TYPE.ALONE) {
+    return GROUP_TYPE_ENUM.ALONE;
+  } else if (groupType === GROUP_TYPE.MANY) {
+    return GROUP_TYPE_ENUM.MANY;
+  } else {
+    return null;
+  }
+};
+
+export const GroupTypeReqTransform = () => Transform(({ value }) => groupTypeStringToNumber(value));
+export const GroupTypeResTransform = () => Transform(({ value }) => groupTypeNumberToString(value));
+
+export const GroupTypeReqDecorator = (nullable = false) =>
+  applyDecorators(
+    GroupTypeReqDecorator(),
+    ApiProperty({
+      nullable,
+      description: '판매 유형',
+      type: 'number',
+      enum: GROUP_TYPE_VALUE,
+      example: GROUP_TYPE_VALUE.join(' | '),
+    })
+  );
+
+export const GroupTypeResDecorator = (nullable = false) =>
+  applyDecorators(
+    GroupTypeResDecorator(),
+    ApiProperty({
+      nullable,
+      description: '판매 유형',
+      type: 'string',
+      enum: GROUP_TYPE_VALUE,
+      example: GROUP_TYPE_VALUE.join(' | '),
+    })
+  );

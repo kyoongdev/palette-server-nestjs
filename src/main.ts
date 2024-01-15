@@ -5,7 +5,6 @@ import AppConfig from '@/appConfig';
 import { logger } from '@/log';
 
 import { AppModule } from './app.module';
-import { Middlewares } from './common/middleware';
 
 (async function () {
   const app = await NestFactory.create(AppModule, {
@@ -18,7 +17,6 @@ import { Middlewares } from './common/middleware';
     .enableCors({
       origin: '*',
     })
-    .configureMiddleware()
     .configureInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
     .configurePipes(
       new ValidationPipe({

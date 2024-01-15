@@ -18,7 +18,6 @@ const app_module_1 = require("./app.module");
         .enableCors({
         origin: '*',
     })
-        .configureMiddleware()
         .configureInterceptors(new common_1.ClassSerializerInterceptor(app.get(core_1.Reflector)))
         .configurePipes(new common_1.ValidationPipe({
         whitelist: true,

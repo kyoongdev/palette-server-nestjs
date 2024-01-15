@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule, Provider, RequestMethod } from '@nestjs/common';
+import { MiddlewareConsumer, Module, type NestModule, Provider, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
