@@ -13,11 +13,13 @@ exports.JwtAuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const jsonwebtoken_1 = require("jsonwebtoken");
+const prisma_service_1 = require("../../database/prisma.service");
 const jwt_1 = require("../jwt/jwt");
 let JwtAuthGuard = class JwtAuthGuard {
-    constructor(configService, jwt) {
+    constructor(configService, jwt, database) {
         this.configService = configService;
         this.jwt = jwt;
+        this.database = database;
     }
     async canActivate(context) {
         const req = context.switchToHttp().getRequest();
@@ -30,13 +32,48 @@ let JwtAuthGuard = class JwtAuthGuard {
         const decoded = this.jwt.verifyJwt(splittedHeader[1]);
         if (decoded instanceof jsonwebtoken_1.JsonWebTokenError)
             throw new common_1.UnauthorizedException('TOKEN_EXPIRED');
+        let isExist = null;
+        try {
+            if (decoded.role === 'USER') {
+                isExist = (await this.database.user.findUnique({
+                    where: {
+                        id: decoded.id,
+                    },
+                }));
+            }
+            else if (decoded.role === 'ADMIN') {
+                isExist = (await this.database.admin.findUnique({
+                    where: {
+                        id: decoded.id,
+                    },
+                }));
+            }
+            else if (decoded.role === 'MUSICIAN') {
+                isExist = (await this.database.user.findUnique({
+                    where: {
+                        id: decoded.id,
+                    },
+                    include: {
+                        musician: true,
+                    },
+                }));
+            }
+        }
+        catch (_e) {
+            throw new common_1.NotFoundException('유저를 찾을 수 없습니다.');
+        }
+        req.user = {
+            ...isExist,
+            role: decoded.role,
+        };
         return true;
     }
 };
 JwtAuthGuard = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [config_1.ConfigService,
-        jwt_1.JwtProvider])
+        jwt_1.JwtProvider,
+        prisma_service_1.PrismaService])
 ], JwtAuthGuard);
 exports.JwtAuthGuard = JwtAuthGuard;
 //# sourceMappingURL=jwt.guard.js.map

@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 
 import type { Request } from 'express';
-import { type Observable } from 'rxjs';
 
 import type { RoleType } from '@/interface/token.interface';
 
