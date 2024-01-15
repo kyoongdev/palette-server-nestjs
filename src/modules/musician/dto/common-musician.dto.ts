@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { GroupTypeResDecorator } from '@/common/validator/group-type.validator';
+import { GroupTypeResDecorator } from '@/common/validators/group-type.validator';
 
 export interface CommonMusicianDTOProps {
   id: string;
