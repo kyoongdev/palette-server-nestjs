@@ -1,7 +1,7 @@
-import { INestApplication, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { Prisma, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { minimatch } from 'minimatch';
 
 import { logger } from '@/log';
@@ -29,6 +29,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     });
     this.routeDatabase();
     this.softDeleteInterceptors();
+  }
+
+  tryThis() {
+    return 'sadf';
   }
 
   async onModuleInit() {

@@ -1,1 +1,1 @@
-export * from './paging.decorators';
+export * from './paging.decorator';
