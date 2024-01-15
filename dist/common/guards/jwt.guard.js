@@ -33,10 +33,10 @@ let JwtAuthGuard = class JwtAuthGuard {
         return true;
     }
 };
-exports.JwtAuthGuard = JwtAuthGuard;
-exports.JwtAuthGuard = JwtAuthGuard = __decorate([
+JwtAuthGuard = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [config_1.ConfigService,
         jwt_1.JwtProvider])
 ], JwtAuthGuard);
+exports.JwtAuthGuard = JwtAuthGuard;
 //# sourceMappingURL=jwt.guard.js.map

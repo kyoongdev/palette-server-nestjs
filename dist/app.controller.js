@@ -24,7 +24,6 @@ let AppController = class AppController {
         res.status(200).json({ status: 'HEALTHY' });
     }
 };
-exports.AppController = AppController;
 __decorate([
     (0, common_1.Get)('/health'),
     __param(0, (0, common_1.Response)()),
@@ -32,8 +31,9 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AppController.prototype, "getHello", null);
-exports.AppController = AppController = __decorate([
+AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [config_1.ConfigService])
 ], AppController);
+exports.AppController = AppController;
 //# sourceMappingURL=app.controller.js.map

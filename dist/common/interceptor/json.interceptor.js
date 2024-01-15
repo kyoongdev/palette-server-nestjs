@@ -24,8 +24,8 @@ let JsonInterceptor = class JsonInterceptor {
         });
     }
 };
-exports.JsonInterceptor = JsonInterceptor;
-exports.JsonInterceptor = JsonInterceptor = __decorate([
+JsonInterceptor = __decorate([
     (0, common_1.Injectable)()
 ], JsonInterceptor);
+exports.JsonInterceptor = JsonInterceptor;
 //# sourceMappingURL=json.interceptor.js.map

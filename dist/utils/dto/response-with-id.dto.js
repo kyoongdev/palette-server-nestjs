@@ -16,9 +16,9 @@ class ResponseWithIdDTO {
         this.id = id;
     }
 }
-exports.ResponseWithIdDTO = ResponseWithIdDTO;
 __decorate([
     (0, swagger_1.ApiProperty)({ type: 'string' }),
     __metadata("design:type", String)
 ], ResponseWithIdDTO.prototype, "id", void 0);
+exports.ResponseWithIdDTO = ResponseWithIdDTO;
 //# sourceMappingURL=response-with-id.dto.js.map

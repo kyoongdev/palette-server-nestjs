@@ -14,8 +14,8 @@ let ResponseWithIdInterceptor = class ResponseWithIdInterceptor {
         return next.handle().pipe((0, rxjs_1.map)((data) => ({ id: data['id'] ?? data })));
     }
 };
-exports.ResponseWithIdInterceptor = ResponseWithIdInterceptor;
-exports.ResponseWithIdInterceptor = ResponseWithIdInterceptor = __decorate([
+ResponseWithIdInterceptor = __decorate([
     (0, common_1.Injectable)()
 ], ResponseWithIdInterceptor);
+exports.ResponseWithIdInterceptor = ResponseWithIdInterceptor;
 //# sourceMappingURL=response-with-id.interceptor.js.map

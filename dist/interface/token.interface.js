@@ -11,5 +11,5 @@ var INTERVAL_WEEK;
     INTERVAL_WEEK[INTERVAL_WEEK["TWO"] = 2] = "TWO";
     INTERVAL_WEEK[INTERVAL_WEEK["THREE"] = 3] = "THREE";
     INTERVAL_WEEK[INTERVAL_WEEK["FOUR"] = 4] = "FOUR";
-})(INTERVAL_WEEK || (exports.INTERVAL_WEEK = INTERVAL_WEEK = {}));
+})(INTERVAL_WEEK = exports.INTERVAL_WEEK || (exports.INTERVAL_WEEK = {}));
 //# sourceMappingURL=token.interface.js.map

@@ -24,7 +24,7 @@ class AppConfig {
   async startServer() {
     await this.configureDatabase();
     await this.app.listen(8000, () => {
-      console.info(`🔥 루프루팡 ${this.configService.get('NODE_ENV')} 서버 시작!! 8000 🔥`);
+      console.info(`🔥 Palette ${this.configService.get('NODE_ENV')} 서버 시작!! 🔥`);
     });
   }
 

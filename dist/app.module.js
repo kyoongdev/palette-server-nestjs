@@ -12,28 +12,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
-const typeorm_1 = require("@nestjs/typeorm");
 const app_controller_1 = require("./app.controller");
+const appConfig_1 = __importDefault(require("./appConfig"));
+const filter_1 = require("./common/filter");
 const interceptor_1 = __importDefault(require("./common/interceptor"));
 const jwt_1 = require("./common/jwt/jwt");
-const provider_1 = require("./database/provider");
 const modules_1 = __importDefault(require("./modules"));
+const global_1 = require("./modules/global");
+const providers = [...filter_1.Filters, ...interceptor_1.default, jwt_1.JwtProvider, appConfig_1.default];
 let AppModule = class AppModule {
 };
-exports.AppModule = AppModule;
-exports.AppModule = AppModule = __decorate([
+AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
             }),
-            typeorm_1.TypeOrmModule.forRootAsync({
-                useClass: provider_1.MysqlConfigProvider,
-            }),
+            global_1.GlobalModule,
             ...modules_1.default,
         ],
         controllers: [app_controller_1.AppController],
-        providers: [jwt_1.JwtProvider, ...interceptor_1.default],
+        providers: [...providers],
     })
 ], AppModule);
+exports.AppModule = AppModule;
 //# sourceMappingURL=app.module.js.map

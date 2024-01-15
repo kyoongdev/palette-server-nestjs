@@ -72,9 +72,9 @@ let JwtProvider = class JwtProvider {
         return new dto_1.TokenDTO({ accessToken, refreshToken });
     }
 };
-exports.JwtProvider = JwtProvider;
-exports.JwtProvider = JwtProvider = __decorate([
+JwtProvider = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [config_1.ConfigService])
 ], JwtProvider);
+exports.JwtProvider = JwtProvider;
 //# sourceMappingURL=jwt.js.map

@@ -17,7 +17,6 @@ class TokenDTO {
         this.refreshToken = props.refreshToken;
     }
 }
-exports.TokenDTO = TokenDTO;
 __decorate([
     (0, swagger_1.ApiProperty)({ name: '엑세스 토큰' }),
     __metadata("design:type", String)
@@ -26,4 +25,5 @@ __decorate([
     (0, swagger_1.ApiProperty)({ name: '리프레시 토큰' }),
     __metadata("design:type", String)
 ], TokenDTO.prototype, "refreshToken", void 0);
+exports.TokenDTO = TokenDTO;
 //# sourceMappingURL=token.dto.js.map

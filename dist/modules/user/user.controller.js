@@ -20,15 +20,15 @@ let UserController = class UserController {
         return await this.userService.findUsers();
     }
 };
-exports.UserController = UserController;
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "findUsers", null);
-exports.UserController = UserController = __decorate([
+UserController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);
+exports.UserController = UserController;
 //# sourceMappingURL=user.controller.js.map

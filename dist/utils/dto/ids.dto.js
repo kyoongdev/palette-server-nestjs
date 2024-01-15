@@ -18,9 +18,9 @@ class IdsDTO {
         }
     }
 }
-exports.IdsDTO = IdsDTO;
 __decorate([
     (0, swagger_1.ApiProperty)({ type: 'string', description: '아이디들', example: '1,2,3' }),
     __metadata("design:type", String)
 ], IdsDTO.prototype, "ids", void 0);
+exports.IdsDTO = IdsDTO;
 //# sourceMappingURL=ids.dto.js.map

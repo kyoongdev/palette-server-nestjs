@@ -40,8 +40,8 @@ let EncryptProvider = class EncryptProvider {
         }
     }
 };
-exports.EncryptProvider = EncryptProvider;
-exports.EncryptProvider = EncryptProvider = __decorate([
+EncryptProvider = __decorate([
     (0, common_1.Injectable)()
 ], EncryptProvider);
+exports.EncryptProvider = EncryptProvider;
 //# sourceMappingURL=encrypt.js.map

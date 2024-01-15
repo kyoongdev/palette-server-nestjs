@@ -20,7 +20,6 @@ class DateDTO {
         }
     }
 }
-exports.DateDTO = DateDTO;
 __decorate([
     (0, swagger_1.ApiProperty)({ type: 'string', format: 'date-time' }),
     __metadata("design:type", Date)
@@ -33,4 +32,5 @@ __decorate([
     (0, swagger_1.ApiProperty)({ type: 'string', format: 'date-time' }),
     __metadata("design:type", Date)
 ], DateDTO.prototype, "deletedAt", void 0);
+exports.DateDTO = DateDTO;
 //# sourceMappingURL=date.dto.js.map
