@@ -1,4 +1,4 @@
-import { ReqUserType } from '@/interface/role.interface';
+import type { ReqUserType } from '@/interface/token.interface';
 
 declare global {
   namespace Express {

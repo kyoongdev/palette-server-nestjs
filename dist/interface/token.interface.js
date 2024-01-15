@@ -4,6 +4,7 @@ exports.INTERVAL_WEEK = exports.Role = void 0;
 exports.Role = {
     USER: 'USER',
     MUSICIAN: 'MUSICIAN',
+    ADMIN: 'ADMIN',
 };
 var INTERVAL_WEEK;
 (function (INTERVAL_WEEK) {

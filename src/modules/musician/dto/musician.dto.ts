@@ -42,6 +42,7 @@ export class MusicianDTO extends CommonMusicianDTO {
 
   @ApiProperty({ description: '삭제일', type: 'string', format: 'date-time' })
   deletedAt?: Date;
+
   constructor(props: MusicianDTOProps) {
     super(props);
     this.approveStatus = this.getApproveStatus(props.isPending, props.isAuthorized);

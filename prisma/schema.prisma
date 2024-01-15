@@ -8,6 +8,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Admin {
+  id String @id @default(uuid())
+
+  adminId  String @db.VarChar(255)
+  password String @db.VarChar(255)
+}
+
 model User {
   id String @id @default(uuid())
 
