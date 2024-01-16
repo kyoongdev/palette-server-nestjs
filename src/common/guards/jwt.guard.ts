@@ -1,12 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { CanActivate, ExecutionContext, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { Request } from 'express';
 import { JsonWebTokenError } from 'jsonwebtoken';
@@ -17,7 +9,6 @@ import {
   RequestMusician,
   RequestUser,
   ReqUserType,
-  Role,
   type TokenPayload,
 } from '@/interface/token.interface';
 
@@ -26,7 +17,6 @@ import { JwtProvider } from '../jwt/jwt';
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
-    private readonly configService: ConfigService,
     private readonly jwt: JwtProvider,
     private readonly database: PrismaService
   ) {}
