@@ -11,6 +11,7 @@ import { UserException } from './exception/user.exception';
 @Injectable()
 export class UserRepository {
   constructor(private readonly database: PrismaDatabase) {}
+
   async findCommonUser(id: string) {
     const user = await this.database.getRepository().user.findUnique({
       where: {
@@ -41,6 +42,7 @@ export class UserRepository {
     if (!user) {
       throw new UserException(USER_ERROR_CODE.USER_NOT_FOUND);
     }
+
     return new UserDTO(user);
   }
 
@@ -72,7 +74,7 @@ export class UserRepository {
         musician: true,
       },
     });
-    console.log({ users });
+
     return users.map((user) => new UserDTO(user));
   }
 

@@ -1,7 +1,12 @@
+import { Module } from '@nestjs/common';
+
 import { AOPModule } from '@/utils/aop/aop.module';
 
 import { UserModule } from './user/user.module';
 
-const Modules = [UserModule, AOPModule];
+export const Modules = [UserModule, AOPModule];
 
-export default Modules;
+@Module({
+  imports: Modules,
+})
+export class V2Module {}

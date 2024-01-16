@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import { AsyncLocalStorage } from 'async_hooks';
-import { getNamespace } from 'cls-hooked';
 import { ClsService } from 'nestjs-cls';
 
 import { TransactionPrisma } from '@/interface/prismsa.interface';

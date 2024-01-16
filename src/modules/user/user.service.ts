@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
+import { Prisma } from '@prisma/client';
 import { ClsService } from 'nestjs-cls';
 
 import { Transactional } from '@/utils/aop/transaction/transaction';
+import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { CreateUserDTO, UpdateUserDTO } from './dto';
 import { UserRepository } from './user.repository';
@@ -14,11 +16,17 @@ export class UserService {
     private readonly cls: ClsService
   ) {}
 
-  @Transactional()
-  async findUsers() {
-    console.log('findUsers 실행');
-    console.log(this.cls.get('test'));
-    return await this.userRepository.findUsers();
+  async findUsers(paging: PagingDTO, args = {} as Prisma.UserFindManyArgs) {
+    const { skip, take } = paging.getSkipTake();
+    const users = await this.userRepository.findCommonUsers({
+      ...args,
+      skip,
+      take,
+    });
+    const count = await this.userRepository.countUser({
+      where: args.where,
+    });
+    return new PaginationDTO(users, { paging, count });
   }
 
   async findUser(id: string) {

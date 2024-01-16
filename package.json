@@ -47,7 +47,6 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.7.0",
     "nanoid": "3.3.4",
-    "nest-router": "^1.0.9",
     "nest-winston": "^1.9.4",
     "nestjs-cls": "^3.6.0",
     "pg": "^8.4.0",
