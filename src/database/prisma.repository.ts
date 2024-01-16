@@ -1,16 +1,19 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
-import { createNamespace, getNamespace } from 'cls-hooked';
+import { AsyncLocalStorage } from 'async_hooks';
+import { getNamespace } from 'cls-hooked';
+import { ClsService } from 'nestjs-cls';
 
-import { PALETTE_NAMESPACE, PALETTE_PRISMA_SERVICE } from '@/common/decorator/transaction.decorator';
 import { TransactionPrisma } from '@/interface/prismsa.interface';
+import { PRISMA_CLS_KEY } from '@/utils/aop/transaction/transaction';
 
 import { PrismaService } from './prisma.service';
 
+@Injectable()
 export class PrismaDatabase {
-  getRepository() {
-    const nameSpace = getNamespace(PALETTE_NAMESPACE);
+  constructor(private readonly cls: ClsService) {}
 
-    return nameSpace.get(PALETTE_PRISMA_SERVICE) as PrismaService | TransactionPrisma;
+  getRepository() {
+    return this.cls.get(PRISMA_CLS_KEY) as PrismaService | TransactionPrisma;
   }
 }

@@ -1,19 +1,18 @@
 import { Injectable } from '@nestjs/common';
 
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 
 import { PrismaDatabase } from '@/database/prisma.repository';
-import { PrismaService } from '@/database/prisma.service';
 
-import { CommonUserDTO } from './dto/common-user.dto';
-import { UserDTO } from './dto/user.dto';
+import { CommonUserDTO, CreateUserDTO, UpdateUserDTO, UserDTO } from './dto';
 import { USER_ERROR_CODE } from './exception/errorCode';
 import { UserException } from './exception/user.exception';
 
 @Injectable()
-export class UserRepository extends PrismaDatabase {
+export class UserRepository {
+  constructor(private readonly database: PrismaDatabase) {}
   async findCommonUser(id: string) {
-    const user = await this.getRepository().user.findUnique({
+    const user = await this.database.getRepository().user.findUnique({
       where: {
         id,
       },
@@ -30,7 +29,7 @@ export class UserRepository extends PrismaDatabase {
   }
 
   async findUser(id: string) {
-    const user = await this.getRepository().user.findUnique({
+    const user = await this.database.getRepository().user.findUnique({
       where: {
         id,
       },
@@ -46,7 +45,7 @@ export class UserRepository extends PrismaDatabase {
   }
 
   async checkUserByEmail(email: string) {
-    const user = await this.getRepository().user.findFirst({
+    const user = await this.database.getRepository().user.findFirst({
       where: {
         email,
       },
@@ -55,8 +54,8 @@ export class UserRepository extends PrismaDatabase {
     return user ? new UserDTO(user) : null;
   }
 
-  async findCommonUsers(args: Prisma.UserFindManyArgs) {
-    const users = await this.getRepository().user.findMany({
+  async findCommonUsers(args = {} as Prisma.UserFindManyArgs) {
+    const users = await this.database.getRepository().user.findMany({
       ...args,
       include: {
         musician: true,
@@ -66,18 +65,54 @@ export class UserRepository extends PrismaDatabase {
     return users.map((user) => new CommonUserDTO(user));
   }
 
-  async findUsers(args: Prisma.UserFindManyArgs) {
-    const users = await this.getRepository().user.findMany({
+  async findUsers(args = {} as Prisma.UserFindManyArgs) {
+    const users = await this.database.getRepository().user.findMany({
       ...args,
       include: {
         musician: true,
       },
     });
-
+    console.log({ users });
     return users.map((user) => new UserDTO(user));
   }
 
-  async countUser(args: Prisma.UserCountArgs) {
-    return await this.getRepository().user.count(args);
+  async countUser(args = {} as Prisma.UserCountArgs) {
+    return await this.database.getRepository().user.count(args);
+  }
+
+  async createUser(data: CreateUserDTO) {
+    const user = await this.database.getRepository().user.create({
+      data,
+    });
+
+    return new CommonUserDTO(user);
+  }
+
+  async updateUser(id: string, data: UpdateUserDTO) {
+    await this.database.getRepository().user.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
+
+  async deleteUser(id: string) {
+    await this.database.getRepository().user.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+  }
+
+  async hardDeleteUser(id: string) {
+    await this.database.getRepository().user.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

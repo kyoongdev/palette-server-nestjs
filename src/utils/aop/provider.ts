@@ -31,6 +31,7 @@ export class BaseAOPProvider {
         .forEach((methodName) => {
           aopDecorators.forEach((aopInstance) => {
             const metadataKey = this.reflect.get(AOP_KEY, aopInstance.constructor);
+
             const metadataList: AOPMetaData[] = this.reflect.get<AOPMetaData[]>(metadataKey, instance[methodName]);
 
             if (!metadataList) {

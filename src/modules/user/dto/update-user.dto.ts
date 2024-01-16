@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { MaxLength } from 'class-validator';
 
-export interface CreateUserDTOProps {
+export interface UpdateUserDTOProps {
   email?: string;
   password?: string;
   name?: string;
@@ -11,7 +11,7 @@ export interface CreateUserDTOProps {
   isAlarmAccepted: boolean;
 }
 
-export class CreateUserDTO {
+export class UpdateUserDTO {
   @ApiProperty({ description: '이메일', type: 'string', nullable: true })
   email?: string;
 
@@ -28,10 +28,10 @@ export class CreateUserDTO {
   @ApiProperty({ description: '휴대폰번호', type: 'string', nullable: true, maxLength: 11 })
   phoneNumber?: string;
 
-  @ApiProperty({ description: '알람 승인 여부', type: 'boolean' })
-  isAlarmAccepted: boolean;
+  @ApiProperty({ description: '알람 승인 여부', type: 'boolean', nullable: true })
+  isAlarmAccepted?: boolean;
 
-  constructor(props?: CreateUserDTOProps) {
+  constructor(props?: UpdateUserDTOProps) {
     if (props) {
       this.email = props.email;
       this.password = props.password;

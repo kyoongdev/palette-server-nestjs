@@ -4,7 +4,7 @@ import { PrismaDatabase } from './prisma.repository';
 import { PrismaService } from './prisma.service';
 
 @Module({
-  providers: [PrismaService],
-  exports: [PrismaService],
+  providers: [PrismaService, PrismaDatabase],
+  exports: [PrismaService, PrismaDatabase],
 })
 export class PrismaModule {}
