@@ -6,9 +6,12 @@ import { Prisma } from '@prisma/client';
 import { Transactional } from '@/utils/aop/transaction/transaction';
 import { EncryptProvider } from '@/utils/encrypt';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
+import { validatePassword } from '@/utils/regex';
 
-import { CheckEmailResultDTO, UpdateUserDTO } from './dto';
+import { CheckEmailResultDTO, UpdatePasswordDTO, UpdateUserDTO } from './dto';
 import { CheckEmailDTO } from './dto/check-email.dto';
+import { USER_ERROR_CODE } from './exception/errorCode';
+import { UserException } from './exception/user.exception';
 import { UserRepository } from './user.repository';
 
 @Injectable()
@@ -48,11 +51,25 @@ export class UserService {
   async updateUser(id: string, data: UpdateUserDTO) {
     await this.findCommonUser(id);
 
-    if (data.password) {
-      data.setPassword(this.encrypt.hashPassword(this.configService.get('PASSWORD_SALT'), data.password));
+    await this.userRepository.updateUser(id, data);
+  }
+
+  async updatePassword(id: string, data: UpdatePasswordDTO) {
+    if (!validatePassword(data.newPassword)) {
+      throw new UserException(USER_ERROR_CODE.PASSWORD_FORMAT_ERROR);
     }
 
-    await this.userRepository.updateUser(id, data);
+    const userPassword = await this.userRepository.findUserPassword(id);
+
+    const isMatch = this.encrypt.comparePassword(data.password, userPassword);
+
+    if (!isMatch) {
+      throw new UserException(USER_ERROR_CODE.PASSWORD_NOT_MATCH);
+    }
+
+    const newPassword = this.encrypt.hashPassword(data.newPassword);
+
+    await this.userRepository.updateUser(id, { password: newPassword });
   }
 
   @Transactional()

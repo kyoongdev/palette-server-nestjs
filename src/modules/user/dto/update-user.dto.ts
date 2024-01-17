@@ -7,7 +7,7 @@ export interface UpdateUserDTOProps {
   password?: string;
   name?: string;
   profileImage?: string;
-  phoneNumber?: string;
+
   isAlarmAccepted: boolean;
 }
 
@@ -24,10 +24,6 @@ export class UpdateUserDTO {
   @ApiProperty({ description: '프로필 이미지', type: 'string', nullable: true })
   profileImage?: string;
 
-  @MaxLength(11)
-  @ApiProperty({ description: '휴대폰번호', type: 'string', nullable: true, maxLength: 11 })
-  phoneNumber?: string;
-
   @ApiProperty({ description: '알람 승인 여부', type: 'boolean', nullable: true })
   isAlarmAccepted?: boolean;
 
@@ -37,11 +33,7 @@ export class UpdateUserDTO {
       this.password = props.password;
       this.name = props.name;
       this.profileImage = props.profileImage;
-      this.phoneNumber = props.phoneNumber;
       this.isAlarmAccepted = props.isAlarmAccepted;
     }
-  }
-  setPassword(newPassword: string) {
-    this.password = newPassword;
   }
 }

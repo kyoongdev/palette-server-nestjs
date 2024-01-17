@@ -46,6 +46,23 @@ export class UserRepository {
     return new UserDTO(user);
   }
 
+  async findUserPassword(id: string) {
+    const user = await this.database.getRepository().user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        password: true,
+      },
+    });
+
+    if (!user) {
+      throw new UserException(USER_ERROR_CODE.USER_NOT_FOUND);
+    }
+
+    return user.password;
+  }
+
   async checkUserByEmail(email: string) {
     const user = await this.database.getRepository().user.findFirst({
       where: {

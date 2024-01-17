@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import crypto from 'crypto';
 
@@ -7,15 +8,17 @@ import { COMMON_ERROR_CODE } from './exception/errorCode';
 
 @Injectable()
 export class EncryptProvider {
-  public comparePassword(salt: string, password: string, hashedPassword: string) {
+  constructor(private readonly configService: ConfigService) {}
+
+  public comparePassword(password: string, hashedPassword: string, salt = this.configService.get('PASSWORD_SALT')) {
     try {
-      return this.hashPassword(salt, password) === hashedPassword;
+      return this.hashPassword(password, salt) === hashedPassword;
     } catch (err) {
       throw new CommonException(COMMON_ERROR_CODE.ENCRYPT_ERROR);
     }
   }
 
-  public hashPassword(salt: string, password: string) {
+  public hashPassword(password: string, salt = this.configService.get('PASSWORD_SALT')) {
     try {
       return crypto.pbkdf2Sync(password, salt, 1, 32, 'sha512').toString('base64');
     } catch (err) {

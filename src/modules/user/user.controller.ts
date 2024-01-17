@@ -10,7 +10,7 @@ import { EmptyResponseDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
 import { Auth, ResponseApi } from '@/utils/swagger';
 
-import { CommonUserDTO, UpdateUserDTO } from './dto';
+import { CommonUserDTO, UpdatePasswordDTO, UpdateUserDTO } from './dto';
 import { UserService } from './user.service';
 
 @ApiTags('유저')
@@ -42,6 +42,22 @@ export class UserController {
   )
   async updateMe(@ReqUser() user: RequestUser, @Body() body: UpdateUserDTO) {
     await this.userService.updateUser(user.id, body);
+  }
+
+  @Patch('/me/password')
+  @Auth([JwtAuthGuard, RoleGuard('USER', 'MUSICIAN')])
+  @ApiOperation({ description: '내 비밀번호 수정', summary: '내 비밀번호 수정 API' })
+  @ApiBody({
+    type: UpdatePasswordDTO,
+  })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
+  async updateMyPassword(@ReqUser() user: RequestUser, @Body() body: UpdatePasswordDTO) {
+    await this.userService.updatePassword(user.id, body);
   }
 
   @Delete('/me')

@@ -9,3 +9,8 @@ export const validatePhoneNumber = (phoneNumber: string): boolean => {
 
   return phoneNumberRegex.test(phoneNumber);
 };
+export const validatePassword = (password: string) => {
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
+
+  return passwordRegex.test(password);
+};

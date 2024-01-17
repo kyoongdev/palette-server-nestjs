@@ -9,6 +9,8 @@ export const USER_ERROR = {
   HARD_DELETE_FAILED: '유저를 삭제하는데 실패했습니다.(아직 탈퇴하지 않은 회원입니다.)',
   USER_ALREADY_BLOCKED: '이미 차단된 유저입니다.',
   USER_BLOCKED: '차단된 유저입니다.',
+  PASSWORD_NOT_MATCH: '비밀번호가 일치하지 않습니다.',
+  PASSWORD_FORMAT_ERROR: '비밀번호는 8~16자의 영문, 숫자, 특수문자 조합이어야 합니다.',
 };
 
 export const USER_ERROR_CODE: ErrorCode<typeof USER_ERROR> = {
@@ -35,5 +37,13 @@ export const USER_ERROR_CODE: ErrorCode<typeof USER_ERROR> = {
   USER_BLOCKED: {
     code: HttpStatus.FORBIDDEN,
     message: USER_ERROR.USER_BLOCKED,
+  },
+  PASSWORD_NOT_MATCH: {
+    code: HttpStatus.BAD_REQUEST,
+    message: USER_ERROR.PASSWORD_NOT_MATCH,
+  },
+  PASSWORD_FORMAT_ERROR: {
+    code: HttpStatus.BAD_REQUEST,
+    message: USER_ERROR.PASSWORD_FORMAT_ERROR,
   },
 };
