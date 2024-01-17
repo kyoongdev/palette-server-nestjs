@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-import { seedContact, seedGenre, seedMood, seedSaleType } from '../_shared';
+import { seedContact, seedGenre, seedMood, seedRegion, seedSaleType } from '../_shared';
 import { seedLicense } from '../_shared/license';
 
 export const seedDev = async (database: PrismaClient) => {
@@ -9,4 +9,5 @@ export const seedDev = async (database: PrismaClient) => {
   await seedGenre(database);
   await seedMood(database);
   await seedSaleType(database);
+  await seedRegion(database);
 };

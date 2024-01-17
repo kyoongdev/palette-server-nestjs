@@ -353,15 +353,18 @@ model RecordingImage {
 }
 
 model RegionLargeGroup {
-  id   String @id @default(uuid())
-  name String @db.VarChar(20)
+  id String @id @default(uuid())
+
+  name  String @db.VarChar(20)
+  order Int    @default(0) @db.TinyInt
 
   regions          RegionSmallGroup[]
   recordingRegions RecordingRegion[]
 }
 
 model RegionSmallGroup {
-  id   String @id @default(uuid())
+  id String @id @default(uuid())
+
   name String @db.VarChar(20)
 
   largeGroupId String
