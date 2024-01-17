@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { Property } from '../swagger';
 
 export interface DateDTOProps {
   createdAt: Date;
@@ -7,13 +7,13 @@ export interface DateDTOProps {
 }
 
 export class DateDTO {
-  @ApiProperty({ type: 'string', format: 'date-time' })
+  @Property({ apiProperty: { type: 'string', format: 'date-time' } })
   createdAt: Date;
 
-  @ApiProperty({ type: 'string', format: 'date-time' })
+  @Property({ apiProperty: { type: 'string', format: 'date-time' } })
   updatedAt: Date;
 
-  @ApiProperty({ type: 'string', format: 'date-time' })
+  @Property({ apiProperty: { type: 'string', format: 'date-time' } })
   deletedAt: Date;
 
   constructor(props?: DateDTOProps) {

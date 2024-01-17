@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { Property } from '@/utils/swagger';
 
 export interface CheckEmailResultDTOProps {
   isExists: boolean;
@@ -6,10 +6,10 @@ export interface CheckEmailResultDTOProps {
 }
 
 export class CheckEmailResultDTO {
-  @ApiProperty({ description: '이메일 중복 여부' })
+  @Property({ apiProperty: { description: '이메일 중복 여부' } })
   isExists: boolean;
 
-  @ApiProperty({ description: '이메일' })
+  @Property({ apiProperty: { description: '이메일' } })
   email: string;
 
   constructor(props: CheckEmailResultDTOProps) {

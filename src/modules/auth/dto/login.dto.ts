@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { Property } from '@/utils/swagger';
 
 export interface LoginDTOProps {
   email: string;
@@ -6,10 +6,10 @@ export interface LoginDTOProps {
 }
 
 export class LoginDTO {
-  @ApiProperty({ description: '이메일', type: 'string' })
+  @Property({ apiProperty: { description: '이메일', type: 'string' } })
   email: string;
 
-  @ApiProperty({ description: '비밀번호', type: 'string' })
+  @Property({ apiProperty: { description: '비밀번호', type: 'string' } })
   password: string;
 
   constructor(props?: LoginDTOProps) {

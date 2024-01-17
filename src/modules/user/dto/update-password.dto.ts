@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { Property } from '@/utils/swagger';
 
 export interface UpdatePasswordDTOProps {
   password: string;
@@ -6,10 +6,10 @@ export interface UpdatePasswordDTOProps {
 }
 
 export class UpdatePasswordDTO {
-  @ApiProperty({ description: '기존 비밀번호', type: 'string' })
+  @Property({ apiProperty: { description: '기존 비밀번호', type: 'string' } })
   password: string;
 
-  @ApiProperty({ description: '신규 비밀번호', type: 'string', nullable: true })
+  @Property({ apiProperty: { description: '신규 비밀번호', type: 'string', nullable: true } })
   newPassword?: string;
 
   constructor(props?: UpdatePasswordDTOProps) {

@@ -5,7 +5,7 @@ import { isArray, omit } from 'lodash';
 
 import type { ApiResponseMetadata, ApiResponseOptions } from '@/interface/swagger.interface';
 
-import { DECORATORS } from './constants/swagger';
+import { DECORATORS } from '../constants/swagger';
 
 export function getTypeIsArrayTuple(
   input: Function | [Function] | undefined | string | Record<string, any>,
@@ -102,3 +102,4 @@ export const ResponseApi = (
 export const Auth = (guards: Function[], name = 'access-token') => {
   return applyDecorators(ApiBearerAuth(name), UseGuards(...guards));
 };
+export * from './property';

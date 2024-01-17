@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { Property } from '@/utils/swagger';
 
 export interface TokenDTOProps {
   accessToken: string;
@@ -6,14 +6,16 @@ export interface TokenDTOProps {
 }
 
 export class TokenDTO {
-  @ApiProperty({ name: '엑세스 토큰' })
+  @Property({ apiProperty: { description: '엑세스 토큰' } })
   accessToken: string;
 
-  @ApiProperty({ name: '리프레시 토큰' })
+  @Property({ apiProperty: { description: '리프레시 토큰' } })
   refreshToken: string;
 
-  constructor(props: TokenDTOProps) {
-    this.accessToken = props.accessToken;
-    this.refreshToken = props.refreshToken;
+  constructor(props?: TokenDTOProps) {
+    if (props) {
+      this.accessToken = props.accessToken;
+      this.refreshToken = props.refreshToken;
+    }
   }
 }

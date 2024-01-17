@@ -1,6 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-
 import { DateDTO, DateDTOProps } from '@/utils';
+import { Property } from '@/utils/swagger';
 
 import { CommonMusicianDTO, CommonMusicianDTOProps } from './common-musician.dto';
 
@@ -14,33 +13,35 @@ export interface MusicianDTOProps extends CommonMusicianDTOProps, DateDTOProps {
 }
 
 export class MusicianDTO extends CommonMusicianDTO {
-  @ApiProperty({
-    description: '승인 상태',
-    type: 'string',
-    enum: ['APPROVED', 'PENDING', 'REJECTED'],
-    example: 'APPROVED |PENDING |REJECTED',
+  @Property({
+    apiProperty: {
+      description: '승인 상태',
+      type: 'string',
+      enum: ['APPROVED', 'PENDING', 'REJECTED'],
+      example: 'APPROVED |PENDING |REJECTED',
+    },
   })
   approveStatus: string;
 
-  @ApiProperty({ description: '은행 코드', type: 'string' })
+  @Property({ apiProperty: { description: '은행 코드', type: 'string' } })
   bankCode: string;
 
-  @ApiProperty({ description: '계좌 번호', type: 'string' })
+  @Property({ apiProperty: { description: '계좌 번호', type: 'string' } })
   bankAccount: string;
 
-  @ApiProperty({ description: '계좌주', type: 'string' })
+  @Property({ apiProperty: { description: '계좌주', type: 'string' } })
   bankAccountOwnerName: string;
 
-  @ApiProperty({ description: '증빙자료', type: 'string' })
+  @Property({ apiProperty: { description: '증빙자료', type: 'string' } })
   evidenceFileUrl: string;
 
-  @ApiProperty({ description: '생성일', type: 'string', format: 'date-time' })
+  @Property({ apiProperty: { description: '생성일', type: 'string', format: 'date-time' } })
   createdAt: Date;
 
-  @ApiProperty({ description: '수정일', type: 'string', format: 'date-time' })
+  @Property({ apiProperty: { description: '수정일', type: 'string', format: 'date-time' } })
   updatedAt: Date;
 
-  @ApiProperty({ description: '삭제일', type: 'string', format: 'date-time' })
+  @Property({ apiProperty: { description: '삭제일', type: 'string', format: 'date-time' } })
   deletedAt?: Date;
 
   constructor(props: MusicianDTOProps) {

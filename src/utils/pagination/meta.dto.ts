@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-
 import { isNaN } from 'lodash';
+
+import { Property } from '../swagger';
 
 import { PagingDTO } from './paging.dto';
 
@@ -10,22 +10,22 @@ export interface PagingMetaDTOInterface {
 }
 
 export class PagingMetaDTO {
-  @ApiProperty({ type: 'number' })
+  @Property({ apiProperty: { type: 'number' } })
   total: number;
 
-  @ApiProperty({ type: 'number' })
+  @Property({ apiProperty: { type: 'number' } })
   page: number;
 
-  @ApiProperty({ type: 'number' })
+  @Property({ apiProperty: { type: 'number' } })
   limit: number;
 
-  @ApiProperty({ type: 'number' })
+  @Property({ apiProperty: { type: 'number' } })
   skip: number;
 
-  @ApiProperty({ type: 'boolean' })
+  @Property({ apiProperty: { type: 'boolean' } })
   hasPrev: boolean;
 
-  @ApiProperty({ type: 'boolean' })
+  @Property({ apiProperty: { type: 'boolean' } })
   hasNext: boolean;
 
   constructor({ paging, count }: PagingMetaDTOInterface) {

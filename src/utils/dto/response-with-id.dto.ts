@@ -1,7 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { Property } from '../swagger';
 
 export class ResponseWithIdDTO {
-  @ApiProperty({ type: 'string' })
+  @Property({ apiProperty: { type: 'string' } })
   id: string;
 
   constructor(id?: string) {

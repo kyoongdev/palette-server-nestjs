@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, MaxLength } from 'class-validator';
 
-import { MaxLength } from 'class-validator';
+import { Property } from '@/utils/swagger';
 
 export interface CreateUserDTOProps {
   email?: string;
@@ -12,23 +12,24 @@ export interface CreateUserDTOProps {
 }
 
 export class CreateUserDTO {
-  @ApiProperty({ description: '이메일', type: 'string', nullable: true })
+  @IsEmail()
+  @Property({ apiProperty: { description: '이메일', type: 'string', nullable: true } })
   email?: string;
 
-  @ApiProperty({ description: '비밀번호', type: 'string', nullable: true })
+  @Property({ apiProperty: { description: '비밀번호', type: 'string', nullable: true } })
   password?: string;
 
-  @ApiProperty({ description: '이름', type: 'string', nullable: true })
+  @Property({ apiProperty: { description: '이름', type: 'string', nullable: true } })
   name?: string;
 
-  @ApiProperty({ description: '프로필 이미지', type: 'string', nullable: true })
+  @Property({ apiProperty: { description: '프로필 이미지', type: 'string', nullable: true } })
   profileImage?: string;
 
   @MaxLength(11)
-  @ApiProperty({ description: '휴대폰번호', type: 'string', nullable: true, maxLength: 11 })
+  @Property({ apiProperty: { description: '휴대폰번호', type: 'string', nullable: true, maxLength: 11 } })
   phoneNumber?: string;
 
-  @ApiProperty({ description: '알람 승인 여부', type: 'boolean' })
+  @Property({ apiProperty: { description: '알람 승인 여부', type: 'boolean' } })
   isAlarmAccepted: boolean;
 
   constructor(props?: CreateUserDTOProps) {

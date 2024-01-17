@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { Property } from '../swagger';
 
 export interface SkipTake {
   skip: number;
@@ -6,10 +6,10 @@ export interface SkipTake {
 }
 
 export class PagingDTO {
-  @ApiProperty({ type: 'number', minimum: 1, default: 1 })
+  @Property({ apiProperty: { type: 'number', minimum: 1, default: 1 } })
   page: number;
 
-  @ApiProperty({ type: 'number', minimum: 1, default: 20 })
+  @Property({ apiProperty: { type: 'number', minimum: 1, default: 20 } })
   limit: number;
 
   constructor(page: number, limit: number) {

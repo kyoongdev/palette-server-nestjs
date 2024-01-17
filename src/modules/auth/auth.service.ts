@@ -47,7 +47,7 @@ export class AuthService {
     }
 
     if (!validatePassword(data.password)) {
-      throw new CustomException(USER_ERROR_CODE.PASSWORD_NOT_MATCH);
+      throw new CustomException(USER_ERROR_CODE.PASSWORD_FORMAT_ERROR);
     }
 
     const password = this.encrypt.hashPassword(data.password);

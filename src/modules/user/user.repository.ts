@@ -107,7 +107,7 @@ export class UserRepository {
     return new CommonUserDTO(user);
   }
 
-  async updateUser(id: string, data: UpdateUserDTO) {
+  async updateUser(id: string, data: Prisma.UserUpdateArgs['data']) {
     await this.database.getRepository().user.update({
       where: {
         id,

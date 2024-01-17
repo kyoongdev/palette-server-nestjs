@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-
 import { MaxLength } from 'class-validator';
+
+import { Property } from '@/utils/swagger';
 
 export interface FindEmailDTOProps {
   name: string;
@@ -8,10 +8,10 @@ export interface FindEmailDTOProps {
 }
 
 export class FindEmailDTO {
-  @ApiProperty({ description: '이름', type: 'string' })
+  @Property({ apiProperty: { description: '이름', type: 'string' } })
   name: string;
 
   @MaxLength(11)
-  @ApiProperty({ description: '전화번호', type: 'string' })
+  @Property({ apiProperty: { description: '전화번호', type: 'string' } })
   phoneNumber: string;
 }

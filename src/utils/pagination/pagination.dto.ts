@@ -1,12 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { Property } from '../swagger';
 
 import { PagingMetaDTO, PagingMetaDTOInterface } from './meta.dto';
 
 export class PaginationDTO<T extends object> {
-  @ApiProperty({ isArray: true })
+  @Property({ apiProperty: { isArray: true } })
   data: T[];
 
-  @ApiProperty({ type: PagingMetaDTO })
+  @Property({ apiProperty: { type: PagingMetaDTO } })
   paging: PagingMetaDTO;
 
   constructor(data: T[], { paging, count }: PagingMetaDTOInterface) {
