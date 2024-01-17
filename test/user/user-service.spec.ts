@@ -1,11 +1,13 @@
-import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
-import { PrismaClient, User } from '@prisma/client';
-import { UserService } from '@/modules/user/user.service';
+import { PrismaModule } from '@/database/prisma.module';
+import { PrismaDatabase } from '@/database/prisma.repository';
 import { PrismaService } from '@/database/prisma.service';
-import { Test, TestingModule } from '@nestjs/testing';
 import { UserRepository } from '@/modules/user/user.repository';
-import { createNamespace, getNamespace } from 'cls-hooked';
-import { PALETTE_NAMESPACE, PALETTE_PRISMA_SERVICE } from '@/common/decorator/transaction.decorator';
+import { UserService } from '@/modules/user/user.service';
+import { PRISMA_CLS_KEY } from '@/utils/aop/transaction/transaction';
+import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaClient, User } from '@prisma/client';
+import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
+import { ClsModule, ClsService } from 'nestjs-cls';
 
 const testUser: User = {
   id: '123',
@@ -21,30 +23,34 @@ const testUser: User = {
   updatedAt: new Date(),
 };
 
-const namespace = getNamespace(PALETTE_NAMESPACE) ?? createNamespace(PALETTE_NAMESPACE);
-
 describe('UserService', () => {
-  namespace.run(() => {
-    let service: UserService;
-    let mockPrisma: DeepMockProxy<PrismaClient>;
-    const namespace2 = getNamespace(PALETTE_NAMESPACE);
-    namespace2.set(PALETTE_PRISMA_SERVICE, new PrismaClient());
-    console.log(typeof namespace2.get(PALETTE_PRISMA_SERVICE));
+  let service: UserService;
+  let cls: ClsService;
+  let mockPrisma: DeepMockProxy<PrismaClient>;
 
-    beforeEach(async () => {
-      const module: TestingModule = await Test.createTestingModule({
-        providers: [UserService, PrismaService, UserRepository],
-      })
-        .overrideProvider(PrismaService)
-        .useValue(mockDeep<PrismaClient>())
-        .compile();
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [UserService, PrismaService, PrismaDatabase, UserRepository],
+      imports: [
+        ClsModule.forRoot({
+          global: true,
+        }),
+      ],
+    })
+      .overrideProvider(PrismaService)
+      .useValue(mockDeep<PrismaClient>())
 
-      service = module.get<UserService>(UserService);
-      mockPrisma = module.get(PrismaService);
-    });
+      .compile();
 
-    describe('Check user duplication', () => {
-      it('should return a User if user exists.', async () => {
+    service = module.get<UserService>(UserService);
+    mockPrisma = module.get(PrismaService);
+    cls = module.get(ClsService);
+  });
+
+  describe('Check user duplication', () => {
+    it('should return a User if user exists.', async () => {
+      cls.run(async () => {
+        cls.set(PRISMA_CLS_KEY, mockPrisma);
         (mockPrisma.user as any).findUnique.mockResolvedValueOnce(testUser);
 
         const result = await service.findUser(testUser.id);

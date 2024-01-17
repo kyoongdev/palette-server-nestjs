@@ -18,6 +18,7 @@ const providers: Provider[] = [...Filters, ...Interceptors, JwtProvider, AppConf
 @Module({
   imports: [
     GlobalModule,
+
     ConfigModule.forRoot({
       isGlobal: true,
     }),
