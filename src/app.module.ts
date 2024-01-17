@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, type NestModule, type Provider, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { RouterModule, Routes } from '@nestjs/core';
+import { RouterModule } from '@nestjs/core';
 
 import { ClsModule } from 'nestjs-cls';
 
@@ -8,12 +8,11 @@ import { AppController } from './app.controller';
 import AppConfig from './appConfig';
 import { Filters } from './common/filter';
 import Interceptors from './common/interceptor';
-import { JwtProvider } from './common/jwt/jwt';
 import { TransactionMiddleware } from './common/middleware/transaction.middleware';
 import { Modules, V2Module } from './modules';
 import { GlobalModule } from './modules/global';
 
-const providers: Provider[] = [...Filters, ...Interceptors, JwtProvider, AppConfig];
+const providers: Provider[] = [...Filters, ...Interceptors, AppConfig];
 
 @Module({
   imports: [

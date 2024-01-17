@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import { JwtProvider } from '@/common/jwt/jwt';
 import { EncryptProvider } from '@/utils/encrypt';
 
 import { UserController } from './user.controller';
