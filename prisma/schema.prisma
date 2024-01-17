@@ -276,7 +276,9 @@ model ArtistSaleTypeBridge {
 model ArtistSaleType {
   id String @id @default(uuid())
 
-  name            String
+  name  String
+  order Int    @default(0) @db.TinyInt
+
   artistSaleTypes ArtistSaleTypeBridge[]
 }
 
@@ -518,7 +520,9 @@ model AlbumArtSaleTypeBridge {
 model AlbumArtSaleType {
   id String @id @default(uuid())
 
-  name              String
+  name  String
+  order Int    @default(0) @db.TinyInt
+
   albumArtSaleTypes AlbumArtSaleTypeBridge[]
 }
 
@@ -552,7 +556,9 @@ model File {
 model Contact {
   id String @id @default(uuid())
 
-  name                 String                @db.VarChar(20)
+  name  String @db.VarChar(20)
+  order Int    @default(0) @db.TinyInt
+
   mrBeatContacts       MrBeatContact[]
   artistContacts       ArtistContact[]
   mixMasteringContacts MixMasteringContact[]
@@ -562,7 +568,8 @@ model Contact {
 model Genre {
   id String @id @default(uuid())
 
-  name String @db.VarChar(20)
+  name  String @db.VarChar(20)
+  order Int    @default(0) @db.TinyInt
 
   mrBeatGenres       MrBeat[]
   mixMasteringGenres MixMasteringGenre[]
@@ -571,7 +578,9 @@ model Genre {
 model Mood {
   id String @id @default(uuid())
 
-  name       String   @db.VarChar(20)
+  name  String @db.VarChar(20)
+  order Int    @default(0) @db.TinyInt
+
   mrBeatMood MrBeat[]
 }
 

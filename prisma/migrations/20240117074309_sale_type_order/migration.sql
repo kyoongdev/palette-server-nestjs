@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `AlbumArtSaleType` ADD COLUMN `order` TINYINT NOT NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE `ArtistSaleType` ADD COLUMN `order` TINYINT NOT NULL DEFAULT 0;

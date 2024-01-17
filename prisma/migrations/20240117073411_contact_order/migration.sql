@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Contact` ADD COLUMN `order` TINYINT NOT NULL DEFAULT 0;
