@@ -41,4 +41,7 @@ export class UpdateUserDTO {
       this.isAlarmAccepted = props.isAlarmAccepted;
     }
   }
+  setPassword(newPassword: string) {
+    this.password = newPassword;
+  }
 }

@@ -1,22 +1,25 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { Prisma } from '@prisma/client';
-import { ClsService } from 'nestjs-cls';
 
 import { Transactional } from '@/utils/aop/transaction/transaction';
+import { EncryptProvider } from '@/utils/encrypt';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
-import { CreateUserDTO, UpdateUserDTO } from './dto';
+import { CheckEmailResultDTO, UpdateUserDTO } from './dto';
+import { CheckEmailDTO } from './dto/check-email.dto';
 import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly cls: ClsService
+    private readonly encrypt: EncryptProvider,
+    private readonly configService: ConfigService
   ) {}
 
-  async findUsers(paging: PagingDTO, args = {} as Prisma.UserFindManyArgs) {
+  async findCommonUsers(paging: PagingDTO, args = {} as Prisma.UserFindManyArgs) {
     const { skip, take } = paging.getSkipTake();
     const users = await this.userRepository.findCommonUsers({
       ...args,
@@ -29,13 +32,32 @@ export class UserService {
     return new PaginationDTO(users, { paging, count });
   }
 
-  async findUser(id: string) {
-    return this.userRepository.findUser(id);
+  async findCommonUser(id: string) {
+    return this.userRepository.findCommonUser(id);
   }
 
-  async createUser(data: CreateUserDTO) {}
+  async checkEmail(data: CheckEmailDTO) {
+    const user = await this.userRepository.checkUserByEmail(data.email);
+    return new CheckEmailResultDTO({
+      email: data.email,
+      isExists: Boolean(user),
+    });
+  }
 
-  async updateUser(id: string, data: UpdateUserDTO) {}
+  @Transactional()
+  async updateUser(id: string, data: UpdateUserDTO) {
+    await this.findCommonUser(id);
 
-  async deleteUser(id: string) {}
+    if (data.password) {
+      data.setPassword(this.encrypt.hashPassword(this.configService.get('PASSWORD_SALT'), data.password));
+    }
+
+    await this.userRepository.updateUser(id, data);
+  }
+
+  @Transactional()
+  async deleteUser(id: string) {
+    await this.findCommonUser(id);
+    await this.userRepository.deleteUser(id);
+  }
 }

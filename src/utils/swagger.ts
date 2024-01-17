@@ -1,5 +1,5 @@
-import { HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
+import { applyDecorators, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 
 import { isArray, omit } from 'lodash';
 
@@ -97,4 +97,8 @@ export const ResponseApi = (
       ApiResponse(options)(target, key as any, descriptor);
     }
   };
+};
+
+export const Auth = (guards: Function[], name = 'access-token') => {
+  return applyDecorators(ApiBearerAuth(name), UseGuards(...guards));
 };
