@@ -75,9 +75,14 @@ class AppConfig {
         'access-token'
       )
       .build();
-    const document = SwaggerModule.createDocument(this.app, swaggerConfig);
 
-    SwaggerModule.setup('api-docs', this.app, document);
+    const document = SwaggerModule.createDocument(this.app, swaggerConfig, {});
+
+    SwaggerModule.setup('api-docs', this.app, document, {
+      swaggerOptions: {
+        docExpansion: false,
+      },
+    });
   }
 
   private async configureDatabase() {
