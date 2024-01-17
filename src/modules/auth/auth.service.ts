@@ -81,6 +81,7 @@ export class AuthService {
   async googleLoginCallback(code: string, res: Response) {
     try {
       const result = await this.googleService.getRestCallback(code);
+
       const { user } = result;
 
       this.socialCallback(new CreateSocialUserDTO().setGoogleUser(user), `${user.id}`, 'google', result.token, res);

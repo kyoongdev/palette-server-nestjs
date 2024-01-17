@@ -16,7 +16,7 @@ const KAKAO_URL = {
 
 const GOOGLE_URL = {
   TOKEN: 'https://oauth2.googleapis.com/token',
-  USER_WEB: 'https://www.googleapis.com/oauth2/v2/userinfo',
+  USER_WEB: 'https://www.googleapis.com/userinfo/v2/me',
   USER_APP(id_token: string) {
     return 'https://oauth2.googleapis.com/tokeninfo?id_token=' + id_token;
   },

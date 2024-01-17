@@ -137,9 +137,10 @@ export class UserRepository {
   }
 
   async createSocialUser(data: CreateSocialUserDTO) {
+    const { socialId, socialType, ...rest } = data;
     const user = await this.database.getRepository().user.create({
       data: {
-        ...data,
+        ...rest,
         social: {
           create: {
             socialId: data.socialId,

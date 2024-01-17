@@ -17,7 +17,7 @@ const config = new ConfigService();
       google: {
         clientId: config.get<string>('GOOGLE_CLIENT_ID'),
         clientSecret: config.get<string>('GOOGLE_CLIENT_SECRET'),
-        redirectUri: config.get<string>('GOOGLE_REDIRECT_URI'),
+        redirectUri: config.get<string>('GOOGLE_REDIRECT_URL'),
       },
       kakao: {
         adminKey: config.get<string>('KAKAO_ADMIN_KEY'),
@@ -28,7 +28,7 @@ const config = new ConfigService();
       naver: {
         clientId: config.get<string>('NAVER_CLIENT_ID'),
         clientSecret: config.get<string>('NAVER_CLIENT_SECRET'),
-        redirectUrl: config.get<string>('NAVER_REDIRECT_URI'),
+        redirectUrl: config.get<string>('NAVER_REDIRECT_URL'),
       },
     }),
   ],

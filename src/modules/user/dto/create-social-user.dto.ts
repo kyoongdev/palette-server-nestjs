@@ -11,7 +11,7 @@ export interface CreateSocialUserDTOProps extends CreateUserDTOProps {
   socialId: string;
   socialType: SocialType;
 }
-console.log(typeof CreateUserDTO);
+
 export class CreateSocialUserDTO extends CreateUserDTO {
   @Property({ apiProperty: { type: 'string', description: '소셜 ID' } })
   socialId: string;
@@ -32,7 +32,9 @@ export class CreateSocialUserDTO extends CreateUserDTO {
     this.socialId = `${socialUser.id}`;
     this.socialType = socialTypeToNumber('kakao');
     this.email = account.email;
-    this.phoneNumber = account.phone_number.replace(/-/g, '').replace('+82 ', '0').trim();
+    this.phoneNumber = account.phone_number
+      ? account.phone_number.replace(/-/g, '').replace('+82 ', '0').trim()
+      : undefined;
 
     return this;
   }
