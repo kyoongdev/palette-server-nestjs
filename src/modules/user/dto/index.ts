@@ -5,3 +5,4 @@ export * from './create-user.dto';
 export * from './check-email-result.dto';
 export * from './check-email.dto';
 export * from './update-password.dto';
+export * from './find-email.dto';

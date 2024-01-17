@@ -1,8 +1,8 @@
 import { HttpException } from '@nestjs/common';
 
-import type { BaseErrorCode } from '@/interface/exception.interface';
+import { BaseErrorCode } from '.';
 
-export class UserException extends HttpException {
+export class CustomException extends HttpException {
   constructor(error: BaseErrorCode) {
     super(error.message, error.code);
   }

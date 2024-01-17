@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 
+import { CustomException } from '@/common/error/custom.exception';
 import { Transactional } from '@/utils/aop/transaction/transaction';
 import { EncryptProvider } from '@/utils/encrypt';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
@@ -10,16 +10,14 @@ import { validatePassword } from '@/utils/regex';
 
 import { CheckEmailResultDTO, UpdatePasswordDTO, UpdateUserDTO } from './dto';
 import { CheckEmailDTO } from './dto/check-email.dto';
-import { USER_ERROR_CODE } from './exception/errorCode';
-import { UserException } from './exception/user.exception';
+import { USER_ERROR_CODE } from './exception/error-code';
 import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly encrypt: EncryptProvider,
-    private readonly configService: ConfigService
+    private readonly encrypt: EncryptProvider
   ) {}
 
   async findCommonUsers(paging: PagingDTO, args = {} as Prisma.UserFindManyArgs) {
@@ -47,6 +45,10 @@ export class UserService {
     });
   }
 
+  async findEmail() {
+    //TODO: 이메일 찾기 + 휴대폰 번호 인증
+  }
+
   @Transactional()
   async updateUser(id: string, data: UpdateUserDTO) {
     await this.findCommonUser(id);
@@ -54,17 +56,22 @@ export class UserService {
     await this.userRepository.updateUser(id, data);
   }
 
+  @Transactional()
   async updatePassword(id: string, data: UpdatePasswordDTO) {
-    if (!validatePassword(data.newPassword)) {
-      throw new UserException(USER_ERROR_CODE.PASSWORD_FORMAT_ERROR);
-    }
-
     const userPassword = await this.userRepository.findUserPassword(id);
 
     const isMatch = this.encrypt.comparePassword(data.password, userPassword);
 
     if (!isMatch) {
-      throw new UserException(USER_ERROR_CODE.PASSWORD_NOT_MATCH);
+      throw new CustomException(USER_ERROR_CODE.PASSWORD_NOT_MATCH);
+    }
+
+    if (!data.newPassword) {
+      return;
+    }
+
+    if (!validatePassword(data.newPassword)) {
+      throw new CustomException(USER_ERROR_CODE.PASSWORD_FORMAT_ERROR);
     }
 
     const newPassword = this.encrypt.hashPassword(data.newPassword);

@@ -5,10 +5,7 @@ import type { SignOptions, VerifyOptions } from 'jsonwebtoken';
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import { nanoid } from 'nanoid';
 
-import type {
-  TokenPayload,
-  TokenPayloadProps,
-} from '@/interface/token.interface';
+import type { TokenPayload, TokenPayloadProps } from '@/interface/token.interface';
 import { TokenDTO } from '@/modules/auth/dto';
 
 @Injectable()
@@ -18,21 +15,13 @@ export class JwtProvider {
 
   constructor(private readonly configService: ConfigService) {}
 
-  signJwt<T extends object>(value: T, options?: SignOptions): string | any {
+  signJwt<T extends object>(value: T, options?: SignOptions): string {
     try {
-      if (
-        typeof value !== 'string' &&
-        typeof value !== 'object' &&
-        !Buffer.isBuffer(value)
-      ) {
+      if (typeof value !== 'string' && typeof value !== 'object' && !Buffer.isBuffer(value)) {
         throw { status: 400, message: 'BadRequest Payload' };
       }
 
-      return jwt.sign(
-        value,
-        this.configService.get<string>('JWT_KEY') as string,
-        options ?? {},
-      );
+      return jwt.sign(value, this.configService.get<string>('JWT_KEY') as string, options ?? {});
     } catch (error) {
       return new JsonWebTokenError('sign Failed');
     }
@@ -40,29 +29,22 @@ export class JwtProvider {
 
   verifyJwt<T = any>(token: string, options?: VerifyOptions): T | any {
     try {
-      return jwt.verify(
-        token,
-        this.configService.get<string>('JWT_KEY') as string,
-        options ?? {},
-      ) as T;
+      return jwt.verify(token, this.configService.get<string>('JWT_KEY') as string, options ?? {}) as T;
     } catch (error) {
       return new JsonWebTokenError('sign Failed');
     }
   }
 
-  async createTokens<T extends TokenPayloadProps>(
-    value: T,
-    options?: SignOptions,
-  ) {
+  async createTokens<T extends TokenPayloadProps>(value: T, options?: SignOptions) {
     const key = nanoid();
 
     const accessToken = this.signJwt<TokenPayload>(
       { ...value, key },
-      { ...options, expiresIn: this.accessTokenExpiresIn },
+      { ...options, expiresIn: this.accessTokenExpiresIn }
     );
     const refreshToken = this.signJwt<TokenPayload>(
       { ...value, key },
-      { ...options, expiresIn: this.refreshTokenExpiresIn },
+      { ...options, expiresIn: this.refreshTokenExpiresIn }
     );
 
     return new TokenDTO({ accessToken, refreshToken });

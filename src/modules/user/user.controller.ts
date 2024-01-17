@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { Paging } from '@/common/decorator';
@@ -10,7 +10,7 @@ import { EmptyResponseDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
 import { Auth, ResponseApi } from '@/utils/swagger';
 
-import { CommonUserDTO, UpdatePasswordDTO, UpdateUserDTO } from './dto';
+import { CheckEmailDTO, CheckEmailResultDTO, CommonUserDTO, UpdatePasswordDTO, UpdateUserDTO } from './dto';
 import { UserService } from './user.service';
 
 @ApiTags('유저')
@@ -26,6 +26,18 @@ export class UserController {
   })
   async findMe(@ReqUser() user: RequestUser) {
     return await this.userService.findCommonUser(user.id);
+  }
+
+  @Post('/check-email')
+  @ApiOperation({ description: '이메일 중복 확인', summary: '이메일 중복 확인 API' })
+  @ApiBody({
+    type: CheckEmailDTO,
+  })
+  @ResponseApi({
+    type: CheckEmailResultDTO,
+  })
+  async checkEmail(@Body() body: CheckEmailDTO) {
+    return await this.userService.checkEmail(body);
   }
 
   @Patch('/me')

@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 
 import type { Prisma } from '@prisma/client';
 
+import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
 
 import { CommonUserDTO, CreateUserDTO, UpdateUserDTO, UserDTO } from './dto';
-import { USER_ERROR_CODE } from './exception/errorCode';
-import { UserException } from './exception/user.exception';
+import { USER_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
 export class UserRepository {
@@ -23,7 +23,7 @@ export class UserRepository {
     });
 
     if (!user) {
-      throw new UserException(USER_ERROR_CODE.USER_NOT_FOUND);
+      throw new CustomException(USER_ERROR_CODE.USER_NOT_FOUND);
     }
 
     return new CommonUserDTO(user);
@@ -40,7 +40,7 @@ export class UserRepository {
     });
 
     if (!user) {
-      throw new UserException(USER_ERROR_CODE.USER_NOT_FOUND);
+      throw new CustomException(USER_ERROR_CODE.USER_NOT_FOUND);
     }
 
     return new UserDTO(user);
@@ -57,7 +57,7 @@ export class UserRepository {
     });
 
     if (!user) {
-      throw new UserException(USER_ERROR_CODE.USER_NOT_FOUND);
+      throw new CustomException(USER_ERROR_CODE.USER_NOT_FOUND);
     }
 
     return user.password;
