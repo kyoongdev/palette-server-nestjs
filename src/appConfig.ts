@@ -61,7 +61,7 @@ class AppConfig {
 
   private configureSwagger() {
     const swaggerConfig = new DocumentBuilder()
-      .setTitle('Palette API v1')
+      .setTitle('Palette API v2')
       .setDescription('Palette의 API 문서입니다.')
       .setVersion('1.0.0')
       .addServer(this.configService.get('API_URL'))

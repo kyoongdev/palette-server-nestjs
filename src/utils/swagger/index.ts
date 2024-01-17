@@ -102,4 +102,5 @@ export const ResponseApi = (
 export const Auth = (guards: Function[], name = 'access-token') => {
   return applyDecorators(ApiBearerAuth(name), UseGuards(...guards));
 };
+
 export * from './property';

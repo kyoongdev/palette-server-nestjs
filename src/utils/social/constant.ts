@@ -1,4 +1,4 @@
-import queryString from 'query-string';
+import queryString from 'querystring';
 
 export const KAKAO_CONFIG = Symbol('KAKAO_CONFIG');
 export const GOOGLE_CONFIG = Symbol('GOOGLE_CONFIG');

@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import axios from 'axios';
 import type { Response } from 'express';
-import queryString from 'query-string';
+import queryString from 'querystring';
 
 import type { KakaoConfig, KakaoGetRestCallback, KakaoGetUser } from '@/interface/social.interface';
 

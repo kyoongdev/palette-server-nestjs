@@ -6,6 +6,7 @@ import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
 
 import { CommonUserDTO, CreateUserDTO, UpdateUserDTO, UserDTO } from './dto';
+import { CreateSocialUserDTO } from './dto/create-social-user.dto';
 import { USER_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
@@ -63,6 +64,34 @@ export class UserRepository {
     return user.password;
   }
 
+  async findUserBySocialId(socialId: string) {
+    const user = await this.database.getRepository().user.findFirst({
+      where: {
+        social: {
+          socialId,
+        },
+      },
+    });
+
+    if (!user) {
+      throw new CustomException(USER_ERROR_CODE.USER_NOT_FOUND);
+    }
+
+    return new UserDTO(user);
+  }
+
+  async checkUserBySocialId(socialId: string) {
+    const user = await this.database.getRepository().user.findFirst({
+      where: {
+        social: {
+          socialId,
+        },
+      },
+    });
+
+    return user ? new UserDTO(user) : null;
+  }
+
   async checkUserByEmail(email: string) {
     const user = await this.database.getRepository().user.findFirst({
       where: {
@@ -105,6 +134,22 @@ export class UserRepository {
     });
 
     return new CommonUserDTO(user);
+  }
+
+  async createSocialUser(data: CreateSocialUserDTO) {
+    const user = await this.database.getRepository().user.create({
+      data: {
+        ...data,
+        social: {
+          create: {
+            socialId: data.socialId,
+            socialType: data.socialType,
+          },
+        },
+      },
+    });
+
+    return new UserDTO(user);
   }
 
   async updateUser(id: string, data: Prisma.UserUpdateArgs['data']) {
