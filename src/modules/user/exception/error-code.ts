@@ -11,6 +11,7 @@ const USER_ERROR = {
   USER_BLOCKED: '차단된 유저입니다.',
   PASSWORD_NOT_MATCH: '비밀번호가 일치하지 않습니다.',
   PASSWORD_FORMAT_ERROR: '비밀번호는 8~16자의 영문, 숫자, 특수문자 조합이어야 합니다.',
+  PASSWORD_NOT_EXIST: '비밀번호가 존재하지 않습니다.',
 };
 
 export const USER_ERROR_CODE: ErrorCode<typeof USER_ERROR> = {
@@ -45,5 +46,9 @@ export const USER_ERROR_CODE: ErrorCode<typeof USER_ERROR> = {
   PASSWORD_FORMAT_ERROR: {
     code: HttpStatus.BAD_REQUEST,
     message: USER_ERROR.PASSWORD_FORMAT_ERROR,
+  },
+  PASSWORD_NOT_EXIST: {
+    code: HttpStatus.BAD_REQUEST,
+    message: USER_ERROR.PASSWORD_NOT_EXIST,
   },
 };

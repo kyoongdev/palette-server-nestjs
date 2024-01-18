@@ -1,19 +1,17 @@
 import { Property } from '@/utils/swagger';
 
-export interface AdminDTOProps {
-  id: string;
-  adminId: string;
+import { CommonAdminDTO, CommonAdminDTOProps } from './common-admin.dto';
+
+export interface AdminDTOProps extends CommonAdminDTOProps {
+  password: string;
 }
 
-export class AdminDTO {
-  @Property({ apiProperty: { type: 'string', description: '관리자 id' } })
-  id: string;
-
-  @Property({ apiProperty: { type: 'string', description: '관리자 아이디' } })
-  adminId: string;
+export class AdminDTO extends CommonAdminDTO {
+  @Property({ apiProperty: { type: 'string', description: '관리자 비밀번호' } })
+  password: string;
 
   constructor(props: AdminDTOProps) {
-    this.id = props.id;
-    this.adminId = props.adminId;
+    super(props);
+    this.password = props.password;
   }
 }

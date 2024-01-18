@@ -23,6 +23,6 @@ export class AdminController {
     isPaging: true,
   })
   async findAdmins(@Paging() paging: PagingDTO) {
-    return await this.adminService.findAdmins(paging);
+    return await this.adminService.findCommonAdmins(paging);
   }
 }

@@ -2,21 +2,66 @@ import { Injectable } from '@nestjs/common';
 
 import { Prisma } from '@prisma/client';
 
+import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
 
-import { AdminDTO } from './dto';
+import { AdminDTO, CommonAdminDTO, CreateAdminDTO, UpdateAdminDTO } from './dto';
+import { ADMIN_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
 export class AdminRepository {
   constructor(private readonly database: PrismaDatabase) {}
 
-  async findAdmins(args = {} as Prisma.AdminFindManyArgs) {
+  async findAdmin(id: string) {
+    const admin = await this.database.getRepository().admin.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!admin) {
+      throw new CustomException(ADMIN_ERROR_CODE.ADMIN_NOT_FOUND);
+    }
+
+    return new AdminDTO(admin);
+  }
+
+  async findCommonAdmin(id: string) {
+    return new CommonAdminDTO(await this.findAdmin(id));
+  }
+
+  async findCommonAdmins(args = {} as Prisma.AdminFindManyArgs) {
     const admins = await this.database.getRepository().admin.findMany(args);
 
-    return admins.map((admin) => new AdminDTO(admin));
+    return admins.map((admin) => new CommonAdminDTO(admin));
   }
 
   async countAdmins(args = {} as Prisma.AdminCountArgs) {
     return await this.database.getRepository().admin.count(args);
+  }
+
+  async createAdmin(data: CreateAdminDTO) {
+    const admin = await this.database.getRepository().admin.create({
+      data,
+    });
+
+    return admin;
+  }
+
+  async updateAdmin(id: string, data: UpdateAdminDTO) {
+    const admin = await this.database.getRepository().admin.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
+
+  async deleteAdmin(id: string) {
+    await this.database.getRepository().admin.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

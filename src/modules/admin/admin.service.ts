@@ -8,9 +8,9 @@ import { AdminRepository } from './admin.repository';
 export class AdminService {
   constructor(private readonly adminRepository: AdminRepository) {}
 
-  async findAdmins(paging: PagingDTO) {
+  async findCommonAdmins(paging: PagingDTO) {
     const { skip, take } = paging.getSkipTake();
-    const admins = await this.adminRepository.findAdmins({
+    const admins = await this.adminRepository.findCommonAdmins({
       skip,
       take,
     });

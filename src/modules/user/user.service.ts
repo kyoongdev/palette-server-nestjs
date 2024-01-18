@@ -56,9 +56,13 @@ export class UserService {
 
   @Transactional()
   async updatePassword(id: string, data: UpdatePasswordDTO) {
-    const userPassword = await this.userRepository.findUserPassword(id);
+    const user = await this.userRepository.findUser(id);
 
-    const isMatch = this.encrypt.comparePassword(data.password, userPassword);
+    if (!user.password) {
+      throw new CustomException(USER_ERROR_CODE.PASSWORD_NOT_EXIST);
+    }
+
+    const isMatch = this.encrypt.comparePassword(data.password, user.password);
 
     if (!isMatch) {
       throw new CustomException(USER_ERROR_CODE.PASSWORD_NOT_MATCH);
