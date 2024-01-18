@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import axios from 'axios';
+import { SwaggerTheme } from 'swagger-themes';
 
 import { PrismaService } from '@/database/prisma.service';
 
@@ -77,13 +78,14 @@ class AppConfig {
       .build();
 
     const document = SwaggerModule.createDocument(this.app, swaggerConfig, {});
-
+    const theme = new SwaggerTheme('v3');
     SwaggerModule.setup('api-docs', this.app, document, {
       swaggerOptions: {
         docExpansion: false,
         apisSorter: 'alpha',
         operationsSorter: 'method',
       },
+      customCss: theme.getBuffer('dark'),
     });
   }
 
