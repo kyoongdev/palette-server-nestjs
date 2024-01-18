@@ -9,7 +9,8 @@ import AppConfig from './appConfig';
 import { Filters } from './common/filter';
 import Interceptors from './common/interceptor';
 import { TransactionMiddleware } from './common/middleware/transaction.middleware';
-import { Modules, V2Module } from './modules';
+import { V2Module } from './modules';
+import { AdminModule } from './modules/admin/admin.module';
 import { GlobalModule } from './modules/global';
 
 const providers: Provider[] = [...Filters, ...Interceptors, AppConfig];
@@ -25,11 +26,15 @@ const providers: Provider[] = [...Filters, ...Interceptors, AppConfig];
       global: true,
     }),
     V2Module,
+    AdminModule,
     RouterModule.register([
       {
         path: '/api/v2',
         module: V2Module,
-        children: Modules,
+      },
+      {
+        path: '/api/v2/admins',
+        module: AdminModule,
       },
     ]),
   ],

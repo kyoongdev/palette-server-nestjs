@@ -15,6 +15,7 @@ export class BaseAOPProvider {
 
   getInstance(providerFilter: (provider: InstanceWrapper<any>) => boolean): void {
     const providers = this.discovery.getProviders().filter(providerFilter);
+
     const controllers = this.discovery.getControllers();
 
     const singletonInstances = providers
@@ -33,10 +34,10 @@ export class BaseAOPProvider {
             const metadataKey = this.reflect.get(AOP_KEY, aopInstance.constructor);
 
             const metadataList: AOPMetaData[] = this.reflect.get<AOPMetaData[]>(metadataKey, instance[methodName]);
-
             if (!metadataList) {
               return;
             }
+
             for (const { originalFn, metadata, aopSymbol } of metadataList) {
               const wrappedMethod = aopInstance.execute({
                 instance,

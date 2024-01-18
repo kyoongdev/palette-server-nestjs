@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 
-import { AdminAOPProvider } from '@/utils/aop/admin-aop.provider';
-import { AdminAOPModule } from '@/utils/aop/aop.module';
+import { AdminController } from './admin.controller';
+import { AdminRepository } from './admin.repository';
+import { AdminService } from './admin.service';
 
-export const AdminModules = [AdminAOPModule];
+export const AdminModules = [];
 
 @Module({
-  providers: [AdminAOPProvider],
+  providers: [AdminService, AdminRepository],
+  controllers: [AdminController],
   imports: AdminModules,
 })
 export class AdminModule {}
