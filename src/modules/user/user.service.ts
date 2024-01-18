@@ -51,8 +51,6 @@ export class UserService {
 
   @Transactional()
   async updateUser(id: string, data: UpdateUserDTO) {
-    await this.findCommonUser(id);
-
     await this.userRepository.updateUser(id, data);
   }
 
@@ -81,7 +79,6 @@ export class UserService {
 
   @Transactional()
   async deleteUser(id: string) {
-    await this.findCommonUser(id);
     await this.userRepository.deleteUser(id);
   }
 }
