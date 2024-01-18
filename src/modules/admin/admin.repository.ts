@@ -30,6 +30,16 @@ export class AdminRepository {
     return new CommonAdminDTO(await this.findAdmin(id));
   }
 
+  async checkAdminByAdminId(adminId: string) {
+    const admin = await this.database.getRepository().admin.findUnique({
+      where: {
+        adminId,
+      },
+    });
+
+    return admin ? new AdminDTO(admin) : false;
+  }
+
   async findCommonAdmins(args = {} as Prisma.AdminFindManyArgs) {
     const admins = await this.database.getRepository().admin.findMany(args);
 

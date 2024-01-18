@@ -8,7 +8,7 @@ import { ResponseApi } from '@/utils/swagger';
 import { AdminService } from './admin.service';
 import { AdminDTO } from './dto';
 
-@ApiTags('관리자')
+@ApiTags('[관리자]')
 @Controller()
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}

@@ -81,6 +81,8 @@ class AppConfig {
     SwaggerModule.setup('api-docs', this.app, document, {
       swaggerOptions: {
         docExpansion: false,
+        apisSorter: 'alpha',
+        operationsSorter: 'method',
       },
     });
   }

@@ -43,7 +43,7 @@ export class AuthService {
       user = await this.userRepository.createSocialUser(data);
     }
 
-    const tokens = await this.jwt.createTokens({ id: user.id, role: 'USER' });
+    const tokens = await this.jwt.createTokens({ id: user.id, role: user.musician ? Role.MUSICIAN : Role.USER });
 
     const query = queryString.stringify({
       status: 200,
@@ -95,9 +95,11 @@ export class AuthService {
     if (!user) {
       throw new CustomException(USER_ERROR_CODE.USER_NOT_FOUND);
     }
-    const password = await this.userRepository.findUserPassword(user.id);
+    const userPassword = await this.userRepository.findUser(user.id);
 
-    const isMatch = this.encrypt.comparePassword(data.password, password);
+    if (!userPassword) throw new CustomException(USER_ERROR_CODE.PASSWORD_NOT_EXIST);
+
+    const isMatch = this.encrypt.comparePassword(data.password, userPassword.password);
 
     if (!isMatch) {
       throw new CustomException(USER_ERROR_CODE.PASSWORD_NOT_MATCH);
@@ -105,7 +107,7 @@ export class AuthService {
 
     return this.jwt.createTokens({
       id: user.id,
-      role: Role.USER,
+      role: user.musician ? Role.MUSICIAN : Role.USER,
     });
   }
 
