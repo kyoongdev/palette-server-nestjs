@@ -12,8 +12,8 @@ export class GenreDTO {
   @Property({ apiProperty: { type: 'string', description: '장르 이름' } })
   name: string;
 
-  constructor(genre: GenreDTOProps) {
-    this.id = genre.id;
-    this.name = genre.name;
+  constructor(props: GenreDTOProps) {
+    this.id = props.id;
+    this.name = props.name;
   }
 }

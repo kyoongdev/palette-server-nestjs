@@ -4,10 +4,11 @@ import { AOPModule } from '@/utils/aop/aop.module';
 
 import { AuthModule } from './auth/auth.module';
 import { GenreModule } from './genre/genre.module';
+import { MoodModule } from './mood/mood.module';
 import { RegionModule } from './region/region.module';
 import { UserModule } from './user/user.module';
 
-export const Modules = [GenreModule, RegionModule, AuthModule, UserModule, AOPModule];
+export const Modules = [MoodModule, GenreModule, RegionModule, AuthModule, UserModule, AOPModule];
 
 @Module({
   imports: Modules,
