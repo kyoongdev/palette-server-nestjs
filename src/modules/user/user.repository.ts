@@ -13,23 +13,6 @@ import { USER_ERROR_CODE } from './exception/error-code';
 export class UserRepository {
   constructor(private readonly database: PrismaDatabase) {}
 
-  async findCommonUser(id: string) {
-    const user = await this.database.getRepository().user.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        musician: true,
-      },
-    });
-
-    if (!user) {
-      throw new CustomException(USER_ERROR_CODE.USER_NOT_FOUND);
-    }
-
-    return new CommonUserDTO(user);
-  }
-
   async findUser(id: string) {
     const user = await this.database.getRepository().user.findUnique({
       where: {
@@ -44,7 +27,7 @@ export class UserRepository {
       throw new CustomException(USER_ERROR_CODE.USER_NOT_FOUND);
     }
 
-    return new UserDTO(user);
+    return user;
   }
 
   async findUserBySocialId(socialId: string) {
@@ -53,6 +36,9 @@ export class UserRepository {
         social: {
           socialId,
         },
+      },
+      include: {
+        musician: true,
       },
     });
 
@@ -70,9 +56,12 @@ export class UserRepository {
           socialId,
         },
       },
+      include: {
+        musician: true,
+      },
     });
 
-    return user ? new UserDTO(user) : null;
+    return user ?? null;
   }
 
   async checkUserByEmail(email: string) {
@@ -80,20 +69,12 @@ export class UserRepository {
       where: {
         email,
       },
-    });
-
-    return user ? new UserDTO(user) : null;
-  }
-
-  async findCommonUsers(args = {} as Prisma.UserFindManyArgs) {
-    const users = await this.database.getRepository().user.findMany({
-      ...args,
       include: {
         musician: true,
       },
     });
 
-    return users.map((user) => new CommonUserDTO(user));
+    return user ?? null;
   }
 
   async findUsers(args = {} as Prisma.UserFindManyArgs) {
@@ -104,7 +85,7 @@ export class UserRepository {
       },
     });
 
-    return users.map((user) => new UserDTO(user));
+    return users;
   }
 
   async countUser(args = {} as Prisma.UserCountArgs) {
@@ -114,9 +95,12 @@ export class UserRepository {
   async createUser(data: CreateUserDTO) {
     const user = await this.database.getRepository().user.create({
       data,
+      include: {
+        musician: true,
+      },
     });
 
-    return new CommonUserDTO(user);
+    return user;
   }
 
   async createSocialUser(data: CreateSocialUserDTO) {
@@ -131,9 +115,12 @@ export class UserRepository {
           },
         },
       },
+      include: {
+        musician: true,
+      },
     });
 
-    return new UserDTO(user);
+    return user;
   }
 
   async updateUser(id: string, data: Prisma.UserUpdateArgs['data']) {

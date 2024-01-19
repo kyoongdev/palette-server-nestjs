@@ -92,14 +92,14 @@ export class AuthService {
 
   async login(data: LoginDTO) {
     const user = await this.userRepository.checkUserByEmail(data.email);
+
     if (!user) {
       throw new CustomException(USER_ERROR_CODE.USER_NOT_FOUND);
     }
-    const userPassword = await this.userRepository.findUser(user.id);
 
-    if (!userPassword) throw new CustomException(USER_ERROR_CODE.PASSWORD_NOT_EXIST);
+    if (!user.password) throw new CustomException(USER_ERROR_CODE.PASSWORD_NOT_EXIST);
 
-    const isMatch = this.encrypt.comparePassword(data.password, userPassword.password);
+    const isMatch = this.encrypt.comparePassword(data.password, user.password);
 
     if (!isMatch) {
       throw new CustomException(USER_ERROR_CODE.PASSWORD_NOT_MATCH);

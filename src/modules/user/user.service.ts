@@ -8,7 +8,7 @@ import { EncryptProvider } from '@/utils/encrypt';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 import { validatePassword } from '@/utils/regex';
 
-import { CheckEmailResultDTO, UpdatePasswordDTO, UpdateUserDTO } from './dto';
+import { CheckEmailResultDTO, CommonUserDTO, UpdatePasswordDTO, UpdateUserDTO } from './dto';
 import { CheckEmailDTO } from './dto/check-email.dto';
 import { USER_ERROR_CODE } from './exception/error-code';
 import { UserRepository } from './user.repository';
@@ -22,7 +22,7 @@ export class UserService {
 
   async findCommonUsers(paging: PagingDTO, args = {} as Prisma.UserFindManyArgs) {
     const { skip, take } = paging.getSkipTake();
-    const users = await this.userRepository.findCommonUsers({
+    const users = await this.userRepository.findUsers({
       ...args,
       skip,
       take,
@@ -30,11 +30,16 @@ export class UserService {
     const count = await this.userRepository.countUser({
       where: args.where,
     });
-    return new PaginationDTO(users, { paging, count });
+
+    return new PaginationDTO(
+      users.map((user) => new CommonUserDTO(user)),
+      { paging, count }
+    );
   }
 
   async findCommonUser(id: string) {
-    return this.userRepository.findCommonUser(id);
+    const user = await this.userRepository.findUser(id);
+    return new CommonUserDTO(user);
   }
 
   async checkEmail(data: CheckEmailDTO) {
