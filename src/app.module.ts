@@ -12,13 +12,13 @@ import { TransactionMiddleware } from './common/middleware/transaction.middlewar
 import { Modules, V2Module } from './modules';
 import { AdminModule, AdminModules } from './modules/admin/admin.module';
 import { GlobalModule } from './modules/global';
+import { MusicianModule, MusicianModules } from './modules/musician/musician.module';
 
 const providers: Provider[] = [...Filters, ...Interceptors, AppConfig];
 
 @Module({
   imports: [
     GlobalModule,
-
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -27,6 +27,7 @@ const providers: Provider[] = [...Filters, ...Interceptors, AppConfig];
     }),
     V2Module,
     AdminModule,
+    MusicianModule,
     RouterModule.register([
       {
         path: '/api/v2',
@@ -37,6 +38,11 @@ const providers: Provider[] = [...Filters, ...Interceptors, AppConfig];
         path: '/api/v2/admins',
         module: AdminModule,
         children: AdminModules,
+      },
+      {
+        path: '/api/v2/musicians',
+        module: MusicianModule,
+        children: MusicianModules,
       },
     ]),
   ],

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { CommonMusicianDTO, CreateMusicianDTO } from './dto';
+import { UpdateMusicianDTO } from './dto/update-musician.dto';
 import { MusicianRepository } from './musician.repository';
 
 @Injectable()
@@ -26,7 +27,7 @@ export class MusicianService {
     return musician.id;
   }
 
-  async updateMusician(userId: string, data: CreateMusicianDTO) {
+  async updateMusician(userId: string, data: UpdateMusicianDTO) {
     const musician = await this.findMusicianByUserId(userId);
     await this.musicianRepository.updateMusician(musician.id, data);
   }
