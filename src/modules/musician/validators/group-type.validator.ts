@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { type ValidationArguments, ValidatorConstraint, type ValidatorConstraintInterface } from 'class-validator';
 
-import { BaseValidator } from './base.validator';
+import { BaseValidator } from '../../../common/validators/base.validator';
 
 export const GROUP_TYPE = {
   ALONE: 'ALONE',

@@ -16,6 +16,7 @@ import { GoogleLogin } from '@/utils/social/google';
 import { KakaoLogin } from '@/utils/social/kakao';
 import { NaverLogin } from '@/utils/social/naver';
 
+import { UserDTO } from '../user/dto';
 import { CreateSocialUserDTO } from '../user/dto/create-social-user.dto';
 import { USER_ERROR_CODE } from '../user/exception/error-code';
 import { UserRepository } from '../user/user.repository';
@@ -42,8 +43,12 @@ export class AuthService {
     if (!user) {
       user = await this.userRepository.createSocialUser(data);
     }
+    const realUser = new UserDTO(user);
 
-    const tokens = await this.jwt.createTokens({ id: user.id, role: user.musician ? Role.MUSICIAN : Role.USER });
+    const tokens = await this.jwt.createTokens({
+      id: user.id,
+      role: realUser.musician && realUser.musician.approveStatus === 'APPROVED' ? Role.MUSICIAN : Role.USER,
+    });
 
     const query = queryString.stringify({
       status: 200,
@@ -105,9 +110,11 @@ export class AuthService {
       throw new CustomException(USER_ERROR_CODE.PASSWORD_NOT_MATCH);
     }
 
+    const realUser = new UserDTO(user);
+
     return this.jwt.createTokens({
       id: user.id,
-      role: user.musician ? Role.MUSICIAN : Role.USER,
+      role: realUser.musician && realUser.musician.approveStatus === 'APPROVED' ? Role.MUSICIAN : Role.USER,
     });
   }
 

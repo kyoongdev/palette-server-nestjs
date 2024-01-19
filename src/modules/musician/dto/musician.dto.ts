@@ -4,8 +4,6 @@ import { Property } from '@/utils/swagger';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from './common-musician.dto';
 
 export interface MusicianDTOProps extends CommonMusicianDTOProps, DateDTOProps {
-  isPending: boolean;
-  isAuthorized: boolean;
   bankCode: string;
   bankAccount: string;
   bankAccountOwnerName: string;
@@ -13,16 +11,6 @@ export interface MusicianDTOProps extends CommonMusicianDTOProps, DateDTOProps {
 }
 
 export class MusicianDTO extends CommonMusicianDTO {
-  @Property({
-    apiProperty: {
-      description: '승인 상태',
-      type: 'string',
-      enum: ['APPROVED', 'PENDING', 'REJECTED'],
-      example: 'APPROVED |PENDING |REJECTED',
-    },
-  })
-  approveStatus: string;
-
   @Property({ apiProperty: { description: '은행 코드', type: 'string' } })
   bankCode: string;
 
@@ -46,7 +34,6 @@ export class MusicianDTO extends CommonMusicianDTO {
 
   constructor(props: MusicianDTOProps) {
     super(props);
-    this.approveStatus = this.getApproveStatus(props.isPending, props.isAuthorized);
     this.bankAccount = props.bankAccount;
     this.bankCode = props.bankCode;
     this.bankAccountOwnerName = props.bankAccountOwnerName;
@@ -54,13 +41,5 @@ export class MusicianDTO extends CommonMusicianDTO {
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
     this.deletedAt = props.deletedAt;
-  }
-
-  private getApproveStatus(isPending: boolean, isAuthorized: boolean) {
-    if (isPending && isAuthorized) {
-      return 'APPROVED';
-    } else if (isPending && !isAuthorized) {
-      return 'REJECTED';
-    } else return 'PENDING';
   }
 }
