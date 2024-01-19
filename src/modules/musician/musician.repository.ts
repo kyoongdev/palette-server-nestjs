@@ -27,6 +27,29 @@ export class MusicianRepository {
     return musician;
   }
 
+  async findMusicians(args = {} as Prisma.MusicianFindManyArgs) {
+    const { where, include, select, ...rest } = args;
+    const musicians = await this.database.getRepository().musician.findMany({
+      where,
+      include: {
+        _count: {
+          select: {
+            services: true,
+          },
+        },
+      },
+      ...rest,
+    });
+
+    return musicians;
+  }
+
+  async countMusicians(args = {} as Prisma.MusicianCountArgs) {
+    const count = await this.database.getRepository().musician.count(args);
+
+    return count;
+  }
+
   async createMusician(data: Prisma.MusicianCreateArgs['data']) {
     return await this.database.getRepository().musician.create({
       data,

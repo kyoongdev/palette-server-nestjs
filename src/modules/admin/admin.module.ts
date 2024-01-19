@@ -4,8 +4,9 @@ import { AdminController } from './admin.controller';
 import { AdminRepository } from './admin.repository';
 import { AdminService } from './admin.service';
 import { AdminAuthModule } from './auth/auth.module';
+import { AdminMusicianModule } from './musician/musician.module';
 
-export const AdminModules = [AdminAuthModule];
+export const AdminModules = [AdminAuthModule, AdminMusicianModule];
 
 @Module({
   providers: [AdminService, AdminRepository],
