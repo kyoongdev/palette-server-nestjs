@@ -8,7 +8,14 @@ import { EncryptProvider } from '@/utils/encrypt';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 import { validatePassword } from '@/utils/regex';
 
-import { CheckEmailResultDTO, CommonUserDTO, UpdatePasswordDTO, UpdateUserDTO } from './dto';
+import {
+  CheckEmailResultDTO,
+  CheckNicknameDTO,
+  CheckNicknameResultDTO,
+  CommonUserDTO,
+  UpdatePasswordDTO,
+  UpdateUserDTO,
+} from './dto';
 import { CheckEmailDTO } from './dto/check-email.dto';
 import { USER_ERROR_CODE } from './exception/error-code';
 import { UserRepository } from './user.repository';
@@ -46,6 +53,14 @@ export class UserService {
     const user = await this.userRepository.checkUserByEmail(data.email);
     return new CheckEmailResultDTO({
       email: data.email,
+      isExists: Boolean(user),
+    });
+  }
+
+  async checkNickname(data: CheckNicknameDTO) {
+    const user = await this.userRepository.checkUserByNickname(data.nickname);
+    return new CheckNicknameResultDTO({
+      nickname: data.nickname,
       isExists: Boolean(user),
     });
   }

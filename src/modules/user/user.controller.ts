@@ -10,7 +10,15 @@ import { EmptyResponseDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
 import { Auth, ResponseApi } from '@/utils/swagger';
 
-import { CheckEmailDTO, CheckEmailResultDTO, CommonUserDTO, UpdatePasswordDTO, UpdateUserDTO } from './dto';
+import {
+  CheckEmailDTO,
+  CheckEmailResultDTO,
+  CheckNicknameDTO,
+  CheckNicknameResultDTO,
+  CommonUserDTO,
+  UpdatePasswordDTO,
+  UpdateUserDTO,
+} from './dto';
 import { UserService } from './user.service';
 
 @ApiTags('유저')
@@ -38,6 +46,18 @@ export class UserController {
   })
   async checkEmail(@Body() body: CheckEmailDTO) {
     return await this.userService.checkEmail(body);
+  }
+
+  @Post('/check-nickname')
+  @ApiOperation({ description: '닉네임 중복 확인', summary: '닉네임 중복 확인 API' })
+  @ApiBody({
+    type: CheckNicknameDTO,
+  })
+  @ResponseApi({
+    type: CheckNicknameResultDTO,
+  })
+  async checkNickname(@Body() body: CheckNicknameDTO) {
+    return await this.userService.checkNickname(body);
   }
 
   @Patch('/me')

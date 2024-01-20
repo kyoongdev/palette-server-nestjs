@@ -6,3 +6,5 @@ export * from './check-email-result.dto';
 export * from './check-email.dto';
 export * from './update-password.dto';
 export * from './find-email.dto';
+export * from './check-nickname-result.dto';
+export * from './check-nickname.dto';

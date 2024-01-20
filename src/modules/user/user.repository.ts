@@ -77,6 +77,19 @@ export class UserRepository {
     return user ?? null;
   }
 
+  async checkUserByNickname(nickname: string) {
+    const user = await this.database.getRepository().user.findFirst({
+      where: {
+        nickname,
+      },
+      include: {
+        musician: true,
+      },
+    });
+
+    return user ?? null;
+  }
+
   async findUsers(args = {} as Prisma.UserFindManyArgs) {
     const users = await this.database.getRepository().user.findMany({
       ...args,
