@@ -6,6 +6,7 @@ export interface CreateUserDTOProps {
   email?: string;
   password?: string;
   name?: string;
+  nickname?: string;
   profileImage?: string;
   phoneNumber?: string;
   isAlarmAccepted: boolean;
@@ -22,6 +23,9 @@ export class CreateUserDTO {
   @Property({ apiProperty: { description: '이름', type: 'string', nullable: true } })
   name?: string;
 
+  @Property({ apiProperty: { description: '닉네임', type: 'string', nullable: true } })
+  nickname?: string;
+
   @Property({ apiProperty: { description: '프로필 이미지', type: 'string', nullable: true } })
   profileImage?: string;
 
@@ -37,6 +41,7 @@ export class CreateUserDTO {
       this.email = props.email;
       this.password = props.password;
       this.name = props.name;
+      this.nickname = props.nickname;
       this.profileImage = props.profileImage;
       this.phoneNumber = props.phoneNumber;
       this.isAlarmAccepted = props.isAlarmAccepted;

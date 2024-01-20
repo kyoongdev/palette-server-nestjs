@@ -16,6 +16,9 @@ export class RegisterDTO {
   @Property({ apiProperty: { description: '이름', type: 'string' } })
   name: string;
 
+  @Property({ apiProperty: { description: '닉네임', type: 'string' } })
+  nickname: string;
+
   @MaxLength(11)
   @Property({ apiProperty: { description: '휴대폰번호', type: 'string', maxLength: 11 } })
   phoneNumber: string;
@@ -28,6 +31,7 @@ export class RegisterDTO {
       this.email = props.email;
       this.password = props.password;
       this.name = props.name;
+      this.nickname = props.nickname;
       this.phoneNumber = props.phoneNumber;
       this.isAlarmAccepted = props.isAlarmAccepted;
     }
