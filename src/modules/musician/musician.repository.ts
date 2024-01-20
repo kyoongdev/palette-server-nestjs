@@ -11,6 +11,19 @@ import { MUSICIAN_ERROR_CODE } from './exception/error-code';
 export class MusicianRepository {
   constructor(private readonly database: PrismaDatabase) {}
 
+  async findMusician(id: string) {
+    const musician = await this.database.getRepository().musician.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!musician) {
+      throw new CustomException(MUSICIAN_ERROR_CODE.MUSICIAN_NOT_FOUND);
+    }
+
+    return musician;
+  }
   async findMusicianByUserId(userId: string) {
     const musician = await this.database.getRepository().musician.findFirst({
       where: {

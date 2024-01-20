@@ -19,8 +19,16 @@ export const RoleGuard = (...roles: RoleType[]) => {
 
       if (!req.user) throw new UnauthorizedException('로그인을 진행해주세요.');
 
-      if (!roles.includes(req.user.role)) throw new ForbiddenException(`${req.user.role}는 사용할 수 없습니다.`);
+      if (roles.includes('ADMIN') && req.user.role !== 'ADMIN') {
+        throw new ForbiddenException(`${req.user.role}는 사용할 수 없습니다.`);
+      }
 
+      if (!roles.includes('ADMIN') && !roles.includes('USER') && req.user.role !== 'MUSICIAN')
+        throw new ForbiddenException(`${req.user.role}는 사용할 수 없습니다.`);
+
+      if (roles.includes('USER') && req.user.role !== 'USER' && req.user.role !== 'MUSICIAN') {
+        throw new ForbiddenException(`${req.user.role}는 사용할 수 없습니다.`);
+      }
       return true;
     }
   }

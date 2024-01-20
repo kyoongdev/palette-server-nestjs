@@ -57,6 +57,7 @@ export const GroupTypeResTransform = () => Transform(({ value }) => groupTypeNum
 export const GroupTypeReqDecorator = (nullable = false) =>
   applyDecorators(
     GroupTypeReqTransform(),
+    GroupTypeValidator(),
     ApiProperty({
       nullable,
       description: '활동 인원',

@@ -38,12 +38,12 @@ export class AdminMusicianController {
     return await this.musicianService.getMusicianCountInfo();
   }
 
-  @Post('/:userId/approve')
+  @Post('/:musicianId/approve')
   @ApiOperation({ summary: '뮤지션 승인 API', description: '뮤지션 승인' })
   @ApiParam({
     type: 'string',
-    description: '유저 아이디 (뮤지션 아이디 x)',
-    name: 'userId',
+    description: '뮤지션 아이디',
+    name: 'musicianId',
   })
   @ResponseApi(
     {
@@ -51,16 +51,16 @@ export class AdminMusicianController {
     },
     204
   )
-  async approveMusician(@Param('userId') userId: string) {
-    await this.musicianService.approveMusicianByUserId(userId);
+  async approveMusician(@Param('musicianId') musicianId: string) {
+    await this.musicianService.approveMusician(musicianId);
   }
 
-  @Post('/:userId/reject')
+  @Post('/:musicianId/reject')
   @ApiOperation({ summary: '뮤지션 거절 API', description: '뮤지션 거절' })
   @ApiParam({
     type: 'string',
-    description: '유저 아이디 (뮤지션 아이디 x)',
-    name: 'userId',
+    description: '뮤지션 아이디',
+    name: 'musicianId',
   })
   @ResponseApi(
     {
@@ -68,16 +68,16 @@ export class AdminMusicianController {
     },
     204
   )
-  async rejectMusician(@Param('userId') userId: string) {
-    await this.musicianService.rejectMusicianByUserId(userId);
+  async rejectMusician(@Param('musicianId') musicianId: string) {
+    await this.musicianService.rejectMusician(musicianId);
   }
 
-  @Patch('/:userId')
+  @Patch('/:musicianId')
   @ApiOperation({ summary: '뮤지션 정보 수정 API', description: '뮤지션 정보 수정' })
   @ApiParam({
     type: 'string',
-    description: '유저 아이디 (뮤지션 아이디 x)',
-    name: 'userId',
+    description: '뮤지션 아이디',
+    name: 'musicianId',
   })
   @ApiBody({
     type: UpdateMusicianDTO,
@@ -88,7 +88,7 @@ export class AdminMusicianController {
     },
     204
   )
-  async updateMusician(@Param('userId') userId: string, updateMusicianDTO: UpdateMusicianDTO) {
-    await this.musicianService.updateMusicianByUserId(userId, updateMusicianDTO);
+  async updateMusician(@Param('musicianId') musicianId: string, updateMusicianDTO: UpdateMusicianDTO) {
+    await this.musicianService.updateMusician(musicianId, updateMusicianDTO);
   }
 }

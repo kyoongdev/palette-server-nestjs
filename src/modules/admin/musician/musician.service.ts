@@ -99,8 +99,8 @@ export class AdminMusicianService {
   }
 
   @Transactional()
-  async approveMusicianByUserId(userId: string) {
-    const musician = await this.musicianRepository.findMusicianByUserId(userId);
+  async approveMusician(musicianId: string) {
+    const musician = await this.musicianRepository.findMusician(musicianId);
 
     if (musician.isAuthorized && !musician.isPending) {
       throw new CustomException(MUSICIAN_ERROR_CODE.ALREADY_APPROVED);
@@ -113,8 +113,8 @@ export class AdminMusicianService {
   }
 
   @Transactional()
-  async rejectMusicianByUserId(userId: string) {
-    const musician = await this.musicianRepository.findMusicianByUserId(userId);
+  async rejectMusician(musicianId: string) {
+    const musician = await this.musicianRepository.findMusician(musicianId);
 
     if (!musician.isAuthorized && !musician.isPending) {
       throw new CustomException(MUSICIAN_ERROR_CODE.ALREADY_APPROVED);
@@ -127,8 +127,8 @@ export class AdminMusicianService {
   }
 
   @Transactional()
-  async updateMusicianByUserId(userId: string, data: UpdateMusicianDTO) {
-    const musician = await this.musicianRepository.findMusicianByUserId(userId);
+  async updateMusician(musicianId: string, data: UpdateMusicianDTO) {
+    const musician = await this.musicianRepository.findMusician(musicianId);
 
     await this.musicianRepository.updateMusician(musician.id, data);
   }

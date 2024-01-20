@@ -2,6 +2,8 @@ import { AdminMusician } from '@/interface/musician.interface';
 import { Property } from '@/utils/swagger';
 
 export interface AdminMusiciansDTOProps {
+  id: string;
+  userId: string;
   stageName: string;
   name: string;
   serviceCount: number;
@@ -9,6 +11,12 @@ export interface AdminMusiciansDTOProps {
 }
 
 export class AdminMusiciansDTO {
+  @Property({ apiProperty: { description: '아이디', type: 'string' } })
+  id: string;
+
+  @Property({ apiProperty: { description: '유저 아이디', type: 'string' } })
+  userId: string;
+
   @Property({ apiProperty: { description: '활동명', type: 'string' } })
   stageName: string;
 
@@ -22,6 +30,8 @@ export class AdminMusiciansDTO {
   createdAt: Date;
 
   constructor(props: AdminMusiciansDTOProps) {
+    this.id = props.id;
+    this.userId = props.userId;
     this.stageName = props.stageName;
     this.name = props.name;
     this.serviceCount = props.serviceCount;
@@ -34,6 +44,8 @@ export class AdminMusiciansDTO {
       name: data.name,
       serviceCount: data._count.services,
       createdAt: data.createdAt,
+      id: data.id,
+      userId: data.userId,
     });
   }
 }

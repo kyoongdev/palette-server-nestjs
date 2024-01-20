@@ -9,6 +9,7 @@ import {
   RequestMusician,
   RequestUser,
   ReqUserType,
+  RoleType,
   type TokenPayload,
 } from '@/interface/token.interface';
 
@@ -36,37 +37,48 @@ export class JwtAuthGuard implements CanActivate {
     if (decoded instanceof JsonWebTokenError) throw new UnauthorizedException('TOKEN_EXPIRED');
 
     let isExist: ReqUserType | null = null;
+    let role: RoleType | null = null;
 
-    try {
-      if (decoded.role === 'USER') {
-        isExist = (await this.database.user.findUnique({
-          where: {
-            id: decoded.id,
-          },
-        })) as RequestUser;
-      } else if (decoded.role === 'ADMIN') {
-        isExist = (await this.database.admin.findUnique({
-          where: {
-            id: decoded.id,
-          },
-        })) as RequestAdmin;
-      } else if (decoded.role === 'MUSICIAN') {
-        isExist = (await this.database.user.findUnique({
-          where: {
-            id: decoded.id,
-          },
-          include: {
-            musician: true,
-          },
-        })) as RequestMusician;
+    if (decoded.role === 'USER') {
+      isExist = (await this.database.user.findUnique({
+        where: {
+          id: decoded.id,
+        },
+        include: {
+          musician: true,
+        },
+      })) as RequestMusician;
+      if (isExist.musician) {
+        role = 'MUSICIAN';
+      } else {
+        role = 'USER';
       }
-    } catch (_e) {
-      throw new NotFoundException('유저를 찾을 수 없습니다.');
+    } else if (decoded.role === 'ADMIN') {
+      isExist = (await this.database.admin.findUnique({
+        where: {
+          id: decoded.id,
+        },
+      })) as RequestAdmin;
+      role = 'ADMIN';
+    } else if (decoded.role === 'MUSICIAN') {
+      isExist = (await this.database.user.findFirst({
+        where: {
+          id: decoded.id,
+          musician: {
+            isNot: null,
+          },
+        },
+        include: {
+          musician: true,
+        },
+      })) as RequestMusician;
+      role = 'MUSICIAN';
     }
+    if (!isExist) throw new NotFoundException('유저를 찾을 수 없습니다.');
 
     req.user = {
       ...isExist,
-      role: decoded.role,
+      role,
     } as ReqUserType;
 
     return true;
