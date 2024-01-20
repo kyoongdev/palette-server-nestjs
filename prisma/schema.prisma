@@ -178,7 +178,7 @@ model MrBeatLicense {
   isNewSongWithVoiceAllowed    Boolean
   isProfitActivityAllowed      Boolean
   isPerformanceActivityAllowed Boolean
-  isBackgrounMusicAllowed      Boolean
+  isBackgroundMusicAllowed     Boolean
   isMVProduceAllowed           Boolean
   isShareAllowed               Boolean
   isArrangeAllowed             Boolean
