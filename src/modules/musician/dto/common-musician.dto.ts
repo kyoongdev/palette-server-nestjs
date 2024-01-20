@@ -46,9 +46,9 @@ export class CommonMusicianDTO {
   }
 
   private getApproveStatus(isPending: boolean, isAuthorized: boolean): MusicianApproveStatus {
-    if (isPending && isAuthorized) {
+    if (!isPending && isAuthorized) {
       return 'APPROVED';
-    } else if (isPending && !isAuthorized) {
+    } else if (!isPending && !isAuthorized) {
       return 'REJECTED';
     } else return 'PENDING';
   }

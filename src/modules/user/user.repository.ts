@@ -124,7 +124,7 @@ export class UserRepository {
   }
 
   async updateUser(id: string, data: Prisma.UserUpdateArgs['data']) {
-    await this.database.getRepository().user.update({
+    await this.database.getRepository().user.updateMany({
       where: {
         id,
       },
@@ -133,7 +133,7 @@ export class UserRepository {
   }
 
   async deleteUser(id: string) {
-    await this.database.getRepository().user.update({
+    await this.database.getRepository().user.updateMany({
       where: {
         id,
       },

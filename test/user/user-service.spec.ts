@@ -4,6 +4,8 @@ import { PrismaService } from '@/database/prisma.service';
 import { UserRepository } from '@/modules/user/user.repository';
 import { UserService } from '@/modules/user/user.service';
 import { PRISMA_CLS_KEY } from '@/utils/aop/transaction/transaction';
+import { EncryptProvider } from '@/utils/encrypt';
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClient, User } from '@prisma/client';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
@@ -30,8 +32,11 @@ describe('UserService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserService, PrismaService, PrismaDatabase, UserRepository],
+      providers: [UserService, PrismaService, PrismaDatabase, UserRepository, EncryptProvider],
       imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
+        }),
         ClsModule.forRoot({
           global: true,
         }),
@@ -53,7 +58,7 @@ describe('UserService', () => {
         cls.set(PRISMA_CLS_KEY, mockPrisma);
         (mockPrisma.user as any).findUnique.mockResolvedValueOnce(testUser);
 
-        const result = await service.findUser(testUser.id);
+        const result = await service.findCommonUser(testUser.id);
 
         expect(result.id).toEqual(testUser.id);
       });

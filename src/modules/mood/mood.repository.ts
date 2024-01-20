@@ -88,7 +88,7 @@ export class MoodRepository {
       });
     }
 
-    await this.database.getRepository().mood.update({
+    await this.database.getRepository().mood.updateMany({
       where: {
         id,
       },

@@ -1618,6 +1618,20 @@
   resolved "https://registry.yarnpkg.com/@prisma/prisma-schema-wasm/-/prisma-schema-wasm-4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584.tgz#58398a22a15d0a11ae7c8756de2b793bb8abfca3"
   integrity sha512-JFdsnSgBPN8reDTLOI9Vh/6ccCb2aD1LbY/LWQnkcIgNo6IdpzvuM+qRVbBuA6IZP2SdqQI8Lu6RL2P8EFBQUA==
 
+"@quramy/jest-prisma-core@^1.7.0":
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/@quramy/jest-prisma-core/-/jest-prisma-core-1.7.3.tgz#be71ee3745ce5e44d86486a2dcd7fc48d10896dd"
+  integrity sha512-x/V/OqnUdmXUrv0mQa18ixJ61jYFTvNGrpzhVxr1FriAUQL2p2srMj15iLe8DmkxHqnlwBJHcM2rSx8HM3wiEA==
+  dependencies:
+    chalk "^4.0.0"
+
+"@quramy/jest-prisma@^1.7.3":
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/@quramy/jest-prisma/-/jest-prisma-1.7.3.tgz#2dc2b4e3f265fa889d8839134c7a33f07110d0cb"
+  integrity sha512-f0phAXcml0bzjiswHfwdA7teZparTjv8EXprtSJjnhf0bpMIXE1qGRD1dl43EkfpPWy5RjXthtQDvbCi3Mb6xg==
+  dependencies:
+    "@quramy/jest-prisma-core" "^1.7.0"
+
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.27.8.tgz#6667fac16c436b5434a387a34dedb013198f6e6e"

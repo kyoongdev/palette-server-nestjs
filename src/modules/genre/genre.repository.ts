@@ -89,7 +89,7 @@ export class GenreRepository {
       });
     }
 
-    await this.database.getRepository().genre.update({
+    await this.database.getRepository().genre.updateMany({
       where: {
         id,
       },

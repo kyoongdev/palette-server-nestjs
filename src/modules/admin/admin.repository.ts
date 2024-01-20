@@ -59,7 +59,7 @@ export class AdminRepository {
   }
 
   async updateAdmin(id: string, data: UpdateAdminDTO) {
-    const admin = await this.database.getRepository().admin.update({
+    const admin = await this.database.getRepository().admin.updateMany({
       where: {
         id,
       },

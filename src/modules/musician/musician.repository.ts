@@ -57,16 +57,18 @@ export class MusicianRepository {
   }
 
   async updateMusician(id: string, data: Prisma.MusicianUpdateArgs['data']) {
-    await this.database.getRepository().musician.update({
+    await this.database.getRepository().musician.updateMany({
       where: {
         id,
       },
-      data,
+      data: {
+        ...data,
+      },
     });
   }
 
   async deleteMusician(id: string) {
-    await this.database.getRepository().musician.update({
+    await this.database.getRepository().musician.updateMany({
       where: {
         id,
       },

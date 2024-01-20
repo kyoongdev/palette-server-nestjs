@@ -15,10 +15,7 @@ export const Transactional = () => createAOPDecorator(TRANSACTION);
 
 @AOP(TRANSACTION)
 export class TransactionDecorator implements AOPDecorator {
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly cls: ClsService
-  ) {}
+  constructor(private readonly cls: ClsService) {}
 
   execute({ method, metadata }: AOPParams<any, any>) {
     return async (...args: any[]) => {
