@@ -10,6 +10,7 @@ export interface CommonMusicianDTOProps {
   introduction?: string;
   isPending: boolean;
   isAuthorized: boolean;
+  profileImageUrl?: string;
 }
 export class CommonMusicianDTO {
   @Property({ apiProperty: { description: 'id', type: 'string' } })
@@ -37,12 +38,17 @@ export class CommonMusicianDTO {
   })
   approveStatus: MusicianApproveStatus;
 
+  @Property({ apiProperty: { description: '프로필 이미지 url', type: 'string', nullable: true } })
+  profileImageUrl?: string;
+
   constructor(props: CommonMusicianDTOProps) {
     this.id = props.id;
     this.stageName = props.stageName;
     this.name = props.name;
     this.groupType = props.groupType;
     this.approveStatus = this.getApproveStatus(props.isPending, props.isAuthorized);
+    this.introduction = props.introduction;
+    this.profileImageUrl = props.profileImageUrl;
   }
 
   private getApproveStatus(isPending: boolean, isAuthorized: boolean): MusicianApproveStatus {

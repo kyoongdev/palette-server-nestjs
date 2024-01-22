@@ -7,7 +7,7 @@ export interface CreateUserDTOProps {
   password?: string;
   name?: string;
   nickname?: string;
-  profileImage?: string;
+  profileImageId?: string;
   phoneNumber?: string;
   isAlarmAccepted: boolean;
 }
@@ -26,8 +26,8 @@ export class CreateUserDTO {
   @Property({ apiProperty: { description: '닉네임', type: 'string', nullable: true } })
   nickname?: string;
 
-  @Property({ apiProperty: { description: '프로필 이미지', type: 'string', nullable: true } })
-  profileImage?: string;
+  @Property({ apiProperty: { description: '프로필 이미지 id', type: 'string', nullable: true } })
+  profileImageId?: string;
 
   @MaxLength(11)
   @Property({ apiProperty: { description: '휴대폰번호', type: 'string', nullable: true, maxLength: 11 } })
@@ -42,7 +42,7 @@ export class CreateUserDTO {
       this.password = props.password;
       this.name = props.name;
       this.nickname = props.nickname;
-      this.profileImage = props.profileImage;
+      this.profileImageId = props.profileImageId;
       this.phoneNumber = props.phoneNumber;
       this.isAlarmAccepted = props.isAlarmAccepted;
     }

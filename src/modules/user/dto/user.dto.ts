@@ -1,3 +1,4 @@
+import { FindCommonUser } from '@/interface/user.interface';
 import { Property } from '@/utils/swagger';
 
 import { CommonUserDTO, CommonUserDTOProps } from './common-user.dto';
@@ -23,5 +24,19 @@ export class UserDTO extends CommonUserDTO {
     this.phoneNumber = props.phoneNumber;
     this.password = props.password;
     this.isAlarmAccepted = props.isAlarmAccepted;
+  }
+
+  static fromEntity(data: FindCommonUser): UserDTO {
+    const { profileImage, musician, ...rest } = data;
+    return new UserDTO({
+      ...rest,
+      musician: data.musician
+        ? {
+            ...data.musician,
+            profileImageUrl: profileImage ? profileImage.url : null,
+          }
+        : null,
+      profileImage: profileImage ? profileImage.url : null,
+    });
   }
 }

@@ -50,6 +50,11 @@ export class MusicianRepository {
             services: true,
           },
         },
+        user: {
+          include: {
+            profileImage: true,
+          },
+        },
       },
       ...rest,
     });

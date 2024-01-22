@@ -18,12 +18,13 @@ model Admin {
 model User {
   id String @id @default(uuid())
 
-  email        String? @db.VarChar(255)
-  password     String? @db.VarChar(255)
-  name         String? @db.VarChar(255)
-  nickname     String? @db.VarChar(255)
-  profileImage String? @db.VarChar(255)
-  phoneNumber  String? @db.Char(11)
+  email          String? @db.VarChar(255)
+  password       String? @db.VarChar(255)
+  name           String? @db.VarChar(255)
+  nickname       String? @db.VarChar(255)
+  profileImageId String?
+  profileImage   Image?  @relation(fields: [profileImageId], references: [id])
+  phoneNumber    String? @db.Char(11)
 
   isAlarmAccepted Boolean @default(false)
 
@@ -543,6 +544,7 @@ model Image {
   recordingImages       RecordingImage[]
   mixMasteringThumbnail MixMastering[]
   albumArtImages        AlbumArtImage[]
+  userProfileImages     User[]
 }
 
 model Music {

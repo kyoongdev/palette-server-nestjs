@@ -1,6 +1,7 @@
-export interface FindFile {
+export interface FindMusic {
   id: string;
   originalName: string;
   extension: string;
   url: string;
+  duration: number;
 }

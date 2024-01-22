@@ -1,4 +1,4 @@
-import { FindMusician } from '@/interface/musician.interface';
+import { FindCommonMusician } from '@/interface/musician.interface';
 import { DateDTO, DateDTOProps } from '@/utils';
 import { Property } from '@/utils/swagger';
 
@@ -44,7 +44,7 @@ export class MusicianDTO extends CommonMusicianDTO {
     this.deletedAt = props.deletedAt;
   }
 
-  static fromEntity(data: FindMusician): MusicianDTO {
+  static fromEntity(data: FindCommonMusician): MusicianDTO {
     return new MusicianDTO({
       ...data,
       evidenceFileUrl: data.evidenceFile.url,

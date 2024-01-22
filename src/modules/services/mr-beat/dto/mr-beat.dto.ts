@@ -1,7 +1,6 @@
 import { FindMrBeat } from '@/interface/mr-beat.interface';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
 import { GroupTypeResDecorator } from '@/modules/musician/validators';
-import { DateDTO } from '@/utils';
 import { Property } from '@/utils/swagger';
 
 import { MrBeatContactDTO, MrBeatContactDTOProps } from './mr-beat-contact.dto';
@@ -13,6 +12,7 @@ export interface MrBeatDTOProps {
   groupType: number;
   thumbnailUrl: string;
   musicUrl: string;
+  musicDuration: number;
   genreName: string;
   moodName: string;
   createdAt: Date;
@@ -36,6 +36,9 @@ export class MrBeatDTO {
 
   @Property({ apiProperty: { description: '음원 url', type: 'string' } })
   musicUrl: string;
+
+  @Property({ apiProperty: { description: '음원 길이', type: 'number' } })
+  musicDuration: number;
 
   @Property({ apiProperty: { description: '장르 이름', type: 'string' } })
   genreName: string;
@@ -76,6 +79,7 @@ export class MrBeatDTO {
       groupType: data.groupType,
       thumbnailUrl: data.thumbnail.url,
       musicUrl: data.music.url,
+      musicDuration: data.music.duration,
       genreName: data.genre.name,
       moodName: data.mood.name,
       createdAt: data.createdAt,

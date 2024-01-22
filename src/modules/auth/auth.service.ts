@@ -43,7 +43,7 @@ export class AuthService {
     if (!user) {
       user = await this.userRepository.createSocialUser(data);
     }
-    const realUser = new UserDTO(user);
+    const realUser = UserDTO.fromEntity(user);
 
     const tokens = await this.jwt.createTokens({
       id: user.id,
@@ -110,7 +110,7 @@ export class AuthService {
       throw new CustomException(USER_ERROR_CODE.PASSWORD_NOT_MATCH);
     }
 
-    const realUser = new UserDTO(user);
+    const realUser = UserDTO.fromEntity(user);
 
     return this.jwt.createTokens({
       id: user.id,

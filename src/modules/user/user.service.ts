@@ -39,14 +39,14 @@ export class UserService {
     });
 
     return new PaginationDTO(
-      users.map((user) => new CommonUserDTO(user)),
+      users.map((user) => CommonUserDTO.fromFindCommonUser(user)),
       { paging, count }
     );
   }
 
   async findCommonUser(id: string) {
     const user = await this.userRepository.findUser(id);
-    return new CommonUserDTO(user);
+    return CommonUserDTO.fromFindCommonUser(user);
   }
 
   async checkEmail(data: CheckEmailDTO) {
@@ -71,7 +71,7 @@ export class UserService {
 
   @Transactional()
   async updateUser(id: string, data: UpdateUserDTO) {
-    await this.userRepository.updateUser(id, data);
+    await this.userRepository.updateUser(id, data.toUpdateArgs());
   }
 
   @Transactional()

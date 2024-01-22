@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+import { FindCommonUser } from '@/interface/user.interface';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto/common-musician.dto';
 import { DateDTO, DateDTOProps } from '@/utils';
 
@@ -37,5 +38,20 @@ export class CommonUserDTO extends DateDTO {
     this.name = props.name;
     this.profileImage = props.profileImage;
     this.musician = props.musician ? new CommonMusicianDTO(props.musician) : null;
+  }
+
+  static fromFindCommonUser(data: FindCommonUser): CommonUserDTO {
+    const { profileImage, musician, ...rest } = data;
+
+    return new CommonUserDTO({
+      ...rest,
+      musician: data.musician
+        ? {
+            ...data.musician,
+            profileImageUrl: profileImage ? profileImage.url : null,
+          }
+        : null,
+      profileImage: profileImage ? profileImage.url : null,
+    });
   }
 }

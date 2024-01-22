@@ -19,7 +19,12 @@ export class UserRepository {
         id,
       },
       include: {
-        musician: true,
+        musician: {
+          include: {
+            evidenceFile: true,
+          },
+        },
+        profileImage: true,
       },
     });
 
@@ -38,7 +43,12 @@ export class UserRepository {
         },
       },
       include: {
-        musician: true,
+        musician: {
+          include: {
+            evidenceFile: true,
+          },
+        },
+        profileImage: true,
       },
     });
 
@@ -46,7 +56,7 @@ export class UserRepository {
       throw new CustomException(USER_ERROR_CODE.USER_NOT_FOUND);
     }
 
-    return new UserDTO(user);
+    return user;
   }
 
   async checkUserBySocialId(socialId: string) {
@@ -57,7 +67,12 @@ export class UserRepository {
         },
       },
       include: {
-        musician: true,
+        musician: {
+          include: {
+            evidenceFile: true,
+          },
+        },
+        profileImage: true,
       },
     });
 
@@ -70,7 +85,12 @@ export class UserRepository {
         email,
       },
       include: {
-        musician: true,
+        musician: {
+          include: {
+            evidenceFile: true,
+          },
+        },
+        profileImage: true,
       },
     });
 
@@ -83,7 +103,12 @@ export class UserRepository {
         nickname,
       },
       include: {
-        musician: true,
+        musician: {
+          include: {
+            evidenceFile: true,
+          },
+        },
+        profileImage: true,
       },
     });
 
@@ -92,9 +117,16 @@ export class UserRepository {
 
   async findUsers(args = {} as Prisma.UserFindManyArgs) {
     const users = await this.database.getRepository().user.findMany({
-      ...args,
+      where: {
+        ...args.where,
+      },
       include: {
-        musician: true,
+        musician: {
+          include: {
+            evidenceFile: true,
+          },
+        },
+        profileImage: true,
       },
     });
 
@@ -105,11 +137,15 @@ export class UserRepository {
     return await this.database.getRepository().user.count(args);
   }
 
-  async createUser(data: CreateUserDTO) {
+  async createUser(data: Prisma.UserCreateArgs['data']) {
     const user = await this.database.getRepository().user.create({
       data,
       include: {
-        musician: true,
+        musician: {
+          include: {
+            evidenceFile: true,
+          },
+        },
       },
     });
 
@@ -117,7 +153,7 @@ export class UserRepository {
   }
 
   async createSocialUser(data: CreateSocialUserDTO) {
-    const { socialId, socialType, ...rest } = data;
+    const { socialId, socialType, profileImageId, ...rest } = data;
     const user = await this.database.getRepository().user.create({
       data: {
         ...rest,
@@ -127,9 +163,19 @@ export class UserRepository {
             socialType: data.socialType,
           },
         },
+        profileImage: {
+          connect: {
+            id: profileImageId,
+          },
+        },
       },
       include: {
-        musician: true,
+        musician: {
+          include: {
+            evidenceFile: true,
+          },
+        },
+        profileImage: true,
       },
     });
 
