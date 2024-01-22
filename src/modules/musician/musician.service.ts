@@ -15,8 +15,14 @@ export class MusicianService {
   }
 
   async createMusician(userId: string, data: CreateMusicianDTO) {
+    const { evidenceFileId, ...rest } = data;
     const musician = await this.musicianRepository.createMusician({
-      ...data,
+      ...rest,
+      evidenceFile: {
+        connect: {
+          id: evidenceFileId,
+        },
+      },
       user: {
         connect: {
           id: userId,

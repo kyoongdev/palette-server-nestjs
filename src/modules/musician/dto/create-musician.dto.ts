@@ -10,7 +10,7 @@ export interface CreateMusicianDTOProps {
   bankCode: string;
   bankAccount: string;
   bankAccountOwnerName: string;
-  evidenceFileUrl: string;
+  evidenceFileId: string;
 }
 
 export class CreateMusicianDTO {
@@ -35,8 +35,8 @@ export class CreateMusicianDTO {
   @Property({ apiProperty: { type: 'string', description: '계좌주' } })
   bankAccountOwnerName: string;
 
-  @Property({ apiProperty: { type: 'string', description: '증빙자료' } })
-  evidenceFileUrl: string;
+  @Property({ apiProperty: { type: 'string', description: '증빙자료 파일 id' } })
+  evidenceFileId: string;
 
   constructor(props?: CreateMusicianDTOProps) {
     if (props) {
@@ -47,7 +47,7 @@ export class CreateMusicianDTO {
       this.bankCode = props.bankCode;
       this.bankAccount = props.bankAccount;
       this.bankAccountOwnerName = props.bankAccountOwnerName;
-      this.evidenceFileUrl = props.evidenceFileUrl;
+      this.evidenceFileId = props.evidenceFileId;
     }
   }
 }

@@ -1,4 +1,14 @@
 -- CreateTable
+CREATE TABLE `Admin` (
+    `id` VARCHAR(191) NOT NULL,
+    `adminId` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+
+    UNIQUE INDEX `Admin_adminId_key`(`adminId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `User` (
     `id` VARCHAR(191) NOT NULL,
     `email` VARCHAR(255) NULL,
@@ -39,7 +49,7 @@ CREATE TABLE `Musician` (
     `bankCode` VARCHAR(10) NOT NULL,
     `bankAccount` VARCHAR(30) NOT NULL,
     `bankAccountOwnerName` VARCHAR(20) NOT NULL,
-    `evidenceFileUrl` VARCHAR(255) NOT NULL,
+    `evidenceFileId` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `deletedAt` DATETIME(3) NULL,
@@ -132,7 +142,7 @@ CREATE TABLE `MrBeatLicense` (
     `isNewSongWithVoiceAllowed` BOOLEAN NOT NULL,
     `isProfitActivityAllowed` BOOLEAN NOT NULL,
     `isPerformanceActivityAllowed` BOOLEAN NOT NULL,
-    `isBackgrounMusicAllowed` BOOLEAN NOT NULL,
+    `isBackgroundMusicAllowed` BOOLEAN NOT NULL,
     `isMVProduceAllowed` BOOLEAN NOT NULL,
     `isShareAllowed` BOOLEAN NOT NULL,
     `isArrangeAllowed` BOOLEAN NOT NULL,
@@ -215,6 +225,7 @@ CREATE TABLE `ArtistSaleTypeBridge` (
 CREATE TABLE `ArtistSaleType` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
+    `order` TINYINT NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -280,6 +291,7 @@ CREATE TABLE `RecordingImage` (
 CREATE TABLE `RegionLargeGroup` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(20) NOT NULL,
+    `order` TINYINT NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -417,6 +429,7 @@ CREATE TABLE `AlbumArtSaleTypeBridge` (
 CREATE TABLE `AlbumArtSaleType` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
+    `order` TINYINT NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -426,6 +439,17 @@ CREATE TABLE `Image` (
     `id` VARCHAR(191) NOT NULL,
     `originalName` VARCHAR(255) NOT NULL,
     `extension` VARCHAR(20) NOT NULL,
+    `url` VARCHAR(255) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Music` (
+    `id` VARCHAR(191) NOT NULL,
+    `originalName` VARCHAR(255) NOT NULL,
+    `extension` VARCHAR(20) NOT NULL,
+    `duration` INTEGER NOT NULL,
     `url` VARCHAR(255) NOT NULL,
 
     PRIMARY KEY (`id`)
@@ -445,6 +469,7 @@ CREATE TABLE `File` (
 CREATE TABLE `Contact` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(20) NOT NULL,
+    `order` TINYINT NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -453,6 +478,7 @@ CREATE TABLE `Contact` (
 CREATE TABLE `Genre` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(20) NOT NULL,
+    `order` TINYINT NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -461,6 +487,7 @@ CREATE TABLE `Genre` (
 CREATE TABLE `Mood` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(20) NOT NULL,
+    `order` TINYINT NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -475,6 +502,9 @@ CREATE TABLE `License` (
 
 -- AddForeignKey
 ALTER TABLE `UserSocial` ADD CONSTRAINT `UserSocial_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Musician` ADD CONSTRAINT `Musician_evidenceFileId_fkey` FOREIGN KEY (`evidenceFileId`) REFERENCES `File`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Musician` ADD CONSTRAINT `Musician_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -513,7 +543,7 @@ ALTER TABLE `MusicianSns` ADD CONSTRAINT `MusicianSns_musicianId_fkey` FOREIGN K
 ALTER TABLE `MrBeat` ADD CONSTRAINT `MrBeat_thumbmailId_fkey` FOREIGN KEY (`thumbmailId`) REFERENCES `Image`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MrBeat` ADD CONSTRAINT `MrBeat_musicId_fkey` FOREIGN KEY (`musicId`) REFERENCES `File`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MrBeat` ADD CONSTRAINT `MrBeat_musicId_fkey` FOREIGN KEY (`musicId`) REFERENCES `Music`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `MrBeat` ADD CONSTRAINT `MrBeat_genreId_fkey` FOREIGN KEY (`genreId`) REFERENCES `Genre`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -612,7 +642,7 @@ ALTER TABLE `MixMasteringGenre` ADD CONSTRAINT `MixMasteringGenre_genreId_fkey` 
 ALTER TABLE `MixMasteringMusic` ADD CONSTRAINT `MixMasteringMusic_mixMasteringId_fkey` FOREIGN KEY (`mixMasteringId`) REFERENCES `MixMastering`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MixMasteringMusic` ADD CONSTRAINT `MixMasteringMusic_musicId_fkey` FOREIGN KEY (`musicId`) REFERENCES `File`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MixMasteringMusic` ADD CONSTRAINT `MixMasteringMusic_musicId_fkey` FOREIGN KEY (`musicId`) REFERENCES `Music`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `AlbumArtLicense` ADD CONSTRAINT `AlbumArtLicense_licenseId_fkey` FOREIGN KEY (`licenseId`) REFERENCES `License`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

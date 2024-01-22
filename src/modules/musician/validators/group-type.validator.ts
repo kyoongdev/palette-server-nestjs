@@ -1,4 +1,4 @@
-import { applyDecorators } from '@nestjs/common';
+import { applyDecorators, mixin } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { Transform } from 'class-transformer';
@@ -18,18 +18,21 @@ export enum GROUP_TYPE_ENUM {
 
 export const GROUP_TYPE_VALUE = Object.keys(GROUP_TYPE);
 
-@ValidatorConstraint()
-export class GroupTypeValidateConstraint implements ValidatorConstraintInterface {
-  validate(value: number | null, validationArguments?: ValidationArguments): boolean | Promise<boolean> {
-    if (value !== GROUP_TYPE_ENUM.ALONE && value !== GROUP_TYPE_ENUM.MANY) return false;
-    return true;
-  }
-}
+const GroupTypeValidateConstraint = (nullable = false) => {
+  @ValidatorConstraint()
+  class GroupTypeValidateConstraintImpl implements ValidatorConstraintInterface {
+    validate(value: number | null, validationArguments?: ValidationArguments): boolean | Promise<boolean> {
+      if (nullable && !value) return true;
 
-export const GroupTypeValidator = BaseValidator(
-  GroupTypeValidateConstraint,
-  '활동 인원은 ALONE과 MANY 중에만 입력해주세요.'
-);
+      if (value !== GROUP_TYPE_ENUM.ALONE && value !== GROUP_TYPE_ENUM.MANY) return false;
+      return true;
+    }
+  }
+  return mixin<GroupTypeValidateConstraintImpl>(GroupTypeValidateConstraintImpl);
+};
+
+export const GroupTypeValidator = (nullable = false) =>
+  BaseValidator(GroupTypeValidateConstraint(nullable), '활동 인원은 ALONE과 MANY 중에만 입력해주세요.');
 
 export const groupTypeNumberToString = (groupType: number) => {
   if (groupType === GROUP_TYPE_ENUM.ALONE) {
@@ -57,7 +60,7 @@ export const GroupTypeResTransform = () => Transform(({ value }) => groupTypeNum
 export const GroupTypeReqDecorator = (nullable = false) =>
   applyDecorators(
     GroupTypeReqTransform(),
-    GroupTypeValidator(),
+    GroupTypeValidator(nullable)(),
     ApiProperty({
       nullable,
       description: '활동 인원',

@@ -62,7 +62,8 @@ model Musician {
   bankAccountOwnerName String @db.VarChar(20)
 
   // 증빙자료
-  evidenceFileUrl String @db.VarChar(255)
+  evidenceFileId String
+  evidenceFile   File   @relation(fields: [evidenceFileId], references: [id])
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -139,7 +140,7 @@ model MrBeat {
   thumbnail   Image  @relation(fields: [thumbmailId], references: [id])
 
   musicId String
-  music   File   @relation(fields: [musicId], references: [id])
+  music   Music  @relation(fields: [musicId], references: [id])
 
   genre   Genre  @relation(fields: [genreId], references: [id])
   genreId String @unique
@@ -440,7 +441,7 @@ model MixMasteringMusic {
   mixMasteringId String
   mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id])
   musicId        String
-  music          File         @relation(fields: [musicId], references: [id])
+  music          Music        @relation(fields: [musicId], references: [id])
 
   isBefore Boolean
   isAfter  Boolean
@@ -544,16 +545,27 @@ model Image {
   albumArtImages        AlbumArtImage[]
 }
 
+model Music {
+  id String @id @default(uuid())
+
+  originalName String @db.VarChar(255)
+  extension    String @db.VarChar(20)
+  duration     Int    @db.Int
+
+  url String @db.VarChar(255)
+
+  mrBeatMusics       MrBeat[]
+  mixMasteringMusics MixMasteringMusic[]
+}
+
 model File {
   id String @id @default(uuid())
 
   originalName String @db.VarChar(255)
   extension    String @db.VarChar(20)
 
-  url String @db.VarChar(255)
-
-  mrBeatMusics       MrBeat[]
-  mixMasteringMusics MixMasteringMusic[]
+  url                   String     @db.VarChar(255)
+  musicianEvidenceFiles Musician[]
 }
 
 model Contact {
