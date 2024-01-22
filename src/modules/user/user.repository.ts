@@ -116,10 +116,9 @@ export class UserRepository {
   }
 
   async findUsers(args = {} as Prisma.UserFindManyArgs) {
+    const { where, include, select, ...rest } = args;
     const users = await this.database.getRepository().user.findMany({
-      where: {
-        ...args.where,
-      },
+      where: where,
       include: {
         musician: {
           include: {
@@ -128,6 +127,7 @@ export class UserRepository {
         },
         profileImage: true,
       },
+      ...rest,
     });
 
     return users;

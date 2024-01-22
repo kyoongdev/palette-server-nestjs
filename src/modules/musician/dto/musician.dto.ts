@@ -44,10 +44,11 @@ export class MusicianDTO extends CommonMusicianDTO {
     this.deletedAt = props.deletedAt;
   }
 
-  static fromEntity(data: FindCommonMusician): MusicianDTO {
-    return new MusicianDTO({
+  static fromFindCommonMusician(data: FindCommonMusician): MusicianDTOProps {
+    return {
       ...data,
+      profileImageUrl: data.user.profileImage ? data.user.profileImage.url : null,
       evidenceFileUrl: data.evidenceFile.url,
-    });
+    };
   }
 }

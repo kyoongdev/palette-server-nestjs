@@ -1,4 +1,4 @@
-import { File, Musician, User } from '@prisma/client';
+import { File, Image, Musician, User } from '@prisma/client';
 
 export type MusicianApproveStatus = 'APPROVED' | 'REJECTED' | 'PENDING';
 
@@ -8,7 +8,11 @@ export interface AdminMusician extends Musician {
   };
 }
 
+export interface MusicianUser extends User {
+  profileImage?: Image;
+}
+
 export interface FindCommonMusician extends Musician {
   evidenceFile: File;
-  user: User;
+  user: MusicianUser;
 }

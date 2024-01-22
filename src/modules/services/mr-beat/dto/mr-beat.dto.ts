@@ -85,7 +85,7 @@ export class MrBeatDTO {
       createdAt: data.createdAt,
       contacts: data.contacts.map(MrBeatContactDTO.fromFindMrBeatContact),
       licenses: data.licenses.map(MrBeatLicenseDTO.fromFindMrBeatLicense),
-      musician: data.musician,
+      musician: CommonMusicianDTO.fromFindCommonMusician(data.musician),
     });
   }
 }

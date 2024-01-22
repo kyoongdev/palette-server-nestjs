@@ -49,6 +49,45 @@ export class MrBeatRepository {
     return mrBeat;
   }
 
+  async countMrBeat(args = {} as Prisma.MrBeatCountArgs) {
+    return this.database.getRepository().mrBeat.count(args);
+  }
+
+  async findMrBeats(args = {} as Prisma.MrBeatFindManyArgs) {
+    const { where, include, select, ...rest } = args;
+    const mrBeats = await this.database.getRepository().mrBeat.findMany({
+      where,
+      include: {
+        contacts: {
+          include: {
+            contact: true,
+          },
+        },
+        genre: true,
+        mood: true,
+        licenses: {
+          include: {
+            license: true,
+          },
+        },
+        music: true,
+        thumbnail: true,
+        musicianServices: {
+          include: {
+            musician: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
+      ...rest,
+    });
+
+    return mrBeats;
+  }
+
   async createMrBeat(musicianId: string, data: Prisma.MrBeatCreateArgs['data']) {
     const mrBeat = await this.database.getRepository().mrBeat.create({
       data: {

@@ -1,4 +1,4 @@
-import { MusicianApproveStatus } from '@/interface/musician.interface';
+import { FindCommonMusician, MusicianApproveStatus } from '@/interface/musician.interface';
 import { GroupTypeResDecorator } from '@/modules/musician/validators/group-type.validator';
 import { Property } from '@/utils/swagger';
 
@@ -57,5 +57,12 @@ export class CommonMusicianDTO {
     } else if (!isPending && !isAuthorized) {
       return 'REJECTED';
     } else return 'PENDING';
+  }
+
+  static fromFindCommonMusician(data: FindCommonMusician): CommonMusicianDTOProps {
+    return {
+      ...data,
+      profileImageUrl: data.user.profileImage ? data.user.profileImage.url : null,
+    };
   }
 }
