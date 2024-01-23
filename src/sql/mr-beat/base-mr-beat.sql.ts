@@ -22,7 +22,7 @@ export class BaseMrBeatSQL {
     LEFT JOIN ServiceReview serviceReview ON serviceReview.serviceId = musicianService.id
     LEFT JOIN Musician musician ON musician.id = musicianService.musicianId
     JOIN User user ON user.id = musician.userId
-    JOIN Image profile ON profile.id = user.profileImageId
+    LEFT JOIN Image profile ON profile.id = user.profileImageId
     `;
   }
 

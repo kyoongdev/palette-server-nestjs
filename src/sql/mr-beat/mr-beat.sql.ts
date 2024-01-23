@@ -22,7 +22,7 @@ export class MrBeatSQL extends BaseMrBeatSQL {
     FROM MrBeat mrBeat
     ${this.getBaseJoin()}
     ${this.getWhere()}
-    GROUP BY mrBeat.id
+    GROUP BY mrBeat.id, serviceReview.id
     ${this.getOrderBy()}
     LIMIT ${this.paging.page},${this.paging.limit ?? 10}
     `;
@@ -37,8 +37,7 @@ export class MrBeatSQL extends BaseMrBeatSQL {
 
     return Prisma.sql`
     WHERE 
-    mrBeat.isPending = 0 
-    AND mrBeat.isAuthorized = 1
+    1 = 1
     ${moodWhere}
     ${genreWhere}
     ${groupTypeWhere}

@@ -68,7 +68,6 @@ export const GroupTypeReqDecorator = (nullable = false) =>
         nullable,
         description: '활동 인원',
         type: 'number',
-        enum: GROUP_TYPE_VALUE,
         example: GROUP_TYPE_VALUE.join(' | '),
       },
     })

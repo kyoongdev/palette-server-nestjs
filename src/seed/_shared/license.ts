@@ -1,8 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 export const seedLicense = async (database: PrismaClient) => {
-  await database.license.deleteMany({});
-
+  await database.license.deleteMany();
   await database.license.create({
     data: {
       name: 'BASIC',

@@ -2,8 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import { range } from 'lodash';
 
 export const seedMrBeat = async (database: PrismaClient) => {
-  await database.mrBeat.deleteMany();
-
   const musician = await database.musician.findFirst({
     where: {
       name: '또로롱',
