@@ -5,7 +5,7 @@ import { Prisma } from '@prisma/client';
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
 
-import { AdminDTO, CommonAdminDTO, CreateAdminDTO, UpdateAdminDTO } from './dto';
+import { CreateAdminDTO, UpdateAdminDTO } from './dto';
 import { ADMIN_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
@@ -23,11 +23,7 @@ export class AdminRepository {
       throw new CustomException(ADMIN_ERROR_CODE.ADMIN_NOT_FOUND);
     }
 
-    return new AdminDTO(admin);
-  }
-
-  async findCommonAdmin(id: string) {
-    return new CommonAdminDTO(await this.findAdmin(id));
+    return admin;
   }
 
   async checkAdminByAdminId(adminId: string) {
@@ -37,13 +33,17 @@ export class AdminRepository {
       },
     });
 
-    return admin ? new AdminDTO(admin) : false;
+    return admin ?? false;
   }
 
-  async findCommonAdmins(args = {} as Prisma.AdminFindManyArgs) {
-    const admins = await this.database.getRepository().admin.findMany(args);
+  async findAdmins(args = {} as Prisma.AdminFindManyArgs) {
+    const { select, where, ...rest } = args;
+    const admins = await this.database.getRepository().admin.findMany({
+      where,
+      ...rest,
+    });
 
-    return admins.map((admin) => new CommonAdminDTO(admin));
+    return admins;
   }
 
   async countAdmins(args = {} as Prisma.AdminCountArgs) {
@@ -59,7 +59,7 @@ export class AdminRepository {
   }
 
   async updateAdmin(id: string, data: UpdateAdminDTO) {
-    const admin = await this.database.getRepository().admin.updateMany({
+    await this.database.getRepository().admin.updateMany({
       where: {
         id,
       },

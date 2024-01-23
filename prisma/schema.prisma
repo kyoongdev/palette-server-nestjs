@@ -32,8 +32,9 @@ model User {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  social   UserSocial?
-  musician Musician?
+  social         UserSocial?
+  musician       Musician?
+  serviceReviews ServiceReview[]
 }
 
 model UserSocial {
@@ -70,13 +71,14 @@ model Musician {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  userId    String             @unique
-  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId               String               @unique
+  user                 User                 @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // 직책
-  positions MusicianPosition[]
+  positions            MusicianPosition[]
   // SNS 주소
-  snses     MusicianSns[]
-  services  MusicianService[]
+  snses                MusicianSns[]
+  services             MusicianService[]
+  serviceReviewReplies ServiceReviewReply[]
 }
 
 model MusicianService {
@@ -94,6 +96,35 @@ model MusicianService {
   artist         Artist?       @relation(fields: [artistId], references: [id])
   albumArtId     String?
   albumArt       AlbumArt?     @relation(fields: [albumArtId], references: [id])
+}
+
+model ServiceReview {
+  id String @id @default(uuid())
+
+  content String @db.MediumText
+  score   Int    @db.TinyInt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+  replys    ServiceReviewReply[]
+}
+
+model ServiceReviewReply {
+  id String @id @default(uuid())
+
+  content String @db.MediumText
+
+  serviceReviewId String
+  serviceReview   ServiceReview @relation(fields: [serviceReviewId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  musicianId String
+  musician   Musician @relation(fields: [musicianId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model MusicianPosition {

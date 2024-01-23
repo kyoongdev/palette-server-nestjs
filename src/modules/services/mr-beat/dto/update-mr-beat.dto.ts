@@ -72,26 +72,26 @@ export class UpdateMrBeatDTO {
     }
   }
 
-  public toCreateArgs(): Prisma.MrBeatUpdateArgs['data'] {
+  public toUpdateArgs(): Prisma.MrBeatUpdateArgs['data'] {
     return {
       name: this.name,
       groupType: this.groupType,
-      thumbnail: {
+      thumbnail: this.thumbnailId && {
         connect: {
           id: this.thumbnailId,
         },
       },
-      music: {
+      music: this.musicId && {
         connect: {
           id: this.musicId,
         },
       },
-      genre: {
+      genre: this.genreId && {
         connect: {
           id: this.genreId,
         },
       },
-      mood: {
+      mood: this.moodId && {
         connect: {
           id: this.moodId,
         },

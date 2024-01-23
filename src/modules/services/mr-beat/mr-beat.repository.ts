@@ -58,29 +58,10 @@ export class MrBeatRepository {
     const mrBeats = await this.database.getRepository().mrBeat.findMany({
       where,
       include: {
-        contacts: {
-          include: {
-            contact: true,
-          },
-        },
         genre: true,
         mood: true,
-        licenses: {
-          include: {
-            license: true,
-          },
-        },
         music: true,
         thumbnail: true,
-        musicianServices: {
-          include: {
-            musician: {
-              include: {
-                user: true,
-              },
-            },
-          },
-        },
       },
       ...rest,
     });
