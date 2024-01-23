@@ -1,13 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Headers,
-  Post,
-  Request,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, Request, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -65,10 +56,7 @@ export class FileController {
 
     @Body() body: UploadMusicDTO
   ) {
-    console.log(file, body);
-
-    // this.fileService.uploadImage(file);
-    return { asdf: 'asdf' };
+    return this.fileService.uploadImage(file);
   }
 
   @Post('/image')
