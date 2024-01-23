@@ -96,6 +96,8 @@ model MusicianService {
   artist         Artist?       @relation(fields: [artistId], references: [id])
   albumArtId     String?
   albumArt       AlbumArt?     @relation(fields: [albumArtId], references: [id])
+
+  reviews ServiceReview[]
 }
 
 model ServiceReview {
@@ -104,8 +106,10 @@ model ServiceReview {
   content String @db.MediumText
   score   Int    @db.TinyInt
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  serviceId String
+  service   MusicianService @relation(fields: [serviceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   createdAt DateTime             @default(now())
   updatedAt DateTime             @updatedAt

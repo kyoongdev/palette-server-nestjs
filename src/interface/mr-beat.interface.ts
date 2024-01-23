@@ -25,6 +25,19 @@ export interface FindMrBeatList extends MrBeat {
   musician: FindCommonMusician;
 }
 
+export interface FindSQLMrBeatList {
+  id: string;
+  name: string;
+  groupType: number;
+  thumbnailUrl: string;
+  musicUrl: string;
+  musicDuration: number;
+  genreName: string;
+  moodName: string;
+  createdAt: Date;
+  score: number;
+}
+
 export interface FindMrBeat extends FindMrBeatList {
   contacts: FindMrBeatContact[];
   licenses: FindMrBeatLicense[];
