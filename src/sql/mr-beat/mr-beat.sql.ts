@@ -36,7 +36,9 @@ export class MrBeatSQL extends BaseMrBeatSQL {
       : Prisma.empty;
 
     return Prisma.sql`
-    WHERE 1=1
+    WHERE 
+    mrBeat.isPending = 0 
+    AND mrBeat.isAuthorized = 1
     ${moodWhere}
     ${genreWhere}
     ${groupTypeWhere}

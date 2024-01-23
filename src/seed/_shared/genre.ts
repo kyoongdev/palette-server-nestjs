@@ -1,9 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 export const seedGenre = async (database: PrismaClient) => {
-  const isExists = await database.genre.findFirst({});
-
-  if (isExists) return;
+  await database.genre.deleteMany({});
 
   await database.genre.createMany({
     data: [

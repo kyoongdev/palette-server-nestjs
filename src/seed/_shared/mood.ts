@@ -1,8 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 export const seedMood = async (database: PrismaClient) => {
-  const isExists = await database.mood.findFirst({});
-  if (isExists) return;
+  await database.mood.deleteMany({});
 
   await database.mood.createMany({
     data: [

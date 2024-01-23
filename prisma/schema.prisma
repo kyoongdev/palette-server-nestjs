@@ -174,10 +174,10 @@ model MrBeat {
   music   Music  @relation(fields: [musicId], references: [id])
 
   genre   Genre  @relation(fields: [genreId], references: [id])
-  genreId String @unique
+  genreId String
 
   mood   Mood   @relation(fields: [moodId], references: [id])
-  moodId String @unique
+  moodId String
 
   isPending    Boolean @default(true)
   isAuthorized Boolean @default(false)
@@ -404,7 +404,7 @@ model RegionSmallGroup {
   name String @db.VarChar(20)
 
   largeGroupId String
-  largeGroup   RegionLargeGroup @relation(fields: [largeGroupId], references: [id])
+  largeGroup   RegionLargeGroup @relation(fields: [largeGroupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   recordingRegions RecordingRegion[]
 }

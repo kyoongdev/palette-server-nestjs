@@ -1,10 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 
 export const seedRegion = async (database: PrismaClient) => {
-  const isGroupExists = await database.regionLargeGroup.findFirst({});
-  const isSmallGroupExists = await database.regionSmallGroup.findFirst({});
+  await database.regionLargeGroup.deleteMany({});
 
-  if (isGroupExists || isSmallGroupExists) return;
   await database.regionLargeGroup.create({
     data: {
       name: '서울',
