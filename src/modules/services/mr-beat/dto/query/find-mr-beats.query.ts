@@ -16,7 +16,7 @@ export class FindMrBeatsQuery extends PagingDTO {
   @GroupTypeReqDecorator(true)
   groupType?: number;
 
-  @Property({ apiProperty: { type: 'string', description: '순서', nullable: true } })
+  @Property({ apiProperty: { type: 'string', description: '순서', nullable: true, enum: ['POPULARITY'] } })
   sort?: FindMrBeatSort;
 
   public toFindManyArgs(): Prisma.MrBeatFindManyArgs {
