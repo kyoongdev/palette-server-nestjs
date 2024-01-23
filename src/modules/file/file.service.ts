@@ -8,7 +8,7 @@ import sharp from 'sharp';
 
 import { PrismaDatabase } from '@/database/prisma.repository';
 
-import { ImageDTO } from './dto';
+import { ImageDTO, MusicDTO } from './dto';
 import { FileDTO } from './dto/file.dto';
 
 @Injectable()
@@ -77,21 +77,21 @@ export class FileService {
   async uploadMusic(file: Express.Multer.File, duration: number) {
     try {
       const { key, fileBuffer, ext } = await this.getFileSpec(file);
-      console.log;
 
-      // const url = await this.uploadS3(fileBuffer, key, contentType);
+      const url = await this.uploadS3(fileBuffer, key, file.mimetype);
 
-      // const image = await this.database.getRepository().image.create({
-      //   data: {
-      //     url,
-      //     originalName: file.originalname,
-      //     extension: ext,
-      //   },
-      // });
+      const music = await this.database.getRepository().music.create({
+        data: {
+          url,
+          originalName: file.originalname,
+          extension: ext,
+          duration,
+        },
+      });
 
-      // return new ImageDTO(image);
+      return new MusicDTO(music);
     } catch (error) {
-      throw new InternalServerErrorException('이미지 저장 중 오류가 발생했습니다.');
+      throw new InternalServerErrorException('음악 저장 중 오류가 발생했습니다.');
     }
   }
   async uploadImage(file: Express.Multer.File) {

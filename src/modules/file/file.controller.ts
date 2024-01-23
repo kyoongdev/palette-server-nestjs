@@ -56,7 +56,7 @@ export class FileController {
 
     @Body() body: UploadMusicDTO
   ) {
-    return this.fileService.uploadImage(file);
+    return this.fileService.uploadMusic(file, body.duration);
   }
 
   @Post('/image')
