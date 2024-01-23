@@ -17,11 +17,19 @@ export interface FindMrBeatLicense extends MrBeatLicense {
   license: FindLicense;
 }
 
+export interface FindMrBeatGenre {
+  genre: FindGenre;
+}
+
+export interface FindMrBeatMood {
+  mood: FindMood;
+}
+
 export interface FindMrBeatList extends MrBeat {
   thumbnail: FindImage;
   music: FindMusic;
-  genre: FindGenre;
-  mood: FindMood;
+  genres: FindMrBeatGenre[];
+  moods: FindMrBeatMood[];
   musicianService: MusicianService & {
     musician: FindCommonMusician;
   };

@@ -173,11 +173,8 @@ model MrBeat {
   musicId String
   music   Music  @relation(fields: [musicId], references: [id])
 
-  genre   Genre  @relation(fields: [genreId], references: [id])
-  genreId String
-
-  mood   Mood   @relation(fields: [moodId], references: [id])
-  moodId String
+  genres MrBeatGenre[]
+  moods  MrBeatMood[]
 
   isPending    Boolean @default(true)
   isAuthorized Boolean @default(false)
@@ -618,14 +615,32 @@ model Contact {
   albumArtContacts     AlbumArtContact[]
 }
 
+model MrBeatGenre {
+  mrBeatId String
+  mrBeat   MrBeat @relation(fields: [mrBeatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  genreId  String
+  genre    Genre  @relation(fields: [genreId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([mrBeatId, genreId])
+}
+
 model Genre {
   id String @id @default(uuid())
 
   name  String @db.VarChar(20)
   order Int    @default(0) @db.TinyInt
 
-  mrBeatGenres       MrBeat[]
   mixMasteringGenres MixMasteringGenre[]
+  mrBeatGenres       MrBeatGenre[]
+}
+
+model MrBeatMood {
+  mrBeatId String
+  mrBeat   MrBeat @relation(fields: [mrBeatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  moodId   String
+  mood     Mood   @relation(fields: [moodId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([mrBeatId, moodId])
 }
 
 model Mood {
@@ -634,7 +649,7 @@ model Mood {
   name  String @db.VarChar(20)
   order Int    @default(0) @db.TinyInt
 
-  mrBeatMood MrBeat[]
+  mrBeatMoods MrBeatMood[]
 }
 
 model License {

@@ -57,6 +57,7 @@ export class MrBeatListDTO {
     this.genreName = props.genreName;
     this.moodName = props.moodName;
     this.createdAt = props.createdAt;
+    this.musician = new CommonMusicianDTO(props.musician);
   }
 
   static fromFindMrBeatList(data: FindMrBeatList): MrBeatListDTO {
@@ -67,8 +68,8 @@ export class MrBeatListDTO {
       thumbnailUrl: data.thumbnail.url,
       musicUrl: data.music.url,
       musicDuration: data.music.duration,
-      genreName: data.genre.name,
-      moodName: data.mood.name,
+      genreName: data.genres.at(-1).genre.name,
+      moodName: data.moods.at(-1).mood.name,
       createdAt: data.createdAt,
       musician: CommonMusicianDTO.fromFindCommonMusician(data.musicianService.musician),
     });

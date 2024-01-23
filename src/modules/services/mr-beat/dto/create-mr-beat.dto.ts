@@ -68,14 +68,22 @@ export class CreateMrBeatDTO {
           id: this.musicId,
         },
       },
-      genre: {
-        connect: {
-          id: this.genreId,
+      genres: {
+        create: {
+          genre: {
+            connect: {
+              id: this.genreId,
+            },
+          },
         },
       },
-      mood: {
-        connect: {
-          id: this.moodId,
+      moods: {
+        create: {
+          mood: {
+            connect: {
+              id: this.moodId,
+            },
+          },
         },
       },
       contacts: {

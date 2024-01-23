@@ -56,7 +56,7 @@ describe('Musician Test', () => {
           bankAccount: '123',
           bankAccountOwnerName: 'ㅇㅂㄹㅇㅁ',
           bankCode: '123',
-          evidenceFileUrl: 'url',
+          evidenceFileId: '123',
           groupType: 1,
           introduction: '~~~',
           name: 'asdf',
@@ -80,7 +80,7 @@ describe('Musician Test', () => {
           bankAccount: '123',
           bankAccountOwnerName: 'ㅇㅂㄹㅇㅁ',
           bankCode: '123',
-          evidenceFileUrl: 'url',
+          evidenceFileId: '123',
           groupType: 1,
           introduction: '~~~',
           name: 'asdf',
@@ -90,8 +90,8 @@ describe('Musician Test', () => {
           data: {},
         });
 
-        await musicianService.createMusician(user.id, createMusicianDTO);
-        await adminMusicianService.rejectMusicianByUserId(user.id);
+        const musicianId = await musicianService.createMusician(user.id, createMusicianDTO);
+        await adminMusicianService.rejectMusician(musicianId);
 
         const musician = await musicianService.findMusicianByUserId(user.id);
         expect(musician.approveStatus).toEqual('REJECTED');
@@ -105,7 +105,7 @@ describe('Musician Test', () => {
           bankAccount: '123',
           bankAccountOwnerName: 'ㅇㅂㄹㅇㅁ',
           bankCode: '123',
-          evidenceFileUrl: 'url',
+          evidenceFileId: '123',
           groupType: 1,
           introduction: '~~~',
           name: 'asdf',
@@ -115,9 +115,9 @@ describe('Musician Test', () => {
           data: {},
         });
 
-        await musicianService.createMusician(user.id, createMusicianDTO);
+        const musicianId = await musicianService.createMusician(user.id, createMusicianDTO);
 
-        await adminMusicianService.approveMusicianByUserId(user.id);
+        await adminMusicianService.approveMusician(musicianId);
 
         const result = await musicianService.findMusicianByUserId(user.id);
 

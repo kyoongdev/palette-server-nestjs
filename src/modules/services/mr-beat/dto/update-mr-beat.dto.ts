@@ -86,14 +86,24 @@ export class UpdateMrBeatDTO {
           id: this.musicId,
         },
       },
-      genre: this.genreId && {
-        connect: {
-          id: this.genreId,
+      genres: this.genreId && {
+        deleteMany: {},
+        create: {
+          genre: {
+            connect: {
+              id: this.genreId,
+            },
+          },
         },
       },
-      mood: this.moodId && {
-        connect: {
-          id: this.moodId,
+      moods: this.moodId && {
+        deleteMany: {},
+        create: {
+          mood: {
+            connect: {
+              id: this.moodId,
+            },
+          },
         },
       },
       contacts: {

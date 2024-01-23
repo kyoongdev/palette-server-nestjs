@@ -23,8 +23,16 @@ export class MrBeatRepository {
             contact: true,
           },
         },
-        genre: true,
-        mood: true,
+        genres: {
+          include: {
+            genre: true,
+          },
+        },
+        moods: {
+          include: {
+            mood: true,
+          },
+        },
         licenses: {
           include: {
             license: true,
@@ -64,8 +72,16 @@ export class MrBeatRepository {
     const mrBeats = await this.database.getRepository().mrBeat.findMany({
       where,
       include: {
-        genre: true,
-        mood: true,
+        genres: {
+          include: {
+            genre: true,
+          },
+        },
+        moods: {
+          include: {
+            mood: true,
+          },
+        },
         music: true,
         thumbnail: true,
       },

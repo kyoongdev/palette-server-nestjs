@@ -22,8 +22,20 @@ export class FindMrBeatsQuery extends PagingDTO {
   public toFindManyArgs(): Prisma.MrBeatFindManyArgs {
     return {
       where: {
-        genreId: this.genreId,
-        moodId: this.moodId,
+        ...(this.genreId && {
+          genres: {
+            some: {
+              genreId: this.genreId,
+            },
+          },
+        }),
+        ...(this.moodId && {
+          moods: {
+            some: {
+              moodId: this.moodId,
+            },
+          },
+        }),
         groupType: this.groupType,
       },
       orderBy: {

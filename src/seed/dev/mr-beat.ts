@@ -26,9 +26,13 @@ export const seedMrBeat = async (database: PrismaClient) => {
           },
           name: `또로롱의 ${index}번째 MR/BEAT`,
           groupType: 1,
-          genre: {
-            connect: {
-              id: genre.id,
+          genres: {
+            create: {
+              genre: {
+                connect: {
+                  id: genre.id,
+                },
+              },
             },
           },
           music: {
@@ -48,9 +52,13 @@ export const seedMrBeat = async (database: PrismaClient) => {
               url: 'https://pallete-file.s3.ap-northeast-2.amazonaws.com/dev/tese.jpg',
             },
           },
-          mood: {
-            connect: {
-              id: mood.id,
+          moods: {
+            create: {
+              mood: {
+                connect: {
+                  id: mood.id,
+                },
+              },
             },
           },
           contacts: {
