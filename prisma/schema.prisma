@@ -86,16 +86,11 @@ model MusicianService {
   musicianId String
   musician   Musician @relation(fields: [musicianId], references: [id])
 
-  mrBeatId       String?
-  mrBeat         MrBeat?       @relation(fields: [mrBeatId], references: [id])
-  mixMasteringId String?
-  mixMastering   MixMastering? @relation(fields: [mixMasteringId], references: [id])
-  recordingId    String?
-  recording      Recording?    @relation(fields: [recordingId], references: [id])
-  artistId       String?
-  artist         Artist?       @relation(fields: [artistId], references: [id])
-  albumArtId     String?
-  albumArt       AlbumArt?     @relation(fields: [albumArtId], references: [id])
+  mixMastering MixMastering?
+  recording    Recording?
+  artist       Artist?
+  albumArt     AlbumArt?
+  mrBeat       MrBeat?
 
   reviews ServiceReview[]
 }
@@ -172,8 +167,8 @@ model MrBeat {
   name      String @db.VarChar(255)
   groupType Int    @db.TinyInt
 
-  thumbmailId String
-  thumbnail   Image  @relation(fields: [thumbmailId], references: [id])
+  thumbnailId String
+  thumbnail   Image  @relation(fields: [thumbnailId], references: [id])
 
   musicId String
   music   Music  @relation(fields: [musicId], references: [id])
@@ -191,9 +186,11 @@ model MrBeat {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  contacts         MrBeatContact[]
-  licenses         MrBeatLicense[]
-  musicianServices MusicianService[]
+  contacts MrBeatContact[]
+  licenses MrBeatLicense[]
+
+  musicianService   MusicianService @relation(fields: [musicianServiceId], references: [id])
+  musicianServiceId String          @unique
 }
 
 model MrBeatContact {
@@ -251,11 +248,12 @@ model Artist {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  images           ArtistImage[]
-  saleTypes        ArtistSaleTypeBridge[]
-  contacts         ArtistContact[]
-  ArtistLicense    ArtistLicense[]
-  musicianServices MusicianService[]
+  images            ArtistImage[]
+  saleTypes         ArtistSaleTypeBridge[]
+  contacts          ArtistContact[]
+  ArtistLicense     ArtistLicense[]
+  musicianService   MusicianService        @relation(fields: [musicianServiceId], references: [id])
+  musicianServiceId String                 @unique
 }
 
 model ArtistLicense {
@@ -350,7 +348,8 @@ model Recording {
   recordingRegion   RecordingRegion    @relation(fields: [recordingRegionId], references: [id])
   recordingRegionId String
   recordingLicense  RecordingLicense[]
-  musicianServices  MusicianService[]
+  musicianService   MusicianService    @relation(fields: [musicianServiceId], references: [id])
+  musicianServiceId String             @unique
 }
 
 model RecordingLicense {
@@ -423,13 +422,14 @@ model MixMastering {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  thumbnailId      String
-  thumbnail        Image                 @relation(fields: [thumbnailId], references: [id])
-  musics           MixMasteringMusic[]
-  genres           MixMasteringGenre[]
-  contacts         MixMasteringContact[]
-  licenses         MixMasteringLicense[]
-  musicianServices MusicianService[]
+  thumbnailId       String
+  thumbnail         Image                 @relation(fields: [thumbnailId], references: [id])
+  musics            MixMasteringMusic[]
+  genres            MixMasteringGenre[]
+  contacts          MixMasteringContact[]
+  licenses          MixMasteringLicense[]
+  musicianService   MusicianService       @relation(fields: [musicianServiceId], references: [id])
+  musicianServiceId String                @unique
 }
 
 model MixMasteringLicense {
@@ -498,11 +498,12 @@ model AlbumArt {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  images           AlbumArtImage[]
-  saleTypes        AlbumArtSaleTypeBridge[]
-  contacts         AlbumArtContact[]
-  licenses         AlbumArtLicense[]
-  musicianServices MusicianService[]
+  images            AlbumArtImage[]
+  saleTypes         AlbumArtSaleTypeBridge[]
+  contacts          AlbumArtContact[]
+  licenses          AlbumArtLicense[]
+  musicianService   MusicianService          @relation(fields: [musicianServiceId], references: [id])
+  musicianServiceId String                   @unique
 }
 
 model AlbumArtLicense {

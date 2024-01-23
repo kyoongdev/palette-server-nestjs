@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
+import { FindSQLMrBeatList } from '@/interface/mr-beat.interface';
 
 import { MR_BEAT_ERROR_CODE } from './exception/error-code';
 
@@ -31,11 +32,16 @@ export class MrBeatRepository {
         },
         music: true,
         thumbnail: true,
-        musicianServices: {
+        musicianService: {
           include: {
             musician: {
               include: {
-                user: true,
+                evidenceFile: true,
+                user: {
+                  include: {
+                    profileImage: true,
+                  },
+                },
               },
             },
           },
@@ -69,16 +75,21 @@ export class MrBeatRepository {
     return mrBeats;
   }
 
-  async createMrBeat(musicianId: string, data: Prisma.MrBeatCreateArgs['data']) {
+  async findMrBeatsWithSQL(sql: Prisma.Sql) {
+    const data: FindSQLMrBeatList[] = await this.database.getRepository().$queryRaw(sql);
+    const count: {
+      'FOUND_ROWS()': number;
+    }[] = await this.database.getRepository().$queryRaw(Prisma.sql`SELECT FOUND_ROWS()`);
+
+    return {
+      data,
+      count: count[0]['FOUND_ROWS()'],
+    };
+  }
+
+  async createMrBeat(data: Prisma.MrBeatCreateArgs['data']) {
     const mrBeat = await this.database.getRepository().mrBeat.create({
-      data: {
-        ...data,
-        musicianServices: {
-          create: {
-            musicianId,
-          },
-        },
-      },
+      data,
     });
 
     return mrBeat;

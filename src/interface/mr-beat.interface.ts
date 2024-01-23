@@ -1,4 +1,4 @@
-import type { MrBeat, MrBeatLicense } from '@prisma/client';
+import type { MrBeat, MrBeatLicense, MusicianService } from '@prisma/client';
 
 import type { FindContact } from './contact.interface';
 import type { FindMusic } from './file.interface';
@@ -22,7 +22,9 @@ export interface FindMrBeatList extends MrBeat {
   music: FindMusic;
   genre: FindGenre;
   mood: FindMood;
-  musician: FindCommonMusician;
+  musicianService: MusicianService & {
+    musician: FindCommonMusician;
+  };
 }
 
 export interface FindSQLMrBeatList {
@@ -36,6 +38,14 @@ export interface FindSQLMrBeatList {
   moodName: string;
   createdAt: Date;
   score: number;
+  musicianId: string;
+  stageName: string;
+  musicianName: string;
+  musicianGroupType: number;
+  musicianIsPending: boolean;
+  musicianIsAuthorized: boolean;
+  musicianIntroduction: string;
+  musicianProfileUrl: string;
 }
 
 export interface FindMrBeat extends FindMrBeatList {

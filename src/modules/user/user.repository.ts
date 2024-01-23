@@ -68,6 +68,10 @@ export class UserRepository {
       },
       include: {
         musician: {
+          where: {
+            isAuthorized: true,
+            isPending: false,
+          },
           include: {
             evidenceFile: true,
           },

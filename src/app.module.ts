@@ -13,6 +13,7 @@ import { Modules, V2Module } from './modules';
 import { AdminModule, AdminModules } from './modules/admin/admin.module';
 import { GlobalModule } from './modules/global';
 import { MusicianModule, MusicianModules } from './modules/musician/musician.module';
+import { ServiceModule, ServiceModules } from './modules/services/service.module';
 
 const providers: Provider[] = [...Filters, ...Interceptors, AppConfig];
 
@@ -26,6 +27,7 @@ const providers: Provider[] = [...Filters, ...Interceptors, AppConfig];
       global: true,
     }),
     V2Module,
+    ServiceModule,
     AdminModule,
     MusicianModule,
     RouterModule.register([
@@ -33,6 +35,11 @@ const providers: Provider[] = [...Filters, ...Interceptors, AppConfig];
         path: '/api/v2',
         module: V2Module,
         children: Modules,
+      },
+      {
+        path: '/api/v2/services',
+        module: ServiceModule,
+        children: ServiceModules,
       },
       {
         path: '/api/v2/admins',

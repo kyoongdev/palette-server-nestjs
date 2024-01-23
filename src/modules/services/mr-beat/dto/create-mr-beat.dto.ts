@@ -54,7 +54,7 @@ export class CreateMrBeatDTO {
     }
   }
 
-  public toCreateArgs(): Prisma.MrBeatCreateArgs['data'] {
+  public toCreateArgs(musicianId: string): Prisma.MrBeatCreateArgs['data'] {
     return {
       name: this.name,
       groupType: this.groupType,
@@ -105,6 +105,13 @@ export class CreateMrBeatDTO {
             },
           },
         })),
+      },
+      musicianService: {
+        create: {
+          musician: {
+            connect: { id: musicianId },
+          },
+        },
       },
     };
   }

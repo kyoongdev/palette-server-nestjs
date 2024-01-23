@@ -1,11 +1,12 @@
 import { Prisma } from '@prisma/client';
 
 import { GroupTypeReqDecorator } from '@/modules/musician/validators';
+import { PagingDTO } from '@/utils/pagination';
 import { Property } from '@/utils/swagger';
 
 type FindMrBeatSort = 'POPULARITY';
 
-export class FindMrBeatsQuery {
+export class FindMrBeatsQuery extends PagingDTO {
   @Property({ apiProperty: { type: 'string', description: '장르 id', nullable: true } })
   genreId?: string;
 
@@ -26,7 +27,11 @@ export class FindMrBeatsQuery {
         groupType: this.groupType,
       },
       orderBy: {
-        musicianServices: {},
+        musicianService: {
+          reviews: {
+            _count: 'asc',
+          },
+        },
       },
     };
   }

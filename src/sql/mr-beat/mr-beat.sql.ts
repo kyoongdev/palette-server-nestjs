@@ -19,7 +19,7 @@ export class MrBeatSQL extends BaseMrBeatSQL {
   getSqlQuery() {
     return Prisma.sql`
     ${this.getBaseSelect()}
-    FROM MrBeat as mrBeat
+    FROM MrBeat mrBeat
     ${this.getBaseJoin()}
     ${this.getWhere()}
     GROUP BY mrBeat.id

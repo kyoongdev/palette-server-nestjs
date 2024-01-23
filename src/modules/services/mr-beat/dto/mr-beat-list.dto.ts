@@ -1,4 +1,4 @@
-import { FindMrBeatList } from '@/interface/mr-beat.interface';
+import { FindMrBeatList, FindSQLMrBeatList } from '@/interface/mr-beat.interface';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
 import { GroupTypeResDecorator } from '@/modules/musician/validators';
 import { Property } from '@/utils/swagger';
@@ -70,7 +70,31 @@ export class MrBeatListDTO {
       genreName: data.genre.name,
       moodName: data.mood.name,
       createdAt: data.createdAt,
-      musician: data.musician,
+      musician: CommonMusicianDTO.fromFindCommonMusician(data.musicianService.musician),
+    });
+  }
+
+  static fromFindSQLMrBeatList(data: FindSQLMrBeatList): MrBeatListDTO {
+    return new MrBeatListDTO({
+      id: data.id,
+      name: data.name,
+      groupType: data.groupType,
+      thumbnailUrl: data.thumbnailUrl,
+      musicUrl: data.musicUrl,
+      musicDuration: data.musicDuration,
+      genreName: data.genreName,
+      moodName: data.moodName,
+      createdAt: data.createdAt,
+      musician: {
+        id: data.musicianId,
+        stageName: data.stageName,
+        name: data.musicianName,
+        groupType: data.musicianGroupType,
+        isPending: data.musicianIsPending,
+        isAuthorized: data.musicianIsAuthorized,
+        introduction: data.musicianIntroduction,
+        profileImageUrl: data.musicianProfileUrl,
+      },
     });
   }
 }

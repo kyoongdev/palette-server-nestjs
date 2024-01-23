@@ -4,6 +4,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { type ValidationArguments, ValidatorConstraint, type ValidatorConstraintInterface } from 'class-validator';
 
+import { Property } from '@/utils/swagger';
+
 import { BaseValidator } from '../../../common/validators/base.validator';
 
 export const GROUP_TYPE = {
@@ -61,23 +63,27 @@ export const GroupTypeReqDecorator = (nullable = false) =>
   applyDecorators(
     GroupTypeReqTransform(),
     GroupTypeValidator(nullable)(),
-    ApiProperty({
-      nullable,
-      description: '활동 인원',
-      type: 'number',
-      enum: GROUP_TYPE_VALUE,
-      example: GROUP_TYPE_VALUE.join(' | '),
+    Property({
+      apiProperty: {
+        nullable,
+        description: '활동 인원',
+        type: 'number',
+        enum: GROUP_TYPE_VALUE,
+        example: GROUP_TYPE_VALUE.join(' | '),
+      },
     })
   );
 
 export const GroupTypeResDecorator = (nullable = false) =>
   applyDecorators(
     GroupTypeResTransform(),
-    ApiProperty({
-      nullable,
-      description: '활동 인원',
-      type: 'string',
-      enum: GROUP_TYPE_VALUE,
-      example: GROUP_TYPE_VALUE.join(' | '),
+    Property({
+      apiProperty: {
+        nullable,
+        description: '활동 인원',
+        type: 'string',
+        enum: GROUP_TYPE_VALUE,
+        example: GROUP_TYPE_VALUE.join(' | '),
+      },
     })
   );

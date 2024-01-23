@@ -23,8 +23,14 @@ export const RoleGuard = (...roles: RoleType[]) => {
         throw new ForbiddenException(`${req.user.role}는 사용할 수 없습니다.`);
       }
 
-      if (!roles.includes('ADMIN') && !roles.includes('USER') && req.user.role !== 'MUSICIAN')
-        throw new ForbiddenException(`${req.user.role}는 사용할 수 없습니다.`);
+      if (roles.includes('MUSICIAN')) {
+        if (req.user.role === 'ADMIN') {
+          throw new ForbiddenException(`${req.user.role}는 사용할 수 없습니다.`);
+        }
+
+        if (!roles.includes('USER') && req.user.role !== 'MUSICIAN')
+          throw new ForbiddenException(`${req.user.role}는 사용할 수 없습니다.`);
+      }
 
       if (roles.includes('USER') && req.user.role !== 'USER' && req.user.role !== 'MUSICIAN') {
         throw new ForbiddenException(`${req.user.role}는 사용할 수 없습니다.`);
