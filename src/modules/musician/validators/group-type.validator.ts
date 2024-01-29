@@ -63,26 +63,22 @@ export const GroupTypeReqDecorator = (nullable = false) =>
   applyDecorators(
     GroupTypeReqTransform(),
     GroupTypeValidator(nullable)(),
-    Property({
-      apiProperty: {
-        nullable,
-        description: '활동 인원',
-        type: 'number',
-        example: GROUP_TYPE_VALUE.join(' | '),
-      },
+    ApiProperty({
+      nullable,
+      description: '활동 인원',
+      type: 'number',
+      example: GROUP_TYPE_VALUE.join(' | '),
     })
   );
 
 export const GroupTypeResDecorator = (nullable = false) =>
   applyDecorators(
     GroupTypeResTransform(),
-    Property({
-      apiProperty: {
-        nullable,
-        description: '활동 인원',
-        type: 'string',
-        enum: GROUP_TYPE_VALUE,
-        example: GROUP_TYPE_VALUE.join(' | '),
-      },
+    ApiProperty({
+      nullable,
+      description: '활동 인원',
+      type: 'string',
+      enum: GROUP_TYPE_VALUE,
+      example: GROUP_TYPE_VALUE.join(' | '),
     })
   );

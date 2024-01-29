@@ -16,8 +16,10 @@ export class BaseMrBeatSQL {
     return Prisma.sql`
     LEFT JOIN Image thumbnail ON thumbnail.id = mrBeat.thumbnailId
     LEFT JOIN Music music ON music.id = mrBeat.musicId
-    LEFT JOIN Genre genre ON genre.id = mrBeat.genreId
-    LEFT JOIN Mood  mood ON mood.id = mrBeat.moodId
+    LEFT JOIN MrBeatGenre mrBeatGenre ON mrBeatGenre.mrBeatId = mrBeat.id
+    LEFT JOIN Genre genre ON genre.id = mrBeatGenre.genreId
+    LEFT JOIN MrBeatMood mrBeatMood ON mrBeatMood.mrBeatId = mrBeat.id
+    LEFT JOIN Mood  mood ON mood.id = mrBeatMood.moodId
     LEFT JOIN MusicianService musicianService ON musicianService.id = mrBeat.musicianServiceId
     LEFT JOIN ServiceReview serviceReview ON serviceReview.serviceId = musicianService.id
     LEFT JOIN Musician musician ON musician.id = musicianService.musicianId

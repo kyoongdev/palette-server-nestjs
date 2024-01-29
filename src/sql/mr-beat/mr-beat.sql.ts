@@ -22,7 +22,7 @@ export class MrBeatSQL extends BaseMrBeatSQL {
     FROM MrBeat mrBeat
     ${this.getBaseJoin()}
     ${this.getWhere()}
-    GROUP BY mrBeat.id, serviceReview.id
+    GROUP BY mrBeat.id, serviceReview.id, mood.id, genre.id
     ${this.getOrderBy()}
     LIMIT ${this.paging.page},${this.paging.limit ?? 10}
     `;

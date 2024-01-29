@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { AOPModule } from '@/utils/aop/aop.module';
 
 import { AuthModule } from './auth/auth.module';
+import { ContactModule } from './contact/contact.module';
 import { FileModule } from './file/file.module';
 import { GenreModule } from './genre/genre.module';
 import { LicenseModule } from './license/license.module';
@@ -20,6 +21,7 @@ export const Modules = [
   AuthModule,
   UserModule,
   LicenseModule,
+  ContactModule,
   AOPModule,
 ];
 

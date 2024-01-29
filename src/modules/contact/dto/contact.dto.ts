@@ -1,17 +1,17 @@
 import { Property } from '@/utils/swagger';
 
-interface LicenseDTOProps {
+export interface ContactDTOProps {
   id: string;
   name: string;
 }
 
-export class LicenseDTO {
+export class ContactDTO {
   @Property({ apiProperty: { description: 'id', type: 'string' } })
   id: string;
   @Property({ apiProperty: { description: '이름', type: 'string' } })
   name: string;
 
-  constructor(props: LicenseDTOProps) {
+  constructor(props: ContactDTOProps) {
     this.id = props.id;
     this.name = props.name;
   }
