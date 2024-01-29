@@ -16,7 +16,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     const errRes = exception['getResponse'] ? exception.getResponse() : null;
-    const status = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
+    const statusCode = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
     const message =
       errRes?.message && Array.isArray(errRes.message) && errRes.message.length > 0
         ? errRes.message
@@ -24,8 +24,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     logger.error(exception.stack || message);
 
-    response.status(status).json({
-      statusCode: status,
+    response.status(statusCode).json({
+      statusCode,
       timestamp: new Date().toISOString(),
       path: request.url,
       message,

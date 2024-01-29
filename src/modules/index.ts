@@ -5,6 +5,7 @@ import { AOPModule } from '@/utils/aop/aop.module';
 import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { GenreModule } from './genre/genre.module';
+import { LicenseModule } from './license/license.module';
 import { MoodModule } from './mood/mood.module';
 import { PaymentModule } from './payment/payment.module';
 import { RegionModule } from './region/region.module';
@@ -18,6 +19,7 @@ export const Modules = [
   RegionModule,
   AuthModule,
   UserModule,
+  LicenseModule,
   AOPModule,
 ];
 
