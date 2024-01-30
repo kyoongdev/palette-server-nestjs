@@ -2,7 +2,12 @@ import { applyDecorators, mixin } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { Transform } from 'class-transformer';
-import { type ValidationArguments, ValidatorConstraint, type ValidatorConstraintInterface } from 'class-validator';
+import {
+  IsOptional,
+  type ValidationArguments,
+  ValidatorConstraint,
+  type ValidatorConstraintInterface,
+} from 'class-validator';
 
 import { Property } from '@/utils/swagger';
 
@@ -65,6 +70,7 @@ export const GroupTypeReqDecorator = (nullable = false) =>
     GroupTypeValidator(nullable)(),
     ApiProperty({
       nullable,
+      required: !nullable,
       description: '활동 인원',
       type: 'number',
       example: GROUP_TYPE_VALUE.join(' | '),
@@ -76,6 +82,7 @@ export const GroupTypeResDecorator = (nullable = false) =>
     GroupTypeResTransform(),
     ApiProperty({
       nullable,
+      required: !nullable,
       description: '활동 인원',
       type: 'string',
       enum: GROUP_TYPE_VALUE,

@@ -25,6 +25,7 @@ export class BaseMrBeatSQL {
     LEFT JOIN Musician musician ON musician.id = musicianService.musicianId
     JOIN User user ON user.id = musician.userId
     LEFT JOIN Image profile ON profile.id = user.profileImageId
+    LEFT JOIN MrBeatLicense mrBeatLicense ON mrBeatLicense.mrBeatId = mrBeat.id
     `;
   }
 
@@ -38,7 +39,8 @@ export class BaseMrBeatSQL {
     musician.id as musicianId, musician.stageName as stageName,
     musician.name as musicianName, musician.groupType as musicianGroupType,
     musician.isPending as musicianIsPending, musician.isAuthorized as musicianIsAuthorized,
-    musician.introduction as musicianIntroduction, profile.url as musicianProfileUrl
+    musician.introduction as musicianIntroduction, profile.url as musicianProfileUrl,
+    MIN(mrBeatLicense.cost) as cost
     `;
   }
 }

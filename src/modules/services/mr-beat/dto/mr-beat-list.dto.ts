@@ -12,6 +12,7 @@ export interface MrBeatListDTOProps {
   musicDuration: number;
   genreName: string;
   moodName: string;
+  cost: number;
   createdAt: Date;
   musician: CommonMusicianDTOProps;
 }
@@ -44,6 +45,9 @@ export class MrBeatListDTO {
   @Property({ apiProperty: { description: '생성일', type: 'string', format: 'date-time' } })
   createdAt: Date;
 
+  @Property({ apiProperty: { description: '가격', type: 'number' } })
+  cost: number;
+
   @Property({ apiProperty: { type: CommonMusicianDTO } })
   musician: CommonMusicianDTO;
 
@@ -57,6 +61,7 @@ export class MrBeatListDTO {
     this.genreName = props.genreName;
     this.moodName = props.moodName;
     this.createdAt = props.createdAt;
+    this.cost = props.cost;
     this.musician = new CommonMusicianDTO(props.musician);
   }
 
@@ -71,6 +76,7 @@ export class MrBeatListDTO {
       genreName: data.genres.at(-1).genre.name,
       moodName: data.moods.at(-1).mood.name,
       createdAt: data.createdAt,
+      cost: Math.min(...data.licenses.map((license) => license.cost)),
       musician: CommonMusicianDTO.fromFindCommonMusician(data.musicianService.musician),
     });
   }
@@ -86,6 +92,7 @@ export class MrBeatListDTO {
       genreName: data.genreName,
       moodName: data.moodName,
       createdAt: data.createdAt,
+      cost: data.cost,
       musician: {
         id: data.musicianId,
         stageName: data.stageName,

@@ -20,6 +20,7 @@ export interface FindSQLMrBeatList {
   score: number;
   musicianId: string;
   stageName: string;
+  cost: number;
   musicianName: string;
   musicianGroupType: number;
   musicianIsPending: boolean;

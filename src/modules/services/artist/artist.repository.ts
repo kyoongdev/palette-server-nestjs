@@ -7,7 +7,7 @@ import { PrismaDatabase } from '@/database/prisma.repository';
 import { FindArtist } from '@/interface/artist.interface';
 import { artistDetailInclude } from '@/utils/constants/include/artist';
 
-import { ARTIST_ERROR_CODE } from './dto/error-code';
+import { ARTIST_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
 export class ArtistRepository {
@@ -42,7 +42,7 @@ export class ArtistRepository {
   }
 
   async findArtistsWithSQL(sql: Prisma.Sql) {
-    const data = await this.database.getRepository().$queryRaw<FindArtist[]>(sql);
+    const data = await this.database.getRepository().$queryRaw(sql);
     const count: {
       'FOUND_ROWS()': number;
     }[] = await this.database.getRepository().$queryRaw(Prisma.sql`SELECT FOUND_ROWS()`);

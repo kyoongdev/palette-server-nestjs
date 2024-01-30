@@ -60,6 +60,7 @@ export const mrBeatListInclude = {
   },
   music: true,
   thumbnail: true,
+  licenses: true,
   musicianService: {
     include: {
       musician: {

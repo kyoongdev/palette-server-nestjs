@@ -31,3 +31,40 @@ export const artistDetailInclude = {
     },
   },
 } satisfies Prisma.ArtistInclude;
+
+export const artistListInclude = {
+  contacts: {
+    include: {
+      contact: true,
+    },
+  },
+  licenses: {
+    include: {
+      license: true,
+    },
+  },
+  images: {
+    include: {
+      image: true,
+    },
+  },
+  musicianService: {
+    include: {
+      musician: {
+        include: {
+          evidenceFile: true,
+          user: {
+            include: {
+              profileImage: true,
+            },
+          },
+        },
+      },
+    },
+  },
+  saleTypes: {
+    include: {
+      saleType: true,
+    },
+  },
+} satisfies Prisma.ArtistInclude;
