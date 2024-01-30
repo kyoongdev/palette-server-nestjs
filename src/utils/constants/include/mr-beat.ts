@@ -1,14 +1,14 @@
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 
-export const mrBeatLicenseInclude = Prisma.validator<Prisma.MrBeatLicenseInclude>()({
+export const mrBeatLicenseInclude = {
   license: true,
-});
+} satisfies Prisma.MrBeatLicenseInclude;
 
-export const mrBeatContactInclude = Prisma.validator<Prisma.MrBeatContactInclude>()({
+export const mrBeatContactInclude = {
   contact: true,
-});
+} satisfies Prisma.MrBeatContactInclude;
 
-export const mrBeatDetailInclude = Prisma.validator<Prisma.MrBeatInclude>()({
+export const mrBeatDetailInclude = {
   contacts: {
     include: {
       contact: true,
@@ -45,9 +45,9 @@ export const mrBeatDetailInclude = Prisma.validator<Prisma.MrBeatInclude>()({
       },
     },
   },
-});
+} satisfies Prisma.MrBeatInclude;
 
-export const mrBeatListInclude = Prisma.validator<Prisma.MrBeatInclude>()({
+export const mrBeatListInclude = {
   genres: {
     include: {
       genre: true,
@@ -74,4 +74,4 @@ export const mrBeatListInclude = Prisma.validator<Prisma.MrBeatInclude>()({
       },
     },
   },
-});
+} satisfies Prisma.MrBeatInclude;

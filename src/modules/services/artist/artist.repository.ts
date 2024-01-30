@@ -4,6 +4,8 @@ import { Prisma } from '@prisma/client';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
+import { FindArtist } from '@/interface/artist.interface';
+import { artistDetailInclude } from '@/utils/constants/include/artist';
 
 import { ARTIST_ERROR_CODE } from './dto/error-code';
 
@@ -12,41 +14,11 @@ export class ArtistRepository {
   constructor(private readonly database: PrismaDatabase) {}
 
   async findArtist(id: string) {
-    const artist = await this.database.getRepository().artist.findUnique({
+    const artist: FindArtist | undefined = await this.database.getRepository().artist.findUnique({
       where: {
         id,
       },
-      include: {
-        contacts: {
-          include: {
-            contact: true,
-          },
-        },
-        licenses: {
-          include: {
-            license: true,
-          },
-        },
-        images: {
-          include: {
-            image: true,
-          },
-        },
-        musicianService: {
-          include: {
-            musician: {
-              include: {
-                evidenceFile: true,
-                user: {
-                  include: {
-                    profileImage: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
+      include: artistDetailInclude,
     });
 
     if (!artist) {
@@ -61,8 +33,48 @@ export class ArtistRepository {
   }
 
   async findArtists(args = {} as Prisma.ArtistFindManyArgs) {
-    return this.database.getRepository().artist.findMany(args);
+    const { where, select, include, ...rest } = args;
+    return this.database.getRepository().artist.findMany({
+      where,
+      include,
+      ...rest,
+    });
   }
 
-  async findArtistsWithSQL(sql: string) {}
+  async findArtistsWithSQL(sql: Prisma.Sql) {
+    const data = await this.database.getRepository().$queryRaw<FindArtist[]>(sql);
+    const count: {
+      'FOUND_ROWS()': number;
+    }[] = await this.database.getRepository().$queryRaw(Prisma.sql`SELECT FOUND_ROWS()`);
+
+    return {
+      data,
+      count: count[0]['FOUND_ROWS()'],
+    };
+  }
+
+  async createArtist(data: Prisma.ArtistCreateArgs['data']) {
+    const artist = await this.database.getRepository().artist.create({
+      data,
+    });
+
+    return artist;
+  }
+
+  async updateArtist(id: string, data: Prisma.ArtistUpdateArgs['data']) {
+    await this.database.getRepository().artist.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
+
+  async deleteArtist(id: string) {
+    await this.database.getRepository().artist.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }
