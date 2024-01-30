@@ -1,12 +1,19 @@
 import { Prisma } from '@prisma/client';
 
+import { FindArtistListQuery } from '@/modules/services/artist/dto/query';
+
 import { BaseArtistSQL, BaseArtistSQLProps } from './base-artist.sql';
 
-interface ArtistSQLProps extends BaseArtistSQLProps {}
+interface ArtistSQLProps extends BaseArtistSQLProps {
+  query: FindArtistListQuery;
+}
 
 export class ArtistSQL extends BaseArtistSQL {
+  query: FindArtistListQuery;
+
   constructor(props: ArtistSQLProps) {
     super(props);
+    this.query = props.query;
   }
 
   getSqlQuery(isAdmin = false) {
@@ -25,13 +32,23 @@ export class ArtistSQL extends BaseArtistSQL {
     const isAdminWhere = isAdmin
       ? Prisma.sql`1 = 1`
       : Prisma.sql`artist.isAuthorized = true AND artist.isPending = false`;
+
+    const saleTypeIdWhere = this.query.saleTypeId
+      ? Prisma.sql`AND saleType.saleTypeId = ${this.query.saleTypeId}`
+      : Prisma.empty;
+
     return Prisma.sql`
     WHERE
     ${isAdminWhere}
+    ${saleTypeIdWhere}
     `;
   }
 
   getOrderBy() {
+    const sort = this.query.sort;
+    if (sort === 'POPULARITY') {
+      return Prisma.sql`ORDER BY score DESC`;
+    }
     return Prisma.empty;
   }
 }

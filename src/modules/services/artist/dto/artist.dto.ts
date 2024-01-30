@@ -1,3 +1,84 @@
-export interface ArtistDTOProps {}
+import { FindArtist } from '@/interface/artist.interface';
+import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
+import { DateDTOProps } from '@/utils';
+import { Property } from '@/utils/swagger';
 
-export class ArtistDTO {}
+import { ArtistImageDTO, ArtistImageDTOProps } from './artist-image.dto';
+import { ArtistLicenseDTO, ArtistLicenseDTOProps } from './artist-license.dto';
+import { ArtistSaleTypeDTO, ArtistSaleTypeDTOProps } from './artist-sale-type.dto';
+
+export interface ArtistDTOProps extends DateDTOProps {
+  id: string;
+  name: string;
+  description: string;
+  updateDescription: string;
+  isPending: boolean;
+  isAuthorized: boolean;
+  images: ArtistImageDTOProps[];
+  saleTypes: ArtistSaleTypeDTOProps[];
+  licenses: ArtistLicenseDTOProps[];
+  musician: CommonMusicianDTOProps;
+}
+
+export class ArtistDTO {
+  @Property({ apiProperty: { description: '아티스트 아이디', type: 'string' } })
+  id: string;
+
+  @Property({ apiProperty: { description: '아티스트 이름', type: 'string' } })
+  name: string;
+
+  @Property({ apiProperty: { description: '아티스트 설명', type: 'string' } })
+  description: string;
+
+  @Property({ apiProperty: { description: '아티스트 업데이트 설명', type: 'string' } })
+  updateDescription: string;
+
+  @Property({ apiProperty: { description: '아티스트 승인 여부', type: 'boolean' } })
+  isAuthorized: boolean;
+
+  @Property({ apiProperty: { description: '아티스트 대기 여부', type: 'boolean' } })
+  isPending: boolean;
+
+  @Property({ apiProperty: { description: '아티스트 이미지', type: ArtistImageDTO, isArray: true } })
+  images: ArtistImageDTO[];
+
+  @Property({ apiProperty: { description: '아티스트 판매 타입', type: ArtistSaleTypeDTO, isArray: true } })
+  saleTypes: ArtistSaleTypeDTO[];
+
+  @Property({ apiProperty: { description: '아티스트 라이센스', type: ArtistLicenseDTO, isArray: true } })
+  licenses: ArtistLicenseDTO[];
+
+  @Property({ apiProperty: { description: '아티스트 음악가', type: CommonMusicianDTO } })
+  musician: CommonMusicianDTO;
+
+  constructor(props: ArtistDTOProps) {
+    this.id = props.id;
+    this.name = props.name;
+    this.description = props.description;
+    this.updateDescription = props.updateDescription;
+    this.isAuthorized = props.isAuthorized;
+    this.isPending = props.isPending;
+    this.images = props.images.map((image) => new ArtistImageDTO(image));
+    this.saleTypes = props.saleTypes.map((saleType) => new ArtistSaleTypeDTO(saleType));
+    this.licenses = props.licenses.map((license) => new ArtistLicenseDTO(license));
+    this.musician = new CommonMusicianDTO(props.musician);
+  }
+
+  static fromArtist(data: FindArtist): ArtistDTO {
+    return new ArtistDTO({
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      updateDescription: data.updateDescription,
+      isAuthorized: data.isAuthorized,
+      isPending: data.isPending,
+      images: data.images,
+      saleTypes: data.saleTypes.map(ArtistSaleTypeDTO.fromArtistSaleType),
+      licenses: data.licenses.map(ArtistLicenseDTO.fromFindArtistLicense),
+      musician: data.musicianService.musician,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      deletedAt: data.deletedAt,
+    });
+  }
+}

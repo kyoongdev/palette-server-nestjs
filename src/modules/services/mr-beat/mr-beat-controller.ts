@@ -21,7 +21,7 @@ import { MrBeatService } from './mr-beat.service';
 export class MrBeatController {
   constructor(private readonly mrBeatService: MrBeatService) {}
 
-  @Get(':mrBeatId')
+  @Get(':mrBeatId/detail')
   @ApiOperation({ description: 'MrBeat 조회', summary: 'MrBeat 조회 API' })
   @ResponseApi({
     type: MrBeatDTO,

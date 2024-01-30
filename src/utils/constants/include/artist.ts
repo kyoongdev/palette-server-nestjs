@@ -8,6 +8,10 @@ export const artistContactInclude = {
   contact: true,
 } satisfies Prisma.ArtistContactInclude;
 
+export const artistSaleTypeInclude = {
+  saleType: true,
+} satisfies Prisma.ArtistSaleTypeBridgeInclude;
+
 export const artistDetailInclude = {
   contacts: {
     include: {
@@ -22,6 +26,11 @@ export const artistDetailInclude = {
   images: {
     include: {
       image: true,
+    },
+  },
+  saleTypes: {
+    include: {
+      saleType: true,
     },
   },
   musicianService: {

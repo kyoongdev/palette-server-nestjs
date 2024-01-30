@@ -38,7 +38,7 @@ export class FindMrBeatsQuery extends PagingDTO {
         }),
         groupType: this.groupType,
       },
-      orderBy: {
+      orderBy: this.sort && {
         musicianService: {
           reviews: {
             _count: 'asc',

@@ -5,6 +5,7 @@ import {
   artistDetailInclude,
   artistLicenseInclude,
   artistListInclude,
+  artistSaleTypeInclude,
 } from '@/utils/constants/include/artist';
 
 export interface FindSQLArtistList {
@@ -29,3 +30,4 @@ export type FindArtist = Prisma.ArtistGetPayload<{ include: typeof artistDetailI
 export type FindArtistList = Prisma.ArtistGetPayload<{ include: typeof artistListInclude }>;
 export type FindArtistLicense = Prisma.ArtistLicenseGetPayload<{ include: typeof artistLicenseInclude }>;
 export type FindArtistContact = Prisma.ArtistContactGetPayload<{ include: typeof artistContactInclude }>;
+export type FindArtistSaleTypeBridge = Prisma.ArtistSaleTypeBridgeGetPayload<{ include: typeof artistSaleTypeInclude }>;
