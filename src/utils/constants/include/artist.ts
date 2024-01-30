@@ -1,5 +1,13 @@
 import { Prisma } from '@prisma/client';
 
+export const artistLicenseInclude = {
+  license: true,
+} satisfies Prisma.ArtistLicenseInclude;
+
+export const artistContactInclude = {
+  contact: true,
+} satisfies Prisma.ArtistContactInclude;
+
 export const artistDetailInclude = {
   contacts: {
     include: {
