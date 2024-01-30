@@ -73,6 +73,7 @@ export const mrBeatListInclude = {
           },
         },
       },
+      reviews: true,
     },
   },
 } satisfies Prisma.MrBeatInclude;

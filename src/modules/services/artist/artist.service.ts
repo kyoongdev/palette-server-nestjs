@@ -4,6 +4,7 @@ import { ArtistSQL } from '@/sql/artist/artist.sql';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { ArtistRepository } from './artist.repository';
+import { ArtistListDTO } from './dto/artist-list.dto';
 
 @Injectable()
 export class ArtistService {
@@ -16,8 +17,7 @@ export class ArtistService {
         paging: sqlPaging,
       }).getSqlQuery()
     );
-    console.log(data[0].saleTypes);
 
-    return new PaginationDTO<any>(data as any, { count, paging });
+    return new PaginationDTO(data.map(ArtistListDTO.fromFindSQLArtistList), { count, paging });
   }
 }

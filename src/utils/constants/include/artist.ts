@@ -60,6 +60,7 @@ export const artistListInclude = {
           },
         },
       },
+      reviews: true,
     },
   },
   saleTypes: {

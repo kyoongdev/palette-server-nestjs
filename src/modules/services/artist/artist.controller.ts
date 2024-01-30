@@ -6,6 +6,7 @@ import { PagingDTO } from '@/utils/pagination';
 import { ResponseApi } from '@/utils/swagger';
 
 import { ArtistService } from './artist.service';
+import { ArtistListDTO } from './dto/artist-list.dto';
 
 @ApiTags('아티스트')
 @Controller('artists')
@@ -17,8 +18,11 @@ export class ArtistController {
   @ApiQuery({
     type: PagingDTO,
   })
-  @ResponseApi({})
+  @ResponseApi({
+    type: ArtistListDTO,
+    isPaging: true,
+  })
   async findArtistsWithSQL(@Paging() paging: PagingDTO) {
-    return this.artistService.findArtistsWithSQL(paging);
+    return await this.artistService.findArtistsWithSQL(paging);
   }
 }

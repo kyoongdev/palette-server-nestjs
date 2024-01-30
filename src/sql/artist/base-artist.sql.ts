@@ -14,8 +14,8 @@ export class BaseArtistSQL {
 
   getBaseJoin() {
     return Prisma.sql`
-    LEFT JOIN ArtistImage image ON image.artistId = artist.id
-    LEFT JOIN Image thumbnail ON thumbnail.id = image.imageId AND image.isThumbnail = true
+    LEFT JOIN ArtistImage image ON image.artistId = artist.id AND image.isThumbnail = true
+    LEFT JOIN Image thumbnail ON thumbnail.id = image.imageId 
     LEFT JOIN ArtistLicense artistLicense ON artistLicense.artistId = artist.id
     LEFT JOIN ArtistSaleTypeBridge artistSaleTypeBridge ON artistSaleTypeBridge.artistId = artist.id
     LEFT JOIN ArtistSaleType artistSaleType ON  artistSaleTypeBridge.saleTypeId = artistSaleType.id
@@ -38,7 +38,7 @@ export class BaseArtistSQL {
     musician.isPending as musicianIsPending, musician.isAuthorized as musicianIsAuthorized,
     musician.introduction as musicianIntroduction, profile.url as musicianProfileUrl,
     GROUP_CONCAT(DISTINCT artistSaleType.name) as saleTypes, MIN(artistLicense.cost) as cost,
-    artist.createdAt as createdAt,
+    artist.createdAt as createdAt
     `;
   }
 }

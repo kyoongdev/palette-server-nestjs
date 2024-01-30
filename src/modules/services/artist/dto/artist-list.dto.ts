@@ -7,6 +7,7 @@ export interface ArtistListDTOProps {
   name: string;
   thumbnailUrl: string;
   cost: number;
+  score: number;
   createdAt: Date;
   saleTypes: string[];
   musician: CommonMusicianDTOProps;
@@ -25,6 +26,9 @@ export class ArtistListDTO {
   @Property({ apiProperty: { description: '가격', type: 'number' } })
   cost: number;
 
+  @Property({ apiProperty: { description: '점수', type: 'number' } })
+  score: number;
+
   @Property({ apiProperty: { description: '생성일', type: 'string', format: 'date-time' } })
   createdAt: Date;
 
@@ -41,22 +45,25 @@ export class ArtistListDTO {
     this.cost = props.cost;
     this.createdAt = props.createdAt;
     this.saleTypes = props.saleTypes;
+    this.score = props.score;
     this.musician = new CommonMusicianDTO(props.musician);
   }
 
-  static async fromFindArtistList(data: FindArtistList) {
+  static fromFindArtistList(data: FindArtistList) {
     return new ArtistListDTO({
       id: data.id,
       cost: Math.min(...data.licenses.map((license) => license.cost)),
       createdAt: data.createdAt,
       musician: data.musicianService.musician,
       name: data.name,
+      score:
+        data.musicianService.reviews.reduce((acc, cur) => acc + cur.score, 0) / data.musicianService.reviews.length,
       saleTypes: data.saleTypes.map((saleType) => saleType.saleType.name),
       thumbnailUrl: data.images.find((image) => image.isThumbnail).image.url,
     });
   }
 
-  static async fromFindSQLArtistList(data: FindSQLArtistList) {
+  static fromFindSQLArtistList(data: FindSQLArtistList) {
     return new ArtistListDTO({
       id: data.id,
       cost: data.cost,
@@ -64,6 +71,7 @@ export class ArtistListDTO {
       name: data.name,
       saleTypes: data.saleTypes.split(','),
       thumbnailUrl: data.thumbnailUrl,
+      score: data.score,
       musician: {
         id: data.musicianId,
         stageName: data.stageName,
