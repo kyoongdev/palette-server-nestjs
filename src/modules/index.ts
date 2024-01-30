@@ -10,6 +10,7 @@ import { LicenseModule } from './license/license.module';
 import { MoodModule } from './mood/mood.module';
 import { PaymentModule } from './payment/payment.module';
 import { RegionModule } from './region/region.module';
+import { SaleTypeModule } from './sale-type/sale-type.module';
 import { UserModule } from './user/user.module';
 
 export const Modules = [
@@ -22,6 +23,7 @@ export const Modules = [
   UserModule,
   LicenseModule,
   ContactModule,
+  SaleTypeModule,
   AOPModule,
 ];
 
