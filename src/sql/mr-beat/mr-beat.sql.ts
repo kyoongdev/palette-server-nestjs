@@ -16,28 +16,31 @@ export class MrBeatSQL extends BaseMrBeatSQL {
     this.query = props.query;
   }
 
-  getSqlQuery() {
+  getSqlQuery(isAdmin = false) {
     return Prisma.sql`
     ${this.getBaseSelect()}
     FROM MrBeat mrBeat
     ${this.getBaseJoin()}
-    ${this.getWhere()}
+    ${this.getWhere(isAdmin)}
     GROUP BY mrBeat.id, serviceReview.id, mood.id, genre.id
     ${this.getOrderBy()}
     LIMIT ${this.paging.page},${this.paging.limit ?? 10}
     `;
   }
 
-  getWhere() {
+  getWhere(isAdmin = false) {
     const moodWhere = this.query.moodId ? Prisma.sql`AND mood.id = ${this.query.moodId}` : Prisma.empty;
     const genreWhere = this.query.genreId ? Prisma.sql`AND genre.id = ${this.query.genreId}` : Prisma.empty;
     const groupTypeWhere = this.query.groupType
       ? Prisma.sql`AND mrBeat.groupType = ${this.query.groupType}`
       : Prisma.empty;
+    const isAdminWhere = isAdmin
+      ? Prisma.sql`1 = 1`
+      : Prisma.sql`mrBeat.isAuthorized = true AND mrBeat.isPending = false`;
 
     return Prisma.sql`
     WHERE 
-    1 = 1
+    ${isAdminWhere}
     ${moodWhere}
     ${genreWhere}
     ${groupTypeWhere}

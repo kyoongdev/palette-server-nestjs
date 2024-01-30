@@ -248,7 +248,7 @@ model Artist {
   images            ArtistImage[]
   saleTypes         ArtistSaleTypeBridge[]
   contacts          ArtistContact[]
-  ArtistLicense     ArtistLicense[]
+  licenses          ArtistLicense[]
   musicianService   MusicianService        @relation(fields: [musicianServiceId], references: [id])
   musicianServiceId String                 @unique
 }

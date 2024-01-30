@@ -32,6 +32,18 @@ export class MrBeatService {
   }
 
   async createMrBeat(musicianId: string, data: CreateMrBeatDTO) {
+    const licensesIds = data.licenses.map((license) => license.licenseId);
+
+    if (licensesIds.length !== new Set(licensesIds).size) {
+      throw new CustomException(MR_BEAT_ERROR_CODE.LICENSE_DUPLICATED);
+    }
+
+    const contactIds = data.contacts.map((contact) => contact.contactId);
+
+    if (contactIds.length !== new Set(contactIds).size) {
+      throw new CustomException(MR_BEAT_ERROR_CODE.CONTACT_DUPLICATED);
+    }
+
     const newMrBeat = await this.mrBeatRepository.createMrBeat(data.toCreateArgs(musicianId));
 
     return newMrBeat.id;
@@ -40,10 +52,30 @@ export class MrBeatService {
   async updateMrBeat(id: string, musicianId: string, data: UpdateMrBeatDTO) {
     const mrBeat = await this.findMrBeat(id);
 
+    if (!mrBeat.isAuthorized && !mrBeat.isPending) {
+      throw new CustomException(MR_BEAT_ERROR_CODE.ONLY_AUTHORIZE_CAN_UPDATE);
+    }
+
     if (mrBeat.musician.id !== musicianId) {
       throw new CustomException(MR_BEAT_ERROR_CODE.ONLY_OWNER_CAN_UPDATE);
     }
-    console.log(data);
+
+    if (data.licenses) {
+      const licensesIds = data.licenses.map((license) => license.licenseId);
+
+      if (licensesIds.length !== new Set(licensesIds).size) {
+        throw new CustomException(MR_BEAT_ERROR_CODE.LICENSE_DUPLICATED);
+      }
+    }
+
+    if (data.contacts) {
+      const contactIds = data.contacts.map((contact) => contact.contactId);
+
+      if (contactIds.length !== new Set(contactIds).size) {
+        throw new CustomException(MR_BEAT_ERROR_CODE.CONTACT_DUPLICATED);
+      }
+    }
+
     await this.mrBeatRepository.updateMrBeat(id, {
       ...data.toUpdateArgs(),
       isAuthorized: false,
