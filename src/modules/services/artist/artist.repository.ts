@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
+import { Prisma } from '@prisma/client';
+
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
 
@@ -53,4 +55,14 @@ export class ArtistRepository {
 
     return artist;
   }
+
+  async countArtists(args = {} as Prisma.ArtistCountArgs) {
+    return this.database.getRepository().artist.count(args);
+  }
+
+  async findArtists(args = {} as Prisma.ArtistFindManyArgs) {
+    return this.database.getRepository().artist.findMany(args);
+  }
+
+  async findArtistsWithSQL(sql: string) {}
 }
