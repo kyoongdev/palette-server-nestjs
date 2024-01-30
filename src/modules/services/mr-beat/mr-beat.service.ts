@@ -43,7 +43,7 @@ export class MrBeatService {
     if (mrBeat.musician.id !== musicianId) {
       throw new CustomException(MR_BEAT_ERROR_CODE.ONLY_OWNER_CAN_UPDATE);
     }
-
+    console.log(data);
     await this.mrBeatRepository.updateMrBeat(id, {
       ...data.toUpdateArgs(),
       isAuthorized: false,

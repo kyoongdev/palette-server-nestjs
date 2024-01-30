@@ -8,6 +8,7 @@ interface LicenseDTOProps {
 export class LicenseDTO {
   @Property({ apiProperty: { description: 'id', type: 'string' } })
   id: string;
+
   @Property({ apiProperty: { description: '이름', type: 'string' } })
   name: string;
 

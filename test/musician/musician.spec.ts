@@ -50,13 +50,20 @@ describe('Musician Test', () => {
 
   describe('승인 관련', () => {
     it('승인 대기 상태 ', async () => {
-      cls.run(async () => {
+      await cls.run(async () => {
         cls.set(PRISMA_CLS_KEY, prisma);
+        const file = await prisma.file.create({
+          data: {
+            extension: 'jpg',
+            originalName: 'asdf',
+            url: 'asdf',
+          },
+        });
         const createMusicianDTO: CreateMusicianDTO = new CreateMusicianDTO({
           bankAccount: '123',
           bankAccountOwnerName: 'ㅇㅂㄹㅇㅁ',
           bankCode: '123',
-          evidenceFileId: '123',
+          evidenceFileId: file.id,
           groupType: 1,
           introduction: '~~~',
           name: 'asdf',
@@ -74,13 +81,20 @@ describe('Musician Test', () => {
     });
 
     it('승인 거절 상태 ', async () => {
-      cls.run(async () => {
+      await cls.run(async () => {
         cls.set(PRISMA_CLS_KEY, prisma);
+        const file = await prisma.file.create({
+          data: {
+            extension: 'jpg',
+            originalName: 'asdf',
+            url: 'asdf',
+          },
+        });
         const createMusicianDTO: CreateMusicianDTO = new CreateMusicianDTO({
           bankAccount: '123',
           bankAccountOwnerName: 'ㅇㅂㄹㅇㅁ',
           bankCode: '123',
-          evidenceFileId: '123',
+          evidenceFileId: file.id,
           groupType: 1,
           introduction: '~~~',
           name: 'asdf',
@@ -99,13 +113,20 @@ describe('Musician Test', () => {
     });
 
     it('승인 완료 상태 ', async () => {
-      cls.run(async () => {
+      await cls.run(async () => {
         cls.set(PRISMA_CLS_KEY, prisma);
+        const file = await prisma.file.create({
+          data: {
+            extension: 'jpg',
+            originalName: 'asdf',
+            url: 'asdf',
+          },
+        });
         const createMusicianDTO: CreateMusicianDTO = new CreateMusicianDTO({
           bankAccount: '123',
           bankAccountOwnerName: 'ㅇㅂㄹㅇㅁ',
           bankCode: '123',
-          evidenceFileId: '123',
+          evidenceFileId: file.id,
           groupType: 1,
           introduction: '~~~',
           name: 'asdf',

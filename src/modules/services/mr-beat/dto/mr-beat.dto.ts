@@ -19,6 +19,8 @@ export interface MrBeatDTOProps {
   contacts: MrBeatContactDTOProps[];
   licenses: MrBeatLicenseDTOProps[];
   musician: CommonMusicianDTOProps;
+  isPending: boolean;
+  isAuthorized: boolean;
 }
 
 export class MrBeatDTO {
@@ -49,6 +51,12 @@ export class MrBeatDTO {
   @Property({ apiProperty: { description: '생성일', type: 'string', format: 'date-time' } })
   createdAt: Date;
 
+  @Property({ apiProperty: { description: '승인 대기 여부', type: 'boolean' } })
+  isPending: boolean;
+
+  @Property({ apiProperty: { description: '승인 여부', type: 'boolean' } })
+  isAuthorized: boolean;
+
   @Property({ apiProperty: { type: MrBeatContactDTO, isArray: true } })
   contacts: MrBeatContactDTO[];
 
@@ -67,6 +75,9 @@ export class MrBeatDTO {
     this.genreName = props.genreName;
     this.moodName = props.moodName;
     this.createdAt = props.createdAt;
+    this.musicDuration = props.musicDuration;
+    this.isPending = props.isPending;
+    this.isAuthorized = props.isAuthorized;
     this.contacts = props.contacts.map((contact) => new MrBeatContactDTO(contact));
     this.licenses = props.licenses.map((license) => new MrBeatLicenseDTO(license));
     this.musician = new CommonMusicianDTO(props.musician);
@@ -83,6 +94,8 @@ export class MrBeatDTO {
       genreName: data.genres.at(-1).genre.name,
       moodName: data.moods.at(-1).mood.name,
       createdAt: data.createdAt,
+      isPending: data.isPending,
+      isAuthorized: data.isAuthorized,
       contacts: data.contacts.map(MrBeatContactDTO.fromFindMrBeatContact),
       licenses: data.licenses.map(MrBeatLicenseDTO.fromFindMrBeatLicense),
       musician: CommonMusicianDTO.fromFindCommonMusician(data.musicianService.musician),

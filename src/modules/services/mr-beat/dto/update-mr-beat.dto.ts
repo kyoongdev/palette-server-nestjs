@@ -106,36 +106,40 @@ export class UpdateMrBeatDTO {
           },
         },
       },
-      contacts: {
-        deleteMany: {},
-        create: this.contacts.map((contact) => ({
-          method: contact.method,
-          contact: {
-            connect: {
-              id: contact.contactId,
+      ...(this.contacts && {
+        contacts: {
+          deleteMany: {},
+          create: this.contacts.map((contact) => ({
+            method: contact.method,
+            contact: {
+              connect: {
+                id: contact.contactId,
+              },
             },
-          },
-        })),
-      },
-      licenses: {
-        deleteMany: {},
-        create: this.licenses.map((license) => ({
-          usePeriod: license.usePeriod,
-          cost: license.cost,
-          isNewSongWithVoiceAllowed: license.isNewSongWithVoiceAllowed,
-          isProfitActivityAllowed: license.isProfitActivityAllowed,
-          isPerformanceActivityAllowed: license.isPerformanceActivityAllowed,
-          isBackgroundMusicAllowed: license.isBackgroundMusicAllowed,
-          isMVProduceAllowed: license.isMVProduceAllowed,
-          isShareAllowed: license.isShareAllowed,
-          isArrangeAllowed: license.isArrangeAllowed,
-          license: {
-            connect: {
-              id: license.licenseId,
+          })),
+        },
+      }),
+      ...(this.licenses && {
+        licenses: {
+          deleteMany: {},
+          create: this.licenses.map((license) => ({
+            usePeriod: license.usePeriod,
+            cost: license.cost,
+            isNewSongWithVoiceAllowed: license.isNewSongWithVoiceAllowed,
+            isProfitActivityAllowed: license.isProfitActivityAllowed,
+            isPerformanceActivityAllowed: license.isPerformanceActivityAllowed,
+            isBackgroundMusicAllowed: license.isBackgroundMusicAllowed,
+            isMVProduceAllowed: license.isMVProduceAllowed,
+            isShareAllowed: license.isShareAllowed,
+            isArrangeAllowed: license.isArrangeAllowed,
+            license: {
+              connect: {
+                id: license.licenseId,
+              },
             },
-          },
-        })),
-      },
+          })),
+        },
+      }),
     };
   }
 }

@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 export const seedContact = async (database: PrismaClient) => {
+  await database.contact.deleteMany({});
   await database.contact.createMany({
     data: [
       {
