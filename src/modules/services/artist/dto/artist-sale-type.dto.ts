@@ -18,7 +18,7 @@ export class ArtistSaleTypeDTO {
     this.name = props.name;
   }
 
-  static fromArtistSaleType(data: FindArtistSaleTypeBridge): ArtistSaleTypeDTO {
+  static fromFindArtistSaleType(data: FindArtistSaleTypeBridge): ArtistSaleTypeDTO {
     return new ArtistSaleTypeDTO({
       id: data.saleType.id,
       name: data.saleType.name,

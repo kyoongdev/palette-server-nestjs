@@ -4,3 +4,7 @@ export * from './artist-license.dto';
 export * from './artist-list.dto';
 export * from './artist-sale-type.dto';
 export * from './artist.dto';
+export * from './create-artist-contact.dto';
+export * from './create-artist-image.dto';
+export * from './create-artist-license.dto';
+export * from './create-artist.dto';

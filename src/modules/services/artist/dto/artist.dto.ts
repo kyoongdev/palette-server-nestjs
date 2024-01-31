@@ -3,6 +3,7 @@ import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dt
 import { DateDTOProps } from '@/utils';
 import { Property } from '@/utils/swagger';
 
+import { ArtistContactDTO, ArtistContactDTOProps } from './artist-contact.dto';
 import { ArtistImageDTO, ArtistImageDTOProps } from './artist-image.dto';
 import { ArtistLicenseDTO, ArtistLicenseDTOProps } from './artist-license.dto';
 import { ArtistSaleTypeDTO, ArtistSaleTypeDTOProps } from './artist-sale-type.dto';
@@ -17,6 +18,7 @@ export interface ArtistDTOProps extends DateDTOProps {
   images: ArtistImageDTOProps[];
   saleTypes: ArtistSaleTypeDTOProps[];
   licenses: ArtistLicenseDTOProps[];
+  contacts: ArtistContactDTOProps[];
   musician: CommonMusicianDTOProps;
 }
 
@@ -48,6 +50,9 @@ export class ArtistDTO {
   @Property({ apiProperty: { description: '아티스트 라이센스', type: ArtistLicenseDTO, isArray: true } })
   licenses: ArtistLicenseDTO[];
 
+  @Property({ apiProperty: { description: '아티스트 연락 수단', type: ArtistContactDTO, isArray: true } })
+  contacts: ArtistContactDTO[];
+
   @Property({ apiProperty: { description: '아티스트 음악가', type: CommonMusicianDTO } })
   musician: CommonMusicianDTO;
 
@@ -61,6 +66,7 @@ export class ArtistDTO {
     this.images = props.images.map((image) => new ArtistImageDTO(image));
     this.saleTypes = props.saleTypes.map((saleType) => new ArtistSaleTypeDTO(saleType));
     this.licenses = props.licenses.map((license) => new ArtistLicenseDTO(license));
+    this.contacts = props.contacts.map((contact) => new ArtistContactDTO(contact));
     this.musician = new CommonMusicianDTO(props.musician);
   }
 
@@ -73,8 +79,9 @@ export class ArtistDTO {
       isAuthorized: data.isAuthorized,
       isPending: data.isPending,
       images: data.images,
-      saleTypes: data.saleTypes.map(ArtistSaleTypeDTO.fromArtistSaleType),
+      saleTypes: data.saleTypes.map(ArtistSaleTypeDTO.fromFindArtistSaleType),
       licenses: data.licenses.map(ArtistLicenseDTO.fromFindArtistLicense),
+      contacts: data.contacts.map(ArtistContactDTO.fromFindArtistContact),
       musician: data.musicianService.musician,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,

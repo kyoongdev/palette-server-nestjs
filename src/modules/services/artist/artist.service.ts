@@ -4,7 +4,7 @@ import { ArtistSQL } from '@/sql/artist/artist.sql';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { ArtistRepository } from './artist.repository';
-import { ArtistDTO } from './dto';
+import { ArtistDTO, CreateArtistDTO } from './dto';
 import { ArtistListDTO } from './dto/artist-list.dto';
 import { FindArtistListQuery } from './dto/query';
 
@@ -28,5 +28,11 @@ export class ArtistService {
     );
 
     return new PaginationDTO(data.map(ArtistListDTO.fromFindSQLArtistList), { count, paging });
+  }
+
+  async createArtist(musicianId: string, data: CreateArtistDTO) {
+    const artist = await this.artistRepository.createArtist(data.toCreateArgs(musicianId));
+
+    return artist.id;
   }
 }
