@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { ContactRepository } from '@/modules/contact/contact.repository';
-import { FileService } from '@/modules/file/file.service';
+import { FileRepository } from '@/modules/file/file.repository';
 import { LicenseRepository } from '@/modules/license/license.repository';
 import { SaleTypeRepository } from '@/modules/sale-type/sale-type.repository';
 import { ArtistSQL } from '@/sql/artist/artist.sql';
@@ -19,7 +19,7 @@ import { ARTIST_ERROR_CODE } from './exception/error-code';
 export class ArtistService {
   constructor(
     private readonly artistRepository: ArtistRepository,
-    private readonly fileService: FileService,
+    private readonly fileRepository: FileRepository,
     private readonly contactRepository: ContactRepository,
     private readonly licenseRepository: LicenseRepository,
     private readonly saleTypeRepository: SaleTypeRepository
@@ -52,7 +52,7 @@ export class ArtistService {
 
     if (thumbnailCount > 1) throw new CustomException(ARTIST_ERROR_CODE.ONLY_ONE_THUMBNAIL);
 
-    const imageIds = (await Promise.all(data.images.map((image) => this.fileService.findImage(image.imageId)))).map(
+    const imageIds = (await Promise.all(data.images.map((image) => this.fileRepository.findImage(image.imageId)))).map(
       (image) => image.id
     );
     const contactIds = (

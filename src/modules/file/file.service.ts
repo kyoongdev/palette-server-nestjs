@@ -17,8 +17,8 @@ import { IMAGE_ERROR_CODE } from './exception/error-code';
 @Injectable()
 export class FileService {
   constructor(
-    private readonly configService: ConfigService,
-    private readonly database: PrismaDatabase
+    private readonly database: PrismaDatabase,
+    private readonly configService: ConfigService
   ) {}
 
   toBuffer(arrayBuffer: ArrayBuffer) {
@@ -47,18 +47,6 @@ export class FileService {
     } catch (err) {
       return null;
     }
-  }
-
-  async findImage(id: string) {
-    const image = await this.database.getRepository().image.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!image) throw new CustomException(IMAGE_ERROR_CODE.IMAGE_NOT_FOUND);
-
-    return new ImageDTO(image);
   }
 
   @Transactional()

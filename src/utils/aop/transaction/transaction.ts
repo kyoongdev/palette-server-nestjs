@@ -2,6 +2,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { ClsService } from 'nestjs-cls';
 
+import { PrismaService } from '@/database/prisma.service';
 import { AOPDecorator, AOPParams } from '@/interface/aop.interface';
 import { TransactionPrisma } from '@/interface/prismsa.interface';
 
@@ -19,12 +20,17 @@ export class TransactionDecorator implements AOPDecorator {
 
   execute({ method, metadata }: AOPParams<any, any>) {
     return async (...args: any[]) => {
-      const prismaService = this.cls.get(PRISMA_CLS_KEY);
-      return await prismaService.$transaction(async (tx: TransactionPrisma) => {
-        this.cls.set(PRISMA_CLS_KEY, tx);
+      const prismaService = this.cls.get(PRISMA_CLS_KEY) as PrismaService;
+      return await prismaService.$transaction(
+        async (tx: TransactionPrisma) => {
+          this.cls.set(PRISMA_CLS_KEY, tx);
 
-        return await method(...args);
-      });
+          return await method(...args);
+        },
+        {
+          timeout: 1000 * 60 * 5,
+        }
+      );
     };
   }
 }

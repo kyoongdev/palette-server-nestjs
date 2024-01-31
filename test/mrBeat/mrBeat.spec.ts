@@ -1,5 +1,11 @@
 import { PrismaDatabase } from '@/database/prisma.repository';
 import { PrismaService } from '@/database/prisma.service';
+import { ContactRepository } from '@/modules/contact/contact.repository';
+import { FileRepository } from '@/modules/file/file.repository';
+import { FileService } from '@/modules/file/file.service';
+import { GenreRepository } from '@/modules/genre/genre.repository';
+import { LicenseRepository } from '@/modules/license/license.repository';
+import { MoodRepository } from '@/modules/mood/mood.repository';
 import { MusicianRepository } from '@/modules/musician/musician.repository';
 import { MusicianService } from '@/modules/musician/musician.service';
 import { CreateMrBeatDTO, UpdateMrBeatDTO } from '@/modules/services/mr-beat/dto';
@@ -26,10 +32,14 @@ describe('Mr Beat Test', () => {
         PrismaDatabase,
         MusicianRepository,
         MusicianService,
-
         TransactionDecorator,
         MrBeatService,
         MrBeatRepository,
+        FileRepository,
+        LicenseRepository,
+        ContactRepository,
+        MoodRepository,
+        GenreRepository,
       ],
       imports: [
         AOPModule,
@@ -49,10 +59,10 @@ describe('Mr Beat Test', () => {
   });
 
   describe('Mr Beat Service', () => {
+    it('test', () => {});
     it('Create Mr Beat', async () => {
       await cls.run(async () => {
         cls.set(PRISMA_CLS_KEY, prisma);
-
         const user = await prisma.user.findFirst({
           where: {
             email: '9898junjun@naver.com',
@@ -80,7 +90,6 @@ describe('Mr Beat Test', () => {
             url: 'asdf',
           },
         });
-
         const createMrBeatDTO = new CreateMrBeatDTO({
           contacts: contacts.map((contact) => ({
             contactId: contact.id,
@@ -107,14 +116,11 @@ describe('Mr Beat Test', () => {
         });
         const result = await mrBeatService.createMrBeat(user.musician.id, createMrBeatDTO);
         expect(result).toBeDefined();
-
         const mrBeat = await mrBeatService.findMrBeat(result);
-
         expect(mrBeat.isPending).toBe(true);
         expect(mrBeat.isAuthorized).toBe(false);
       });
     });
-
     it('Update MR Beat', async () => {
       await cls.run(async () => {
         cls.set(PRISMA_CLS_KEY, prisma);
@@ -154,9 +160,7 @@ describe('Mr Beat Test', () => {
           genreId: genre.id,
           moodId: mood.id,
         });
-
         await mrBeatService.updateMrBeat(mrBeat.id, mrBeat.musicianService.musicianId, updateMrBeatDTO);
-
         const updatedMrBeat = await mrBeatService.findMrBeat(mrBeat.id);
         expect(updatedMrBeat).toBeDefined();
         expect(updatedMrBeat.name).toBe('test1235');

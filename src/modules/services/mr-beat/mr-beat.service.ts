@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { ContactRepository } from '@/modules/contact/contact.repository';
-import { FileService } from '@/modules/file/file.service';
+import { FileRepository } from '@/modules/file/file.repository';
 import { GenreRepository } from '@/modules/genre/genre.repository';
 import { LicenseRepository } from '@/modules/license/license.repository';
 import { MoodRepository } from '@/modules/mood/mood.repository';
@@ -20,7 +20,7 @@ import { MrBeatRepository } from './mr-beat.repository';
 export class MrBeatService {
   constructor(
     private readonly mrBeatRepository: MrBeatRepository,
-    private readonly fileService: FileService,
+    private readonly fileRepository: FileRepository,
     private readonly licenseRepository: LicenseRepository,
     private readonly contactRepository: ContactRepository,
     private readonly moodRepository: MoodRepository,
@@ -62,7 +62,7 @@ export class MrBeatService {
       throw new CustomException(MR_BEAT_ERROR_CODE.CONTACT_DUPLICATED);
     }
 
-    await this.fileService.findImage(data.thumbnailId);
+    await this.fileRepository.findImage(data.thumbnailId);
     await this.genreRepository.findGenre(data.genreId);
     await this.moodRepository.findMood(data.moodId);
 
@@ -84,7 +84,7 @@ export class MrBeatService {
     }
 
     if (data.thumbnailId) {
-      await this.fileService.findImage(data.thumbnailId);
+      await this.fileRepository.findImage(data.thumbnailId);
     }
 
     if (data.genreId) {

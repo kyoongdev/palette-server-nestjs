@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { ContactRepository } from '@/modules/contact/contact.repository';
+import { FileRepository } from '@/modules/file/file.repository';
 import { FileService } from '@/modules/file/file.service';
 import { GenreRepository } from '@/modules/genre/genre.repository';
 import { LicenseRepository } from '@/modules/license/license.repository';
@@ -14,7 +15,7 @@ import { MrBeatService } from './mr-beat.service';
   providers: [
     MrBeatRepository,
     MrBeatService,
-    FileService,
+    FileRepository,
     LicenseRepository,
     ContactRepository,
     MoodRepository,
