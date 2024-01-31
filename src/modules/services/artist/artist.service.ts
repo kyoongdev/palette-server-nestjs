@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
 import { CustomException } from '@/common/error/custom.exception';
+import { ContactRepository } from '@/modules/contact/contact.repository';
+import { FileService } from '@/modules/file/file.service';
+import { LicenseRepository } from '@/modules/license/license.repository';
+import { SaleTypeRepository } from '@/modules/sale-type/sale-type.repository';
 import { ArtistSQL } from '@/sql/artist/artist.sql';
+import { Transactional } from '@/utils/aop/transaction/transaction';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { ArtistRepository } from './artist.repository';
@@ -12,7 +17,13 @@ import { ARTIST_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
 export class ArtistService {
-  constructor(private readonly artistRepository: ArtistRepository) {}
+  constructor(
+    private readonly artistRepository: ArtistRepository,
+    private readonly fileService: FileService,
+    private readonly contactRepository: ContactRepository,
+    private readonly licenseRepository: LicenseRepository,
+    private readonly saleTypeRepository: SaleTypeRepository
+  ) {}
 
   async findArtist(id: string) {
     const artist = await this.artistRepository.findArtist(id);
@@ -31,7 +42,7 @@ export class ArtistService {
 
     return new PaginationDTO(data.map(ArtistListDTO.fromFindSQLArtistList), { count, paging });
   }
-
+  @Transactional()
   async createArtist(musicianId: string, data: CreateArtistDTO) {
     const isThumbnailExist = data.images.some((image) => image.isThumbnail);
 
@@ -41,10 +52,20 @@ export class ArtistService {
 
     if (thumbnailCount > 1) throw new CustomException(ARTIST_ERROR_CODE.ONLY_ONE_THUMBNAIL);
 
-    const imageIds = data.images.map((image) => image.imageId);
-    const contactIds = data.contacts.map((contact) => contact.contactId);
-    const licenseIds = data.licenses.map((license) => license.licenseId);
-    const saleTypeIds = data.saleTypeIds;
+    const imageIds = (await Promise.all(data.images.map((image) => this.fileService.findImage(image.imageId)))).map(
+      (image) => image.id
+    );
+    const contactIds = (
+      await Promise.all(data.contacts.map((contact) => this.contactRepository.findContact(contact.contactId)))
+    ).map((contact) => contact.id);
+
+    const licenseIds = (
+      await Promise.all(data.licenses.map((license) => this.licenseRepository.findLicense(license.licenseId)))
+    ).map((license) => license.id);
+
+    const saleTypeIds = (
+      await Promise.all(data.saleTypeIds.map((saleTypeId) => this.saleTypeRepository.findArtistSaleType(saleTypeId)))
+    ).map((saleType) => saleType.id);
 
     const isImageIdDuplicated = imageIds.length !== new Set(imageIds).size;
     const isContactIdDuplicated = contactIds.length !== new Set(contactIds).size;

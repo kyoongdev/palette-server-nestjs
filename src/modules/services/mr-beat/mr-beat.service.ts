@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { MrBeatSQL } from '@/sql';
+import { Transactional } from '@/utils/aop/transaction/transaction';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { CreateMrBeatDTO, MrBeatDTO, UpdateMrBeatDTO } from './dto';
@@ -31,6 +32,7 @@ export class MrBeatService {
     return new PaginationDTO<MrBeatListDTO>(data.map(MrBeatListDTO.fromFindSQLMrBeatList), { count, paging });
   }
 
+  @Transactional()
   async createMrBeat(musicianId: string, data: CreateMrBeatDTO) {
     const licensesIds = data.licenses.map((license) => license.licenseId);
 
@@ -49,6 +51,7 @@ export class MrBeatService {
     return newMrBeat.id;
   }
 
+  @Transactional()
   async updateMrBeat(id: string, musicianId: string, data: UpdateMrBeatDTO) {
     const mrBeat = await this.findMrBeat(id);
 
@@ -83,6 +86,7 @@ export class MrBeatService {
     });
   }
 
+  @Transactional()
   async deleteMrBeat(id: string, musicianId: string) {
     const mrBeat = await this.findMrBeat(id);
 

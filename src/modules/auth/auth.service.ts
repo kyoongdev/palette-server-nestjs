@@ -118,6 +118,7 @@ export class AuthService {
     });
   }
 
+  @Transactional()
   async register(data: RegisterDTO) {
     const user = await this.userRepository.checkUserByEmail(data.email);
 

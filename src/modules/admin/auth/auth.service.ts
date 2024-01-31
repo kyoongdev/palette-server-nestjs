@@ -5,6 +5,7 @@ import { JwtProvider } from '@/common/jwt/jwt';
 import { Role, TokenPayload } from '@/interface/token.interface';
 import { TokenDTO } from '@/modules/auth/dto';
 import { AUTH_ERROR_CODE } from '@/modules/auth/exception/error-code';
+import { Transactional } from '@/utils/aop/transaction/transaction';
 import { EncryptProvider } from '@/utils/encrypt';
 import { validatePassword } from '@/utils/regex';
 
@@ -21,6 +22,7 @@ export class AdminAuthService {
     private readonly encrypt: EncryptProvider,
     private readonly jwt: JwtProvider
   ) {}
+
   async login(data: AdminLoginDTO) {
     const admin = await this.adminRepository.checkAdminByAdminId(data.adminId);
     if (!admin) {
@@ -42,6 +44,7 @@ export class AdminAuthService {
     });
   }
 
+  @Transactional()
   async register(data: AdminRegisterDTO) {
     const user = await this.adminRepository.checkAdminByAdminId(data.adminId);
 

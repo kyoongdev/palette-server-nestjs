@@ -6,10 +6,13 @@ import convert from 'heic-convert';
 import mime from 'mime-types';
 import sharp from 'sharp';
 
+import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
+import { Transactional } from '@/utils/aop/transaction/transaction';
 
 import { ImageDTO, MusicDTO } from './dto';
 import { FileDTO } from './dto/file.dto';
+import { IMAGE_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
 export class FileService {
@@ -46,6 +49,19 @@ export class FileService {
     }
   }
 
+  async findImage(id: string) {
+    const image = await this.database.getRepository().image.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!image) throw new CustomException(IMAGE_ERROR_CODE.IMAGE_NOT_FOUND);
+
+    return new ImageDTO(image);
+  }
+
+  @Transactional()
   async uploadResizedImage(
     file: Express.Multer.File,
     originKey?: string,
@@ -74,6 +90,7 @@ export class FileService {
     }
   }
 
+  @Transactional()
   async uploadMusic(file: Express.Multer.File, duration: number) {
     try {
       const { key, fileBuffer, ext } = await this.getFileSpec(file);
@@ -94,6 +111,8 @@ export class FileService {
       throw new InternalServerErrorException('음악 저장 중 오류가 발생했습니다.');
     }
   }
+
+  @Transactional()
   async uploadImage(file: Express.Multer.File) {
     try {
       const { key, fileBuffer, ext } = await this.getFileSpec(file);
@@ -114,6 +133,7 @@ export class FileService {
     }
   }
 
+  @Transactional()
   async uploadFile(file: Express.Multer.File, originKey: string, contentType = 'image/jpeg') {
     try {
       const { key, fileBuffer, ext } = await this.getFileSpec(file, originKey);
