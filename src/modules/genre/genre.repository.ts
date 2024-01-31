@@ -10,6 +10,20 @@ import { GENRE_ERROR_CODE } from './exception/error-code';
 export class GenreRepository {
   constructor(private readonly database: PrismaDatabase) {}
 
+  async findGenre(id: string) {
+    const genre = await this.database.getRepository().genre.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!genre) {
+      throw new CustomException(GENRE_ERROR_CODE.GENRE_NOT_FOUND);
+    }
+
+    return genre;
+  }
+
   async findGenres() {
     const genres = await this.database.getRepository().genre.findMany({
       orderBy: {
@@ -32,15 +46,7 @@ export class GenreRepository {
   }
 
   async updateGenre(id: string, data: CreateGenreDTO) {
-    const isExist = await this.database.getRepository().genre.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!isExist) {
-      throw new CustomException(GENRE_ERROR_CODE.GENRE_NOT_FOUND);
-    }
+    const isExist = await this.findGenre(id);
 
     if (data.order) {
       await this.database.getRepository().genre.updateMany({
@@ -101,15 +107,7 @@ export class GenreRepository {
   }
 
   async deleteGenre(id: string) {
-    const isExist = await this.database.getRepository().genre.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!isExist) {
-      throw new CustomException(GENRE_ERROR_CODE.GENRE_NOT_FOUND);
-    }
+    const isExist = await this.findGenre(id);
 
     await this.database.getRepository().genre.updateMany({
       where: {

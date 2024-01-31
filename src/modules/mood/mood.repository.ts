@@ -10,6 +10,20 @@ import { MOOD_ERROR_CODE } from './exception/error-code';
 export class MoodRepository {
   constructor(private readonly database: PrismaDatabase) {}
 
+  async findMood(id: string) {
+    const mood = await this.database.getRepository().mood.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!mood) {
+      throw new CustomException(MOOD_ERROR_CODE.MOOD_NOT_FOUND);
+    }
+
+    return mood;
+  }
+
   async findMoods() {
     const moods = await this.database.getRepository().mood.findMany({
       orderBy: {
@@ -31,15 +45,7 @@ export class MoodRepository {
   }
 
   async updateMood(id: string, data: CreateMoodDTO) {
-    const isExist = await this.database.getRepository().mood.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!isExist) {
-      throw new CustomException(MOOD_ERROR_CODE.MOOD_NOT_FOUND);
-    }
+    const isExist = await this.findMood(id);
 
     if (data.order) {
       await this.database.getRepository().mood.updateMany({
@@ -100,15 +106,7 @@ export class MoodRepository {
   }
 
   async deleteMood(id: string) {
-    const isExist = await this.database.getRepository().mood.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!isExist) {
-      throw new CustomException(MOOD_ERROR_CODE.MOOD_NOT_FOUND);
-    }
+    const isExist = await this.findMood(id);
 
     await this.database.getRepository().mood.updateMany({
       where: {
