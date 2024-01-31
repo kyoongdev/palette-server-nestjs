@@ -2,9 +2,9 @@ import { Prisma } from '@prisma/client';
 
 import { Property } from '@/utils/swagger';
 
-import { CreateArtistContactDTO, CreateArtistContactDTOProps } from './create-artist-contact.dto';
-import { CreateArtistImageDTO, CreateArtistImageDTOProps } from './create-artist-image.dto';
-import { CreateArtistLicenseDTO, CreateArtistLicenseDTOProps } from './create-artist-license.dto';
+import { CreateArtistContactDTO, type CreateArtistContactDTOProps } from './create-artist-contact.dto';
+import { CreateArtistImageDTO, type CreateArtistImageDTOProps } from './create-artist-image.dto';
+import { CreateArtistLicenseDTO, type CreateArtistLicenseDTOProps } from './create-artist-license.dto';
 
 export interface CreateArtistDTOProps {
   name: string;

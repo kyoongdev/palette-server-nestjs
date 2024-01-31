@@ -10,6 +10,8 @@ const ARTIST_ERROR = {
   CONTACT_ID_DUPLICATED: '연락처 아이디가 중복되었습니다.',
   LICENSE_ID_DUPLICATED: '라이센스 아이디가 중복되었습니다.',
   SALE_ID_DUPLICATED: '판매 아이디가 중복되었습니다.',
+  ONLY_OWNER_CAN_UPDATE: '본인만 수정할 수 있습니다.',
+  ONLY_OWNER_CAN_DELETE: '본인만 삭제할 수 있습니다.',
 };
 
 export const ARTIST_ERROR_CODE: ErrorCode<typeof ARTIST_ERROR> = {
@@ -40,5 +42,13 @@ export const ARTIST_ERROR_CODE: ErrorCode<typeof ARTIST_ERROR> = {
   SALE_ID_DUPLICATED: {
     code: HttpStatus.BAD_REQUEST,
     message: ARTIST_ERROR.SALE_ID_DUPLICATED,
+  },
+  ONLY_OWNER_CAN_UPDATE: {
+    code: HttpStatus.FORBIDDEN,
+    message: ARTIST_ERROR.ONLY_OWNER_CAN_UPDATE,
+  },
+  ONLY_OWNER_CAN_DELETE: {
+    code: HttpStatus.FORBIDDEN,
+    message: ARTIST_ERROR.ONLY_OWNER_CAN_DELETE,
   },
 };

@@ -8,3 +8,4 @@ export * from './create-artist-contact.dto';
 export * from './create-artist-image.dto';
 export * from './create-artist-license.dto';
 export * from './create-artist.dto';
+export * from './update-artist.dto';
