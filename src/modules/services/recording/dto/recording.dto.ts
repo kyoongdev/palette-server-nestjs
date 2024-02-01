@@ -3,8 +3,8 @@ import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dt
 import { DateDTO, DateDTOProps } from '@/utils';
 import { Property } from '@/utils/swagger';
 
-import { RecordingLicenseDTO, RecordingLicenseDTOProps } from './recodring-license.dto';
 import { RecordingImageDTO, RecordingImageDTOProps } from './recording-image.dto';
+import { RecordingLicenseDTO, RecordingLicenseDTOProps } from './recording-license.dto';
 import { RecordingRegionDTO, RecordingRegionDTOProps } from './recording-region.dto';
 
 export interface RecordingDTOProps extends DateDTOProps {
