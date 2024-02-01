@@ -34,9 +34,7 @@ export class MrBeatSQL extends BaseMrBeatSQL {
     const groupTypeWhere = this.query.groupType
       ? Prisma.sql`AND mrBeat.groupType = ${this.query.groupType}`
       : Prisma.empty;
-    const isAdminWhere = isAdmin
-      ? Prisma.sql`1 = 1`
-      : Prisma.sql`mrBeat.isAuthorized = true AND mrBeat.isPending = false`;
+    const isAdminWhere = isAdmin ? Prisma.sql`1 = 1` : Prisma.sql`mrBeat.isAuthorized = 1 AND mrBeat.isPending = 0`;
 
     return Prisma.sql`
     WHERE 

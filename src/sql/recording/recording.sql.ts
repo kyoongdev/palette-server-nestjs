@@ -17,6 +17,7 @@ export class RecordingSQL extends BaseRecordingSQL {
   }
 
   getSqlQuery(isAdmin = false) {
+    console.log(this.getWhere(isAdmin));
     return Prisma.sql`
     ${this.getBaseSelect()}
     FROM Recording recording
@@ -31,7 +32,7 @@ export class RecordingSQL extends BaseRecordingSQL {
   getWhere(isAdmin = false) {
     const isAdminWhere = isAdmin
       ? Prisma.sql`1 = 1`
-      : Prisma.sql`recording.isAuthorized = true AND recording.isPending = false`;
+      : Prisma.sql`recording.isAuthorized = 1 AND recording.isPending = 0`;
 
     const regionLargeGroupWhere = this.query.regionLargeGroupId
       ? Prisma.sql`AND recordingRegion.regionLargeGroupId = ${this.query.regionLargeGroupId}`
@@ -43,10 +44,15 @@ export class RecordingSQL extends BaseRecordingSQL {
 
     const isEngineerSupportedWhere =
       typeof this.query.isEngineerSupported === 'boolean'
-        ? Prisma.sql`AND recording.isEngineerSupported = ${this.query.isEngineerSupported}`
+        ? Prisma.sql`AND recording.isEngineerSupported = ${this.query.isEngineerSupported ? '1' : '0'}`
         : Prisma.empty;
 
-    return `
+    console.log(isAdminWhere);
+    console.log(regionLargeGroupWhere);
+    console.log(regionSmallGroupWhere);
+    console.log(isEngineerSupportedWhere);
+
+    return Prisma.sql`
     WHERE
     ${isAdminWhere}
     ${regionLargeGroupWhere}
@@ -56,8 +62,6 @@ export class RecordingSQL extends BaseRecordingSQL {
   }
 
   getOrderBy() {
-    return `
-    ORDER BY recording.createdAt DESC
-    `;
+    return Prisma.sql`ORDER BY recording.createdAt DESC`;
   }
 }

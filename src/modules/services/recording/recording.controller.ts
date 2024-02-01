@@ -49,8 +49,8 @@ export class RecordingController {
     },
     201
   )
-  async createRecording(@Param('musicianId') musicianId: string, @Body() data: CreateRecordingDTO) {
-    return await this.recordingService.createRecording(musicianId, data);
+  async createRecording(@ReqUser() user: RequestMusician, @Body() data: CreateRecordingDTO) {
+    return await this.recordingService.createRecording(user.musician.id, data);
   }
 
   @Patch(':recordingId')

@@ -21,7 +21,7 @@ export class BaseRecordingSQL {
     JOIN RecordingRegion recordingRegion ON recordingRegion.id = recording.recordingRegionId
     LEFT JOIN RegionLargeGroup regionLargeGroup ON regionLargeGroup.id = recordingRegion.regionLargeGroupId
     LEFT JOIN RegionSmallGroup regionSmallGroup ON regionSmallGroup.id = recordingRegion.regionSmallGroupId
-    LEFT JOIN MusicianService musicianService ON musicianService.id = artist.musicianServiceId
+    LEFT JOIN MusicianService musicianService ON musicianService.id = recording.musicianServiceId
     LEFT JOIN ServiceReview serviceReview ON serviceReview.serviceId = musicianService.id
     LEFT JOIN Musician musician ON musician.id = musicianService.musicianId
     JOIN User user ON user.id = musician.userId
