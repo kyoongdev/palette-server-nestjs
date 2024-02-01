@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { Paging } from '@/common/decorator';
@@ -7,12 +7,12 @@ import { JwtAuthGuard } from '@/common/guards/jwt.guard';
 import { RoleGuard } from '@/common/guards/role.guard';
 import { ResponseWithIdInterceptor } from '@/common/interceptor/response-with-id.interceptor';
 import { RequestMusician } from '@/interface/token.interface';
-import { ResponseWithIdDTO } from '@/utils';
+import { EmptyResponseDTO, ResponseWithIdDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
 import { Auth, ResponseApi } from '@/utils/swagger';
 
 import { ArtistService } from './artist.service';
-import { ArtistDTO, CreateArtistDTO } from './dto';
+import { ArtistDTO, CreateArtistDTO, UpdateArtistDTO } from './dto';
 import { ArtistListDTO } from './dto/artist-list.dto';
 import { FindArtistListQuery } from './dto/query';
 
@@ -43,7 +43,7 @@ export class ArtistController {
   @Post()
   @Auth([JwtAuthGuard, RoleGuard('MUSICIAN')])
   @UseInterceptors(ResponseWithIdInterceptor)
-  @ApiOperation({ summary: '아티스트 생성 API', description: '아티스트를 생성합니다.' })
+  @ApiOperation({ summary: '아티스트 생성 API (뮤지션만 사용 가능)', description: '아티스트를 생성합니다.' })
   @ResponseApi(
     {
       type: ResponseWithIdDTO,
@@ -52,5 +52,35 @@ export class ArtistController {
   )
   async createArtist(@ReqUser() user: RequestMusician, @Body() body: CreateArtistDTO) {
     return await this.artistService.createArtist(user.musician.id, body);
+  }
+
+  @Patch(':artistId')
+  @Auth([JwtAuthGuard, RoleGuard('MUSICIAN')])
+  @ApiOperation({ summary: '아티스트 수정 API (뮤지션만 사용 가능)', description: '아티스트를 수정합니다.' })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
+  async updateArtist(
+    @ReqUser() user: RequestMusician,
+    @Param('artistId') artistId: string,
+    @Body() body: UpdateArtistDTO
+  ) {
+    return await this.artistService.updateArtist(user.musician.id, artistId, body);
+  }
+
+  @Delete(':artistId')
+  @Auth([JwtAuthGuard, RoleGuard('MUSICIAN')])
+  @ApiOperation({ summary: '아티스트 삭제 API (뮤지션만 사용 가능)', description: '아티스트를 삭제합니다.' })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
+  async deleteArtist(@ReqUser() user: RequestMusician, @Param('artistId') artistId: string) {
+    return await this.artistService.deleteArtist(user.musician.id, artistId);
   }
 }

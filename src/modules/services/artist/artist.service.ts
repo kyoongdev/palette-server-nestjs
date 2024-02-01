@@ -42,6 +42,7 @@ export class ArtistService {
 
     return new PaginationDTO(data.map(ArtistListDTO.fromFindSQLArtistList), { count, paging });
   }
+
   @Transactional()
   async createArtist(musicianId: string, data: CreateArtistDTO) {
     const isThumbnailExist = data.images.some((image) => image.isThumbnail);
