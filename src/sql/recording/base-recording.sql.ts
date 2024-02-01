@@ -33,6 +33,7 @@ export class BaseRecordingSQL {
     return Prisma.sql`
     SELECT SQL_CALC_FOUND_ROWS
     recording.id as id, recording.name as name,
+    recording.studioName as studioName,
     thumbnail.url as thumbnailUrl,
     recordingRegion.id as recordingRegionId,
     regionLargeGroup.name as regionLargeGroupName,

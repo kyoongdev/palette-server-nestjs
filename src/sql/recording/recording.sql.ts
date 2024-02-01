@@ -10,7 +10,7 @@ export class RecordingSQL extends BaseRecordingSQL {
   }
 
   getSqlQuery(isAdmin = false) {
-    return `
+    return Prisma.sql`
     ${this.getBaseSelect()}
     FROM Recording recording
     ${this.getBaseJoin()}
