@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
+import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
 
-import { RegionLargeGroupDTO, RegionSmallGroupDTO } from './dto';
+import { REGION_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
 export class RegionRepository {
@@ -22,7 +23,7 @@ export class RegionRepository {
       },
     });
 
-    return regions.map((region) => new RegionLargeGroupDTO(region));
+    return regions;
   }
 
   async findRegionLargeGroup(id: string) {
@@ -37,7 +38,23 @@ export class RegionRepository {
       },
     });
 
-    return new RegionLargeGroupDTO(region);
+    if (!region) {
+      throw new CustomException(REGION_ERROR_CODE.LARGE_GROUP_NOT_FOUND);
+    }
+
+    return region;
+  }
+
+  async findRegionSmallGroup(id: string) {
+    const region = await this.database.getRepository().regionSmallGroup.findUnique({
+      where: { id },
+    });
+
+    if (!region) {
+      throw new CustomException(REGION_ERROR_CODE.SMALL_GROUP_NOT_FOUND);
+    }
+
+    return region;
   }
 
   async findRegionSmallGroupsByLargeGroup(largeGroupId: string) {
@@ -50,6 +67,6 @@ export class RegionRepository {
       },
     });
 
-    return smallRegions.map((smallRegion) => new RegionSmallGroupDTO(smallRegion));
+    return smallRegions;
   }
 }
