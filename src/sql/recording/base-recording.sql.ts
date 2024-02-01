@@ -40,8 +40,9 @@ export class BaseRecordingSQL {
     AVG(serviceReview.score) as score,
     recording.isEngineerSupported as isEngineerSupported,
     recording.isAuthorized as isAuthorized,
-    recording.cost as cost,
-    recording.createdAt as createdAt
+    recording.createdAt as createdAt,
+    musician.id as musicianId, musician.stageName as stageName,
+    musician.name as musicianName, musician.groupType as musicianGroupType,
     musician.isPending as musicianIsPending, musician.isAuthorized as musicianIsAuthorized,
     musician.introduction as musicianIntroduction, profile.url as musicianProfileUrl,
     MIN(recordingLicense.cost) as cost
