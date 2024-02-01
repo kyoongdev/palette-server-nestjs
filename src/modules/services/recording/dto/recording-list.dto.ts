@@ -1,3 +1,4 @@
+import { FindSQLRecordingList } from '@/interface/recording.interface';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
 import { Property } from '@/utils/swagger';
 
@@ -51,5 +52,19 @@ export class RecordingListDTO {
     this.score = props.score;
     this.createdAt = props.createdAt;
     this.musician = new CommonMusicianDTO(props.musician);
+  }
+
+  static fromFindSQLRecordingList(data: FindSQLRecordingList) {
+    return new RecordingListDTO({
+      id: data.id,
+      name: data.name,
+      studioName: data.studioName,
+      thumbnailUrl: data.thumbnailUrl,
+      isEngineerSupported: data.isEngineerSupported,
+      cost: data.cost,
+      score: data.score,
+      createdAt: data.createdAt,
+      musician: CommonMusicianDTO.fromFindSQLCommonMusician(data),
+    });
   }
 }

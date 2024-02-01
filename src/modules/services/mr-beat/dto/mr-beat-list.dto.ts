@@ -101,16 +101,7 @@ export class MrBeatListDTO {
       createdAt: data.createdAt,
       cost: data.cost,
       score: data.score,
-      musician: {
-        id: data.musicianId,
-        stageName: data.stageName,
-        name: data.musicianName,
-        groupType: data.musicianGroupType,
-        isPending: data.musicianIsPending,
-        isAuthorized: data.musicianIsAuthorized,
-        introduction: data.musicianIntroduction,
-        profileImageUrl: data.musicianProfileUrl,
-      },
+      musician: CommonMusicianDTO.fromFindSQLCommonMusician(data),
     });
   }
 }

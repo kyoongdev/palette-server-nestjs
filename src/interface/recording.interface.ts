@@ -7,9 +7,12 @@ import {
   recordingRegionInclude,
 } from '@/utils/constants/include/recording';
 
-export interface FindSQLRecordingList {
+import { FindSQLCommonMusician } from './musician.interface';
+
+export interface FindSQLRecordingList extends FindSQLCommonMusician {
   id: string;
   name: string;
+  studioName: string;
   thumbnailUrl: string;
   recordingRegionId: string;
   regionLargeGroupName: string;
@@ -19,10 +22,6 @@ export interface FindSQLRecordingList {
   isAuthorized: boolean;
   cost: number;
   createdAt: Date;
-  musicianIsPending: boolean;
-  musicianIsAuthorized: boolean;
-  musicianIntroduction: string;
-  musicianProfileUrl: string;
 }
 
 export type FindRecordingList = Prisma.RecordingGetPayload<{ include: typeof recordingListInclude }>;

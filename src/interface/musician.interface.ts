@@ -16,3 +16,13 @@ export interface FindCommonMusician extends Musician {
   evidenceFile: File;
   user: MusicianUser;
 }
+export interface FindSQLCommonMusician {
+  musicianId: string;
+  stageName: string;
+  musicianName: string;
+  musicianGroupType: number;
+  musicianIsPending: boolean;
+  musicianIsAuthorized: boolean;
+  musicianIntroduction: string;
+  musicianProfileUrl: string;
+}

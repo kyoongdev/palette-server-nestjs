@@ -7,7 +7,9 @@ import {
   mrBeatListInclude,
 } from '@/utils/constants/include/mr-beat';
 
-export interface FindSQLMrBeatList {
+import type { FindSQLCommonMusician } from './musician.interface';
+
+export interface FindSQLMrBeatList extends FindSQLCommonMusician {
   id: string;
   name: string;
   groupType: number;
@@ -18,15 +20,7 @@ export interface FindSQLMrBeatList {
   moodName: string;
   createdAt: Date;
   score: number;
-  musicianId: string;
-  stageName: string;
   cost: number;
-  musicianName: string;
-  musicianGroupType: number;
-  musicianIsPending: boolean;
-  musicianIsAuthorized: boolean;
-  musicianIntroduction: string;
-  musicianProfileUrl: string;
 }
 
 export type FindMrBeat = Prisma.MrBeatGetPayload<{ include: typeof mrBeatDetailInclude }>;
