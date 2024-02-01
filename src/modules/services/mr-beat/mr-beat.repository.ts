@@ -43,7 +43,7 @@ export class MrBeatRepository {
   }
 
   async findMrBeatsWithSQL(sql: Prisma.Sql) {
-    const data: FindSQLMrBeatList[] = await this.database.getRepository().$queryRaw(sql);
+    const data = await this.database.getRepository().$queryRaw<FindSQLMrBeatList[]>(sql);
     const count: {
       'FOUND_ROWS()': number;
     }[] = await this.database.getRepository().$queryRaw(Prisma.sql`SELECT FOUND_ROWS()`);
