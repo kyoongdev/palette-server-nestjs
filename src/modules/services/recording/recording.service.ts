@@ -81,9 +81,13 @@ export class RecordingService {
       throw new CustomException(RECORDING_ERROR_CODE.LICENSE_ID_DUPLICATED);
     }
 
-    await this.regionRepository.findRegionLargeGroup(data.region.regionLargeGroupId);
-    data.region.regionSmallGroupId &&
-      (await this.regionRepository.findRegionSmallGroup(data.region.regionSmallGroupId));
+    const largeGroup = await this.regionRepository.findRegionLargeGroup(data.region.regionLargeGroupId);
+    if (data.region.regionSmallGroupId) {
+      const isSmallGroupExists = largeGroup.regions.find((region) => region.id === data.region.regionSmallGroupId);
+      if (!isSmallGroupExists) {
+        throw new CustomException(RECORDING_ERROR_CODE.REGION_SMALL_GROUP_NOT_MATCH);
+      }
+    }
 
     const recording = await this.recordingRepository.createRecording(data.toCreateArgs(musicianId));
 
@@ -134,9 +138,13 @@ export class RecordingService {
     }
 
     if (data.region) {
-      await this.regionRepository.findRegionLargeGroup(data.region.regionLargeGroupId);
-      data.region.regionSmallGroupId &&
-        (await this.regionRepository.findRegionSmallGroup(data.region.regionSmallGroupId));
+      const largeGroup = await this.regionRepository.findRegionLargeGroup(data.region.regionLargeGroupId);
+      if (data.region.regionSmallGroupId) {
+        const isSmallGroupExists = largeGroup.regions.find((region) => region.id === data.region.regionSmallGroupId);
+        if (!isSmallGroupExists) {
+          throw new CustomException(RECORDING_ERROR_CODE.REGION_SMALL_GROUP_NOT_MATCH);
+        }
+      }
     }
 
     const recording = await this.recordingRepository.findRecording(id);
