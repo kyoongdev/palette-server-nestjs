@@ -72,11 +72,13 @@ export class UpdateRecordingDTO {
               id: this.region.regionLargeGroupId,
             },
           },
-          regionSmallGroup: {
-            connect: {
-              id: this.region.regionSmallGroupId,
+          ...(this.region.regionSmallGroupId && {
+            regionSmallGroup: {
+              connect: {
+                id: this.region.regionSmallGroupId,
+              },
             },
-          },
+          }),
         },
       },
       recordingLicense: this.licenses && {

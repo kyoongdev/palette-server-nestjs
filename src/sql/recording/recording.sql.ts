@@ -1,12 +1,19 @@
 import { Prisma } from '@prisma/client';
 
+import { FindRecordingListQuery } from '@/modules/services/recording/dto/query';
+
 import { BaseRecordingSQL, BaseRecordingSQLProps } from './base-recording.sql';
 
-interface RecordingSQLProps extends BaseRecordingSQLProps {}
+interface RecordingSQLProps extends BaseRecordingSQLProps {
+  query: FindRecordingListQuery;
+}
 
 export class RecordingSQL extends BaseRecordingSQL {
+  query: FindRecordingListQuery;
+
   constructor(props: RecordingSQLProps) {
     super(props);
+    this.query = props.query;
   }
 
   getSqlQuery(isAdmin = false) {
@@ -25,15 +32,32 @@ export class RecordingSQL extends BaseRecordingSQL {
     const isAdminWhere = isAdmin
       ? Prisma.sql`1 = 1`
       : Prisma.sql`recording.isAuthorized = true AND recording.isPending = false`;
+
+    const regionLargeGroupWhere = this.query.regionLargeGroupId
+      ? Prisma.sql`AND recordingRegion.regionLargeGroupId = ${this.query.regionLargeGroupId}`
+      : Prisma.empty;
+
+    const regionSmallGroupWhere = this.query.regionSmallGroupId
+      ? Prisma.sql`AND recordingRegion.regionSmallGroupId = ${this.query.regionSmallGroupId}`
+      : Prisma.empty;
+
+    const isEngineerSupportedWhere =
+      typeof this.query.isEngineerSupported === 'boolean'
+        ? Prisma.sql`AND recording.isEngineerSupported = ${this.query.isEngineerSupported}`
+        : Prisma.empty;
+
     return `
     WHERE
     ${isAdminWhere}
+    ${regionLargeGroupWhere}
+    ${regionSmallGroupWhere}
+    ${isEngineerSupportedWhere}
     `;
   }
 
   getOrderBy() {
     return `
-    ORDER BY score DESC
+    ORDER BY recording.createdAt DESC
     `;
   }
 }
