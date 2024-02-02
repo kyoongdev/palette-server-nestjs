@@ -10,7 +10,7 @@ export const recordingRegionInclude = {
 } satisfies Prisma.RecordingRegionInclude;
 
 export const recordingListInclude = {
-  recordingLicense: {
+  licenses: {
     include: {
       license: true,
     },

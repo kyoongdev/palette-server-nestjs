@@ -81,7 +81,7 @@ export class UpdateRecordingDTO {
           }),
         },
       },
-      recordingLicense: this.licenses && {
+      licenses: this.licenses && {
         deleteMany: {},
         create: this.licenses.map(({ licenseId, ...rest }) => ({
           ...rest,

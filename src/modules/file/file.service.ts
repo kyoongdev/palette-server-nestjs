@@ -6,13 +6,11 @@ import convert from 'heic-convert';
 import mime from 'mime-types';
 import sharp from 'sharp';
 
-import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
 import { Transactional } from '@/utils/aop/transaction/transaction';
 
 import { ImageDTO, MusicDTO } from './dto';
 import { FileDTO } from './dto/file.dto';
-import { IMAGE_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
 export class FileService {

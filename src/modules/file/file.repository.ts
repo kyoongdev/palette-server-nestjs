@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
 
-import { IMAGE_ERROR_CODE } from './exception/error-code';
+import { FILE_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
 export class FileRepository {
@@ -16,8 +16,20 @@ export class FileRepository {
       },
     });
 
-    if (!image) throw new CustomException(IMAGE_ERROR_CODE.IMAGE_NOT_FOUND);
+    if (!image) throw new CustomException(FILE_ERROR_CODE.IMAGE_NOT_FOUND);
 
     return image;
+  }
+
+  async findMusic(id: string) {
+    const music = await this.database.getRepository().music.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!music) throw new CustomException(FILE_ERROR_CODE.MUSIC_NOT_FOUND);
+
+    return music;
   }
 }

@@ -86,7 +86,7 @@ export class CreateRecordingDTO {
           }),
         },
       },
-      recordingLicense: {
+      licenses: {
         create: this.licenses.map(({ licenseId, ...rest }) => ({
           ...rest,
           license: {

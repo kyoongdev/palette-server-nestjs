@@ -87,7 +87,7 @@ export class RecordingDTO extends DateDTO {
       isAuthorized: data.isAuthorized,
       images: data.images.map((image) => new RecordingImageDTO(image)),
       region: RecordingRegionDTO.fromFindRecordingRegion(data.recordingRegion),
-      licenses: data.recordingLicense.map((license) => RecordingLicenseDTO.fromFindRecordingLicense(license)),
+      licenses: data.licenses.map((license) => RecordingLicenseDTO.fromFindRecordingLicense(license)),
       musician: data.musicianService.musician,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,

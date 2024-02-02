@@ -344,7 +344,7 @@ model Recording {
 
   recordingRegion   RecordingRegion    @relation(fields: [recordingRegionId], references: [id])
   recordingRegionId String
-  recordingLicense  RecordingLicense[]
+  licenses          RecordingLicense[]
   musicianService   MusicianService    @relation(fields: [musicianServiceId], references: [id])
   musicianServiceId String             @unique
 }
