@@ -1,21 +1,23 @@
 import { PrismaClient } from '@prisma/client';
 import { range } from 'lodash';
 
-export const seedArtist = async (database: PrismaClient) => {
+export const seedAlbumArt = async (database: PrismaClient) => {
   const musician = await database.musician.findFirst({
     where: {
       name: '또로롱',
     },
   });
-  const contacts = await database.contact.findMany({});
-  const licenses = await database.license.findMany({});
-  const artistSaleTypes = await database.artistSaleType.findMany({
+
+  const saleTypes = await database.albumArtSaleType.findMany({
     skip: 0,
     take: 2,
   });
+  const contacts = await database.contact.findMany({});
+  const licenses = await database.license.findMany({});
+
   await Promise.all(
     range(1, 50).map((index) =>
-      database.artist.create({
+      database.albumArt.create({
         data: {
           musicianService: {
             create: {
@@ -26,24 +28,20 @@ export const seedArtist = async (database: PrismaClient) => {
               },
             },
           },
-          saleTypes: {
-            create: artistSaleTypes.map((saleType) => ({
-              saleType: {
-                connect: {
-                  id: saleType.id,
-                },
-              },
-            })),
-          },
+          name: `또로롱의 ${index}번째 앨범아트`,
+          description: `또로롱의 ${index}번째 앨범아트 설명`,
+          updateDescription: `또로롱의 ${index}번째 앨범아트 업데이트 설명`,
+          isAuthorized: true,
+          isPending: false,
           images: {
             create: [
               {
                 isThumbnail: true,
                 image: {
                   create: {
-                    url: 'https://pallete-file.s3.ap-northeast-2.amazonaws.com/dev/tese.jpg',
                     extension: 'jpg',
                     originalName: 'test',
+                    url: 'https://pallete-file.s3.ap-northeast-2.amazonaws.com/dev/tese.jpg',
                   },
                 },
               },
@@ -51,54 +49,48 @@ export const seedArtist = async (database: PrismaClient) => {
                 isThumbnail: false,
                 image: {
                   create: {
-                    url: 'https://pallete-file.s3.ap-northeast-2.amazonaws.com/dev/tese.jpg',
                     extension: 'jpg',
                     originalName: 'test',
+                    url: 'https://pallete-file.s3.ap-northeast-2.amazonaws.com/dev/tese.jpg',
                   },
                 },
               },
             ],
           },
-          name: `또로롱의 ${index}번째 Artist`,
-          description: `또로롱의 ${index}번째 Artist 입니다.`,
-          updateDescription: `또로롱의 ${index}번째 Artist 입니다.`,
-          isPending: false,
-          isAuthorized: true,
+          saleTypes: {
+            create: saleTypes.map((saleType) => ({
+              saleType: {
+                connect: {
+                  id: saleType.id,
+                },
+              },
+            })),
+          },
           contacts: {
             create: contacts.map((contact) => ({
-              method: '???',
               contact: {
                 connect: {
                   id: contact.id,
                 },
               },
+              method: '???',
             })),
           },
           licenses: {
-            create: licenses.map((license, idx) => ({
+            create: licenses.map((license, index) => ({
               license: {
                 connect: {
                   id: license.id,
                 },
               },
               cost: 10000,
-              draftCount: 1,
-              isApplicationAvailable: true,
+              draftCount: 5,
+              isApplicationAvailable: index % 2 === 0,
               isCommercialUseAllowed: true,
-              isCopyRightTransferAllowed: idx % 2 === 0,
-              isOriginFileProvided: idx % 2 === 0,
-              updateCount: 1,
-              workPeriod: 1,
-              providedFiles: {
-                create: [
-                  {
-                    extension: 'mp3',
-                  },
-                  {
-                    extension: 'mp4',
-                  },
-                ],
-              },
+              isCopyRightTransferAllowed: index % 2 === 0,
+              isOriginFileProvided: index % 2 === 0,
+              updateCount: 5,
+              workPeriod: 5,
             })),
           },
         },

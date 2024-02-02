@@ -72,7 +72,7 @@ export const seedMrBeat = async (database: PrismaClient) => {
             })),
           },
           licenses: {
-            create: licenses.map((license) => ({
+            create: licenses.map((license, idx) => ({
               license: {
                 connect: {
                   id: license.id,
@@ -83,8 +83,8 @@ export const seedMrBeat = async (database: PrismaClient) => {
               isBackgroundMusicAllowed: true,
               isMVProduceAllowed: true,
               isNewSongWithVoiceAllowed: true,
-              isPerformanceActivityAllowed: true,
-              isProfitActivityAllowed: true,
+              isPerformanceActivityAllowed: idx % 2 === 0,
+              isProfitActivityAllowed: idx % 2 === 0,
               isShareAllowed: true,
               providedFiles: {
                 create: [

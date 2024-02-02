@@ -76,7 +76,7 @@ export const seedMixMastering = async (database: PrismaClient) => {
             })),
           },
           licenses: {
-            create: licenses.map((license) => ({
+            create: licenses.map((license, idx) => ({
               license: {
                 connect: {
                   id: license.id,
@@ -84,8 +84,8 @@ export const seedMixMastering = async (database: PrismaClient) => {
               },
               cost: 10000,
               draftCount: 5,
-              isApplicationAvailable: true,
-              isCommercialUseAllowed: true,
+              isApplicationAvailable: idx % 2 === 0,
+              isCommercialUseAllowed: idx % 2 === 0,
               isCopyRightTransferAllowed: true,
               isOriginFileProvided: true,
               updateCount: 5,
