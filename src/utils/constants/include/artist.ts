@@ -17,10 +17,17 @@ export const artistDetailInclude = {
     include: {
       contact: true,
     },
+    orderBy: {
+      contact: {
+        order: 'asc',
+      },
+    },
   },
   licenses: {
-    include: {
-      license: true,
+    orderBy: {
+      license: {
+        name: 'asc',
+      },
     },
   },
   images: {
@@ -31,6 +38,11 @@ export const artistDetailInclude = {
   saleTypes: {
     include: {
       saleType: true,
+    },
+    orderBy: {
+      saleType: {
+        order: 'asc',
+      },
     },
   },
   musicianService: {
@@ -54,10 +66,20 @@ export const artistListInclude = {
     include: {
       contact: true,
     },
+    orderBy: {
+      contact: {
+        order: 'asc',
+      },
+    },
   },
   licenses: {
     include: {
       license: true,
+    },
+    orderBy: {
+      license: {
+        name: 'asc',
+      },
     },
   },
   images: {
@@ -83,6 +105,11 @@ export const artistListInclude = {
   saleTypes: {
     include: {
       saleType: true,
+    },
+    orderBy: {
+      saleType: {
+        order: 'asc',
+      },
     },
   },
 } satisfies Prisma.ArtistInclude;

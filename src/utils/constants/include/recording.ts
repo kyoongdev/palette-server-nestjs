@@ -11,6 +11,40 @@ export const recordingRegionInclude = {
 
 export const recordingListInclude = {
   licenses: {
+    orderBy: {
+      license: {
+        name: 'asc',
+      },
+    },
+  },
+  recordingRegion: {
+    include: {
+      regionLargeGroup: true,
+      regionSmallGroup: true,
+    },
+  },
+  images: {
+    include: {
+      image: true,
+    },
+  },
+  musicianService: {
+    include: {
+      musician: {
+        include: {
+          user: {
+            include: {
+              profileImage: true,
+            },
+          },
+        },
+      },
+    },
+  },
+} satisfies Prisma.RecordingInclude;
+
+export const recordingInclude = {
+  licenses: {
     include: {
       license: true,
     },
@@ -40,5 +74,3 @@ export const recordingListInclude = {
     },
   },
 } satisfies Prisma.RecordingInclude;
-
-export const recordingInclude = recordingListInclude;

@@ -13,20 +13,40 @@ export const mrBeatDetailInclude = {
     include: {
       contact: true,
     },
+    orderBy: {
+      contact: {
+        order: 'asc',
+      },
+    },
   },
   genres: {
     include: {
       genre: true,
+    },
+    orderBy: {
+      genre: {
+        order: 'asc',
+      },
     },
   },
   moods: {
     include: {
       mood: true,
     },
+    orderBy: {
+      mood: {
+        order: 'asc',
+      },
+    },
   },
   licenses: {
     include: {
       license: true,
+    },
+    orderBy: {
+      license: {
+        name: 'asc',
+      },
     },
   },
   music: true,
@@ -52,10 +72,20 @@ export const mrBeatListInclude = {
     include: {
       genre: true,
     },
+    orderBy: {
+      genre: {
+        order: 'asc',
+      },
+    },
   },
   moods: {
     include: {
       mood: true,
+    },
+    orderBy: {
+      mood: {
+        order: 'asc',
+      },
     },
   },
   music: true,
