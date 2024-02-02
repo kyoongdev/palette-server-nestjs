@@ -2,14 +2,7 @@ import { applyDecorators, mixin } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { Transform } from 'class-transformer';
-import {
-  IsOptional,
-  type ValidationArguments,
-  ValidatorConstraint,
-  type ValidatorConstraintInterface,
-} from 'class-validator';
-
-import { Property } from '@/utils/swagger';
+import { type ValidationArguments, ValidatorConstraint, type ValidatorConstraintInterface } from 'class-validator';
 
 import { BaseValidator } from '../../../common/validators/base.validator';
 
