@@ -54,7 +54,7 @@ export class RecordingRepository {
       count: count[0]['FOUND_ROWS()'],
     };
   }
-  async createRecording(data: Prisma.RecordingCreateArgs['data']) {
+  async createRecording(data: Prisma.RecordingCreateInput) {
     const recording = await this.database.getRepository().recording.create({
       data,
     });
@@ -62,7 +62,7 @@ export class RecordingRepository {
     return recording;
   }
 
-  async updateRecording(id: string, data: Prisma.RecordingUpdateArgs['data']) {
+  async updateRecording(id: string, data: Prisma.RecordingUpdateInput) {
     await this.database.getRepository().recording.update({
       where: {
         id,

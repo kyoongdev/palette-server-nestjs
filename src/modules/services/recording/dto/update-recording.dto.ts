@@ -49,7 +49,7 @@ export class UpdateRecordingDTO {
     }
   }
 
-  public toUpdateArgs(): Prisma.RecordingUpdateArgs['data'] {
+  public toUpdateArgs(): Prisma.RecordingUpdateInput {
     return {
       name: this.name,
       studioName: this.studioName,

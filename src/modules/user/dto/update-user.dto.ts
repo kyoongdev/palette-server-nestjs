@@ -39,7 +39,7 @@ export class UpdateUserDTO {
     }
   }
 
-  public toUpdateArgs(): Prisma.UserUpdateArgs['data'] {
+  public toUpdateArgs(): Prisma.UserUpdateInput {
     return {
       ...this,
       profileImageId: this.profileImageId ? { connect: { id: this.profileImageId } } : undefined,

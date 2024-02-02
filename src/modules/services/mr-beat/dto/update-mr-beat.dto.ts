@@ -72,7 +72,7 @@ export class UpdateMrBeatDTO {
     }
   }
 
-  public toUpdateArgs(): Prisma.MrBeatUpdateArgs['data'] {
+  public toUpdateArgs(): Prisma.MrBeatUpdateInput {
     return {
       name: this.name,
       groupType: this.groupType,

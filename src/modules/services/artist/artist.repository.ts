@@ -53,7 +53,7 @@ export class ArtistRepository {
     };
   }
 
-  async createArtist(data: Prisma.ArtistCreateArgs['data']) {
+  async createArtist(data: Prisma.ArtistCreateInput) {
     const artist = await this.database.getRepository().artist.create({
       data,
     });
@@ -61,7 +61,7 @@ export class ArtistRepository {
     return artist;
   }
 
-  async updateArtist(id: string, data: Prisma.ArtistUpdateArgs['data']) {
+  async updateArtist(id: string, data: Prisma.ArtistUpdateInput) {
     await this.database.getRepository().artist.update({
       where: {
         id,

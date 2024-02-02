@@ -56,7 +56,7 @@ export class UpdateArtistDTO {
     }
   }
 
-  public toUpdateArgs(): Prisma.ArtistUpdateArgs['data'] {
+  public toUpdateArgs(): Prisma.ArtistUpdateInput {
     return {
       name: this.name,
       description: this.description,

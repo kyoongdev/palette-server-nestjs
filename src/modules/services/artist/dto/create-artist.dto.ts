@@ -50,7 +50,7 @@ export class CreateArtistDTO {
     }
   }
 
-  public toCreateArgs(musicianId: string): Prisma.ArtistCreateArgs['data'] {
+  public toCreateArgs(musicianId: string): Prisma.ArtistCreateInput {
     return {
       name: this.name,
       description: this.description,

@@ -141,7 +141,7 @@ export class UserRepository {
     return await this.database.getRepository().user.count(args);
   }
 
-  async createUser(data: Prisma.UserCreateArgs['data']) {
+  async createUser(data: Prisma.UserCreateInput) {
     const user = await this.database.getRepository().user.create({
       data,
       include: {
@@ -186,7 +186,7 @@ export class UserRepository {
     return user;
   }
 
-  async updateUser(id: string, data: Prisma.UserUpdateArgs['data']) {
+  async updateUser(id: string, data: Prisma.UserUpdateInput) {
     await this.database.getRepository().user.updateMany({
       where: {
         id,

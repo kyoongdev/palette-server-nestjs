@@ -68,13 +68,13 @@ export class MusicianRepository {
     return count;
   }
 
-  async createMusician(data: Prisma.MusicianCreateArgs['data']) {
+  async createMusician(data: Prisma.MusicianCreateInput) {
     return await this.database.getRepository().musician.create({
       data,
     });
   }
 
-  async updateMusician(id: string, data: Prisma.MusicianUpdateArgs['data']) {
+  async updateMusician(id: string, data: Prisma.MusicianUpdateInput) {
     await this.database.getRepository().musician.updateMany({
       where: {
         id,

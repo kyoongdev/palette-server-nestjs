@@ -54,7 +54,7 @@ export class MrBeatRepository {
     };
   }
 
-  async createMrBeat(data: Prisma.MrBeatCreateArgs['data']) {
+  async createMrBeat(data: Prisma.MrBeatCreateInput) {
     const mrBeat = await this.database.getRepository().mrBeat.create({
       data,
     });
@@ -62,7 +62,7 @@ export class MrBeatRepository {
     return mrBeat;
   }
 
-  async updateMrBeat(id: string, data: Prisma.MrBeatUpdateArgs['data']) {
+  async updateMrBeat(id: string, data: Prisma.MrBeatUpdateInput) {
     await this.database.getRepository().mrBeat.update({
       where: {
         id,

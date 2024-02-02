@@ -55,7 +55,7 @@ export class CreateRecordingDTO {
     }
   }
 
-  public toCreateArgs(musicianId: string): Prisma.RecordingCreateArgs['data'] {
+  public toCreateArgs(musicianId: string): Prisma.RecordingCreateInput {
     return {
       name: this.name,
       studioName: this.studioName,

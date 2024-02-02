@@ -54,7 +54,7 @@ export class CreateMrBeatDTO {
     }
   }
 
-  public toCreateArgs(musicianId: string): Prisma.MrBeatCreateArgs['data'] {
+  public toCreateArgs(musicianId: string): Prisma.MrBeatCreateInput {
     return {
       name: this.name,
       groupType: this.groupType,

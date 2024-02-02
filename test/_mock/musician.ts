@@ -18,4 +18,4 @@ export const mockMusicians = range(1).map((index) => ({
   stageName: 'asdfa',
   updatedAt: new Date(),
   userId: nanoid(12),
-})) as Prisma.MusicianCreateManyArgs['data'];
+})) as Prisma.MusicianCreateManyInput;
