@@ -4,13 +4,17 @@ import { seedContact, seedGenre, seedMood, seedRegion, seedSaleType } from '../_
 import { seedLicense } from '../_shared/license';
 
 import { seedArtist } from './artist';
+import { seedMixMastering } from './mix-mastering';
 import { seedMrBeat } from './mr-beat';
 import { seedMusician } from './musician';
+import { seedRecording } from './recording';
 import { seedUser } from './user';
 
 export const seedDev = async (database: PrismaClient) => {
   await database.mrBeat.deleteMany();
   await database.artist.deleteMany();
+  await database.recording.deleteMany();
+  await database.mixMastering.deleteMany();
 
   await seedLicense(database);
   await seedContact(database);
@@ -22,4 +26,6 @@ export const seedDev = async (database: PrismaClient) => {
   await seedMusician(database);
   await seedMrBeat(database);
   await seedArtist(database);
+  await seedRecording(database);
+  await seedMixMastering(database);
 };
