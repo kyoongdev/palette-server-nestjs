@@ -11,6 +11,8 @@ import {
 
 import { FindSQLCommonMusician } from './musician.interface';
 
+export type MixMasteringSort = 'POPULAR';
+
 export interface FindSQLMixMastering extends FindSQLCommonMusician {
   id: string;
   name: string;
