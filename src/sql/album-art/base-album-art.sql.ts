@@ -12,6 +12,7 @@ export class BaseAlbumARtSQL {
   constructor(props: BaseAlbumArtSQLProps) {
     this.paging = props.paging;
   }
+
   getBaseJoin() {
     return Prisma.sql`
     LEFT JOIN AlbumArtImage albumArtImage ON albumArtImage.albumArtId = albumArt.id AND albumArtImage.isThumbnail = 1
