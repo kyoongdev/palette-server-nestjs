@@ -1,6 +1,6 @@
 import { FindArtist } from '@/interface/artist.interface';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
-import { DateDTOProps } from '@/utils';
+import { DateDTO, DateDTOProps } from '@/utils';
 import { Property } from '@/utils/swagger';
 
 import { ArtistContactDTO, ArtistContactDTOProps } from './artist-contact.dto';
@@ -22,7 +22,7 @@ export interface ArtistDTOProps extends DateDTOProps {
   musician: CommonMusicianDTOProps;
 }
 
-export class ArtistDTO {
+export class ArtistDTO extends DateDTO {
   @Property({ apiProperty: { description: '아티스트 아이디', type: 'string' } })
   id: string;
 
@@ -57,6 +57,7 @@ export class ArtistDTO {
   musician: CommonMusicianDTO;
 
   constructor(props: ArtistDTOProps) {
+    super(props);
     this.id = props.id;
     this.name = props.name;
     this.description = props.description;

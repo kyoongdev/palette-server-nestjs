@@ -19,10 +19,7 @@ export class BaseAlbumARtSQL {
     LEFT JOIN Image image ON image.id = albumArtImage.imageId
     LEFT JOIN AlbumArtSaleTypeBridge albumArtSaleTypeBridge ON albumArtSaleTypeBridge.albumArtId = albumArt.id
     LEFT JOIN SaleType saleType ON saleType.id = albumArtSaleTypeBridge.saleTypeId
-    LEFT JOIN AlbumArtContact albumArtContact ON albumArtContact.albumArtId = albumArt.id
-    LEFT JOIN Contact contact ON contact.id = albumArtContact.contactId
     LEFT JOIN AlbumArtLicense albumArtLicense ON albumArtLicense.albumArtId = albumArt.id
-    LEFT JOIN License license ON license.id = albumArtLicense.licenseId
     LEFT JOIN MusicianService musicianService ON musicianService.id = albumArt.musicianServiceId
     LEFT JOIN ServiceReview serviceReview ON serviceReview.serviceId = musicianService.id
     LEFT JOIN Musician musician ON musician.id = musicianService.musicianId
@@ -37,7 +34,7 @@ export class BaseAlbumARtSQL {
     albumArt.id as id, albumArt.name as name,
     image.url as thumbnailUrl,
     GROUP_CONCAT(DISTINCT saleType.name) as saleTypeNames,
-    MIN(license.cost) as cost,
+    MIN(albumArtLicense.cost) as cost,
     AVG(serviceReview.score) as score,
     musician.id as musicianId, musician.stageName as stageName,
     musician.name as musicianName, musician.groupType as musicianGroupType,

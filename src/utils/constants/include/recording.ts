@@ -39,6 +39,7 @@ export const recordingListInclude = {
           },
         },
       },
+      reviews: true,
     },
   },
 } satisfies Prisma.RecordingInclude;

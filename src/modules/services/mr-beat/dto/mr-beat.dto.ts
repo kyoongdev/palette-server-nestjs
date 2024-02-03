@@ -1,12 +1,13 @@
 import { FindMrBeat } from '@/interface/mr-beat.interface';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
 import { GroupTypeResDecorator } from '@/modules/musician/validators';
+import { DateDTO, DateDTOProps } from '@/utils';
 import { Property } from '@/utils/swagger';
 
 import { MrBeatContactDTO, MrBeatContactDTOProps } from './mr-beat-contact.dto';
 import { MrBeatLicenseDTO, MrBeatLicenseDTOProps } from './mr-beat-license.dto';
 
-export interface MrBeatDTOProps {
+export interface MrBeatDTOProps extends DateDTOProps {
   id: string;
   name: string;
   groupType: number;
@@ -23,7 +24,7 @@ export interface MrBeatDTOProps {
   isAuthorized: boolean;
 }
 
-export class MrBeatDTO {
+export class MrBeatDTO extends DateDTO {
   @Property({ apiProperty: { description: '아이디', type: 'string' } })
   id: string;
 
@@ -67,6 +68,7 @@ export class MrBeatDTO {
   musician: CommonMusicianDTO;
 
   constructor(props: MrBeatDTOProps) {
+    super(props);
     this.id = props.id;
     this.name = props.name;
     this.groupType = props.groupType;
@@ -93,12 +95,14 @@ export class MrBeatDTO {
       musicDuration: data.music.duration,
       genreName: data.genres.at(-1).genre.name,
       moodName: data.moods.at(-1).mood.name,
-      createdAt: data.createdAt,
       isPending: data.isPending,
       isAuthorized: data.isAuthorized,
       contacts: data.contacts.map(MrBeatContactDTO.fromFindMrBeatContact),
       licenses: data.licenses.map(MrBeatLicenseDTO.fromFindMrBeatLicense),
       musician: CommonMusicianDTO.fromFindCommonMusician(data.musicianService.musician),
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      deletedAt: data.deletedAt,
     });
   }
 }
