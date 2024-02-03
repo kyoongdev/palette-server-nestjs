@@ -52,10 +52,10 @@ export class UpdateMixMasteringDTO {
       this.description = props.description;
       this.updateDescription = props.updateDescription;
       this.thumbnailId = props.thumbnailId;
-      this.musics = props.musics.map((music) => new CreateMixMasteringMusicDTO(music));
+      this.musics = props.musics?.map((music) => new CreateMixMasteringMusicDTO(music));
       this.genreId = props.genreId;
-      this.contacts = props.contacts.map((contact) => new CreateMixMasteringContactDTO(contact));
-      this.licenses = props.licenses.map((license) => new CreateMixMasteringLicenseDTO(license));
+      this.contacts = props.contacts?.map((contact) => new CreateMixMasteringContactDTO(contact));
+      this.licenses = props.licenses?.map((license) => new CreateMixMasteringLicenseDTO(license));
     }
   }
 
@@ -65,7 +65,7 @@ export class UpdateMixMasteringDTO {
       description: this.description,
       updateDescription: this.updateDescription,
       thumbnail: this.thumbnailId && {
-        update: {
+        connect: {
           id: this.thumbnailId,
         },
       },
