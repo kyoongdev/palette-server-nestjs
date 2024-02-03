@@ -30,7 +30,6 @@ describe('Artist Test', () => {
         MusicianService,
         ArtistService,
         TransactionDecorator,
-        ArtistService,
         ArtistRepository,
         LicenseRepository,
         FileRepository,
@@ -60,7 +59,6 @@ describe('Artist Test', () => {
     it('Create Artist', async () => {
       await cls.run(async () => {
         cls.set(PRISMA_CLS_KEY, prisma);
-        console.log(typeof prisma);
 
         const user = await prisma.user.findFirst({
           where: {

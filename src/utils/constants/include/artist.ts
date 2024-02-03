@@ -24,6 +24,9 @@ export const artistDetailInclude = {
     },
   },
   licenses: {
+    include: {
+      license: true,
+    },
     orderBy: {
       license: {
         name: 'asc',

@@ -356,9 +356,9 @@ model RecordingLicense {
   cost    Int @db.UnsignedMediumInt
 
   recordingId String
-  recording   Recording @relation(fields: [recordingId], references: [id])
+  recording   Recording @relation(fields: [recordingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   licenseId   String
-  license     License   @relation(fields: [licenseId], references: [id])
+  license     License   @relation(fields: [licenseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([recordingId, licenseId])
 }
@@ -367,18 +367,18 @@ model RecordingRegion {
   id String @id @default(uuid())
 
   regionLargeGroupId String
-  regionLargeGroup   RegionLargeGroup  @relation(fields: [regionLargeGroupId], references: [id])
+  regionLargeGroup   RegionLargeGroup  @relation(fields: [regionLargeGroupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   regionSmallGroupId String?
-  regionSmallGroup   RegionSmallGroup? @relation(fields: [regionSmallGroupId], references: [id])
+  regionSmallGroup   RegionSmallGroup? @relation(fields: [regionSmallGroupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   recording Recording[]
 }
 
 model RecordingImage {
   imageId     String
-  image       Image     @relation(fields: [imageId], references: [id])
+  image       Image     @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   recordingId String
-  recording   Recording @relation(fields: [recordingId], references: [id])
+  recording   Recording @relation(fields: [recordingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   isThumbnail Boolean @default(false)
 
@@ -443,18 +443,18 @@ model MixMasteringLicense {
   isApplicationAvailable     Boolean
 
   licenseId      String
-  license        License      @relation(fields: [licenseId], references: [id])
+  license        License      @relation(fields: [licenseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   mixMasteringId String
-  mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id])
+  mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([mixMasteringId, licenseId])
 }
 
 model MixMasteringContact {
   mixMasteringId String
-  mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id])
+  mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   contactId      String
-  contact        Contact      @relation(fields: [contactId], references: [id])
+  contact        Contact      @relation(fields: [contactId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   method String
 
@@ -463,18 +463,18 @@ model MixMasteringContact {
 
 model MixMasteringGenre {
   mixMasteringId String
-  mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id])
+  mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   genreId        String
-  genre          Genre        @relation(fields: [genreId], references: [id])
+  genre          Genre        @relation(fields: [genreId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([mixMasteringId, genreId])
 }
 
 model MixMasteringMusic {
   mixMasteringId String
-  mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id])
+  mixMastering   MixMastering @relation(fields: [mixMasteringId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   musicId        String
-  music          Music        @relation(fields: [musicId], references: [id])
+  music          Music        @relation(fields: [musicId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   isBefore Boolean
   isAfter  Boolean
@@ -517,18 +517,18 @@ model AlbumArtLicense {
   isApplicationAvailable     Boolean
 
   licenseId  String
-  license    License  @relation(fields: [licenseId], references: [id])
+  license    License  @relation(fields: [licenseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   albumArtId String
-  albumArt   AlbumArt @relation(fields: [albumArtId], references: [id])
+  albumArt   AlbumArt @relation(fields: [albumArtId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([albumArtId, licenseId])
 }
 
 model AlbumArtContact {
   albumArtId String
-  albumArt   AlbumArt @relation(fields: [albumArtId], references: [id])
+  albumArt   AlbumArt @relation(fields: [albumArtId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   contactId  String
-  contact    Contact  @relation(fields: [contactId], references: [id])
+  contact    Contact  @relation(fields: [contactId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   method String
 
@@ -537,9 +537,9 @@ model AlbumArtContact {
 
 model AlbumArtImage {
   albumArtId String
-  albumArt   AlbumArt @relation(fields: [albumArtId], references: [id])
+  albumArt   AlbumArt @relation(fields: [albumArtId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   imageId    String
-  image      Image    @relation(fields: [imageId], references: [id])
+  image      Image    @relation(fields: [imageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   isThumbnail Boolean @default(false)
 
@@ -548,9 +548,9 @@ model AlbumArtImage {
 
 model AlbumArtSaleTypeBridge {
   albumArtId String
-  albumArt   AlbumArt         @relation(fields: [albumArtId], references: [id])
+  albumArt   AlbumArt         @relation(fields: [albumArtId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   saleTypeId String
-  saleType   AlbumArtSaleType @relation(fields: [saleTypeId], references: [id])
+  saleType   AlbumArtSaleType @relation(fields: [saleTypeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([albumArtId, saleTypeId])
 }
