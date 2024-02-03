@@ -29,6 +29,9 @@ export class MusicDTO {
   constructor(props: MusicDTOProps) {
     this.id = props.id;
     this.url = props.url;
+    this.originalName = props.originalName;
+    this.extension = props.extension;
+    this.duration = props.duration;
   }
 
   static parseS3MusicKey(url: string) {

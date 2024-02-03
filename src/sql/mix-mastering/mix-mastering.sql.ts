@@ -22,7 +22,7 @@ export class MixMasteringSQL extends BaseMixMasteringSQL {
     FROM MixMastering mixMastering
     ${this.getBaseJoin()}
     ${this.getWhere(isAdmin)}
-    GROUP BY mixMastering.id, serviceReview.id, genre.id
+    GROUP BY mixMastering.id, serviceReview.id, genre.id, musicBefore.id, musicAfter.id
     ${this.getOrderBy()}
     LIMIT ${this.paging.page},${this.paging.limit ?? 10}
     `;

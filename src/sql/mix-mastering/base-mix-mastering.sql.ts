@@ -24,9 +24,8 @@ export class BaseMixMasteringSQL {
     LEFT JOIN Genre genre ON genre.id = mixMasteringGenre.genreId
     LEFT JOIN MixMasteringLicense mixMasteringLicense ON mixMasteringLicense.mixMasteringId = mixMastering.id
     LEFT JOIN License license ON license.id = mixMasteringLicense.licenseId
-    LEFT JOIN MixMasteringService mixMasteringService ON mixMasteringService.id = mixMastering.serviceId
-    LEFT JOIN ServiceReview serviceReview ON serviceReview.serviceId = mixMasteringService.id
-    LEFT JOIN MusicianService musicianService ON musicianService.id = mixMasteringService.musicianServiceId
+    LEFT JOIN MusicianService musicianService ON musicianService.id = mixMastering.musicianServiceId
+    LEFT JOIN ServiceReview serviceReview ON serviceReview.serviceId = musicianService.id
     LEFT JOIN Musician musician ON musician.id = musicianService.musicianId
     JOIN User user ON user.id = musician.userId
     LEFT JOIN Image profile ON profile.id = user.profileImageId
@@ -38,11 +37,11 @@ export class BaseMixMasteringSQL {
     SELECT SQL_CALC_FOUND_ROWS
     mixMastering.id as id, mixMastering.name as name, 
     thumbnail.url as thumbnailUrl, 
-    musicBefore.id, 
+    musicBefore.id as musicBeforeId,  
     musicBefore.originalName as musicBeforeOriginalName,
     musicBefore.extension as musicBeforeExtension,
     musicBefore.url as musicBeforeUrl, musicBefore.duration as musicBeforeDuration,
-    musicAfter.id,
+    musicAfter.id as musicAfterId,
     musicAfter.originalName as musicAfterOriginalName,
     musicAfter.extension as musicAfterExtension,
     musicAfter.url as musicAfterUrl, musicAfter.duration as musicAfterDuration,

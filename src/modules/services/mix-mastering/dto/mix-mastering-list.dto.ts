@@ -61,6 +61,7 @@ export class MixMasteringListDTO {
   }
 
   static fromFindSQLMixMastering(data: FindSQLMixMastering) {
+    console.log(data);
     return new MixMasteringListDTO({
       id: data.id,
       name: data.name,
