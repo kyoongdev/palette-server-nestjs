@@ -64,19 +64,13 @@ export class ArtistService {
       await Promise.all(data.licenses.map((license) => this.licenseRepository.findLicense(license.licenseId)))
     ).map((license) => license.id);
 
-    const saleTypeIds = (
-      await Promise.all(data.saleTypeIds.map((saleTypeId) => this.saleTypeRepository.findArtistSaleType(saleTypeId)))
-    ).map((saleType) => saleType.id);
-
     const isImageIdDuplicated = imageIds.length !== new Set(imageIds).size;
     const isContactIdDuplicated = contactIds.length !== new Set(contactIds).size;
     const isLicenseIdDuplicated = licenseIds.length !== new Set(licenseIds).size;
-    const isSaleIdDuplicated = saleTypeIds.length !== new Set(saleTypeIds).size;
 
     if (isImageIdDuplicated) throw new CustomException(ARTIST_ERROR_CODE.IMAGE_ID_DUPLICATED);
     if (isContactIdDuplicated) throw new CustomException(ARTIST_ERROR_CODE.CONTACT_ID_DUPLICATED);
     if (isLicenseIdDuplicated) throw new CustomException(ARTIST_ERROR_CODE.LICENSE_ID_DUPLICATED);
-    if (isSaleIdDuplicated) throw new CustomException(ARTIST_ERROR_CODE.SALE_ID_DUPLICATED);
 
     const artist = await this.artistRepository.createArtist(data.toCreateArgs(musicianId));
 
@@ -118,16 +112,6 @@ export class ArtistService {
       const isLicenseIdDuplicated = licenseIds.length !== new Set(licenseIds).size;
 
       if (isLicenseIdDuplicated) throw new CustomException(ARTIST_ERROR_CODE.LICENSE_ID_DUPLICATED);
-    }
-
-    if (data.saleTypeIds) {
-      const saleTypeIds = (
-        await Promise.all(data.saleTypeIds.map((saleTypeId) => this.saleTypeRepository.findArtistSaleType(saleTypeId)))
-      ).map((saleType) => saleType.id);
-
-      const isSaleIdDuplicated = saleTypeIds.length !== new Set(saleTypeIds).size;
-
-      if (isSaleIdDuplicated) throw new CustomException(ARTIST_ERROR_CODE.SALE_ID_DUPLICATED);
     }
 
     await this.artistRepository.updateArtist(id, data.toUpdateArgs());
