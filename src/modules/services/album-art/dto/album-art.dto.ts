@@ -14,6 +14,7 @@ export interface AlbumArtDTOProps extends DateDTOProps {
   updateDescription: string;
   isPending: boolean;
   isAuthorized: boolean;
+  serviceId: string;
   images: AlbumArtImageDTOProps[];
   saleType: AlbumArtSaleTypeDTOProps;
   contacts: AlbumArtContactDTOProps[];
@@ -39,6 +40,9 @@ export class AlbumArtDTO extends DateDTO {
   @Property({ apiProperty: { description: '승인 여부', type: 'boolean' } })
   isAuthorized: boolean;
 
+  @Property({ apiProperty: { description: '서비스 id', type: 'string' } })
+  serviceId: string;
+
   @Property({ apiProperty: { description: '이미지', type: AlbumArtImageDTO, isArray: true } })
   images: AlbumArtImageDTO[];
 
@@ -59,6 +63,7 @@ export class AlbumArtDTO extends DateDTO {
     this.updateDescription = props.updateDescription;
     this.isPending = props.isPending;
     this.isAuthorized = props.isAuthorized;
+    this.serviceId = props.serviceId;
     this.images = props.images.map((image) => new AlbumArtImageDTO(image));
     this.saleType = new AlbumArtSaleTypeDTO(props.saleType);
     this.contacts = props.contacts.map((contact) => new AlbumArtContactDTO(contact));
@@ -87,6 +92,7 @@ export class AlbumArtDTO extends DateDTO {
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
       deletedAt: data.deletedAt,
+      serviceId: data.musicianServiceId,
     });
   }
 }

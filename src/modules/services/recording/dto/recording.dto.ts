@@ -16,6 +16,7 @@ export interface RecordingDTOProps extends DateDTOProps {
   description: string;
   isPending: boolean;
   isAuthorized: boolean;
+  serviceId: string;
   images: RecordingImageDTOProps[];
   region: RecordingRegionDTOProps;
   licenses: RecordingLicenseDTOProps[];
@@ -47,6 +48,9 @@ export class RecordingDTO extends DateDTO {
   @Property({ apiProperty: { description: '승인 여부', type: 'boolean' } })
   isAuthorized: boolean;
 
+  @Property({ apiProperty: { description: '서비스 id', type: 'string' } })
+  serviceId: string;
+
   @Property({ apiProperty: { description: '이미지', type: RecordingImageDTO, isArray: true } })
   images: RecordingImageDTO[];
 
@@ -69,6 +73,7 @@ export class RecordingDTO extends DateDTO {
     this.description = props.description;
     this.isPending = props.isPending;
     this.isAuthorized = props.isAuthorized;
+    this.serviceId = props.serviceId;
     this.images = props.images.map((image) => new RecordingImageDTO(image));
     this.region = new RecordingRegionDTO(props.region);
     this.licenses = props.licenses.map((license) => new RecordingLicenseDTO(license));
@@ -92,6 +97,7 @@ export class RecordingDTO extends DateDTO {
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
       deletedAt: data.deletedAt,
+      serviceId: data.musicianServiceId,
     });
   }
 }

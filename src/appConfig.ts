@@ -81,7 +81,7 @@ class AppConfig {
     const theme = new SwaggerTheme('v3');
     SwaggerModule.setup('api-docs', this.app, document, {
       swaggerOptions: {
-        // docExpansion: false,
+        docExpansion: false,
         apisSorter: 'alpha',
         operationsSorter: 'method',
       },

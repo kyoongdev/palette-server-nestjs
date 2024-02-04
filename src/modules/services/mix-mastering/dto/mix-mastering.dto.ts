@@ -18,6 +18,7 @@ export interface MixMasteringDTOProps extends DateDTOProps {
   beforeMusic: MusicDTOProps;
   afterMusic: MusicDTOProps;
   genreName: string;
+  serviceId: string;
   licenses: MixMasteringLicenseDTOProps[];
   contacts: MixMasteringContactDTOProps[];
   musician: CommonMusicianDTOProps;
@@ -54,6 +55,9 @@ export class MixMasteringDTO extends DateDTO {
   @Property({ apiProperty: { description: '장르 이름', type: 'string' } })
   genreName: string;
 
+  @Property({ apiProperty: { description: '서비스 id', type: 'string' } })
+  serviceId: string;
+
   @Property({ apiProperty: { description: '라이센스', type: MixMasteringLicenseDTO, isArray: true } })
   licenses: MixMasteringLicenseDTO[];
 
@@ -75,6 +79,7 @@ export class MixMasteringDTO extends DateDTO {
     this.beforeMusic = new MusicDTO(props.beforeMusic);
     this.afterMusic = new MusicDTO(props.afterMusic);
     this.genreName = props.genreName;
+    this.serviceId = props.serviceId;
     this.licenses = props.licenses.map((license) => new MixMasteringLicenseDTO(license));
     this.contacts = props.contacts.map((contact) => new MixMasteringContactDTO(contact));
     this.musician = new CommonMusicianDTO(props.musician);
@@ -97,6 +102,8 @@ export class MixMasteringDTO extends DateDTO {
       musician: data.musicianService.musician,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
+      deletedAt: data.deletedAt,
+      serviceId: data.musicianServiceId,
     });
   }
 }

@@ -15,6 +15,7 @@ export interface ArtistDTOProps extends DateDTOProps {
   updateDescription: string;
   isPending: boolean;
   isAuthorized: boolean;
+  serviceId: string;
   images: ArtistImageDTOProps[];
   saleTypes: ArtistSaleTypeDTOProps[];
   licenses: ArtistLicenseDTOProps[];
@@ -41,6 +42,9 @@ export class ArtistDTO extends DateDTO {
   @Property({ apiProperty: { description: '아티스트 대기 여부', type: 'boolean' } })
   isPending: boolean;
 
+  @Property({ apiProperty: { description: '서비스 id', type: 'string' } })
+  serviceId: string;
+
   @Property({ apiProperty: { description: '아티스트 이미지', type: ArtistImageDTO, isArray: true } })
   images: ArtistImageDTO[];
 
@@ -64,6 +68,7 @@ export class ArtistDTO extends DateDTO {
     this.updateDescription = props.updateDescription;
     this.isAuthorized = props.isAuthorized;
     this.isPending = props.isPending;
+    this.serviceId = props.serviceId;
     this.images = props.images.map((image) => new ArtistImageDTO(image));
     this.saleTypes = props.saleTypes.map((saleType) => new ArtistSaleTypeDTO(saleType));
     this.licenses = props.licenses.map((license) => new ArtistLicenseDTO(license));
@@ -87,6 +92,7 @@ export class ArtistDTO extends DateDTO {
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
       deletedAt: data.deletedAt,
+      serviceId: data.musicianServiceId,
     });
   }
 }

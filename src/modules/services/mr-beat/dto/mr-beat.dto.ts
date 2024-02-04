@@ -16,7 +16,7 @@ export interface MrBeatDTOProps extends DateDTOProps {
   musicDuration: number;
   genreName: string;
   moodName: string;
-  createdAt: Date;
+  serviceId: string;
   contacts: MrBeatContactDTOProps[];
   licenses: MrBeatLicenseDTOProps[];
   musician: CommonMusicianDTOProps;
@@ -58,6 +58,9 @@ export class MrBeatDTO extends DateDTO {
   @Property({ apiProperty: { description: '승인 여부', type: 'boolean' } })
   isAuthorized: boolean;
 
+  @Property({ apiProperty: { description: '서비스 id', type: 'string' } })
+  serviceId: string;
+
   @Property({ apiProperty: { type: MrBeatContactDTO, isArray: true } })
   contacts: MrBeatContactDTO[];
 
@@ -80,6 +83,7 @@ export class MrBeatDTO extends DateDTO {
     this.musicDuration = props.musicDuration;
     this.isPending = props.isPending;
     this.isAuthorized = props.isAuthorized;
+    this.serviceId = props.serviceId;
     this.contacts = props.contacts.map((contact) => new MrBeatContactDTO(contact));
     this.licenses = props.licenses.map((license) => new MrBeatLicenseDTO(license));
     this.musician = new CommonMusicianDTO(props.musician);
@@ -103,6 +107,7 @@ export class MrBeatDTO extends DateDTO {
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
       deletedAt: data.deletedAt,
+      serviceId: data.musicianServiceId,
     });
   }
 }
