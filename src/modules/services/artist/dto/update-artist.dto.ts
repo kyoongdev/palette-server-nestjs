@@ -11,7 +11,7 @@ export interface UpdateArtistDTOProps {
   description?: string;
   updateDescription?: string;
   images?: CreateArtistImageDTOProps[];
-  saleTypeIds?: string[];
+  saleTypeId?: string;
   licenses?: CreateArtistLicenseDTOProps[];
   contacts?: CreateArtistContactDTOProps[];
 }
@@ -31,8 +31,8 @@ export class UpdateArtistDTO {
   })
   images?: CreateArtistImageDTO[];
 
-  @Property({ apiProperty: { description: '아티스트 판매 타입', type: 'string', isArray: true, nullable: true } })
-  saleTypeIds?: string[];
+  @Property({ apiProperty: { description: '아티스트 판매 타입', type: 'string', nullable: true } })
+  saleTypeId?: string;
 
   @Property({
     apiProperty: { description: '아티스트 라이센스', type: CreateArtistLicenseDTO, isArray: true, nullable: true },
@@ -50,7 +50,7 @@ export class UpdateArtistDTO {
       this.description = props.description;
       this.updateDescription = props.updateDescription;
       this.images = props.images?.map((image) => new CreateArtistImageDTO(image));
-      this.saleTypeIds = props.saleTypeIds;
+      this.saleTypeId = props.saleTypeId;
       this.licenses = props.licenses?.map((license) => new CreateArtistLicenseDTO(license));
       this.contacts = props.contacts?.map((contact) => new CreateArtistContactDTO(contact));
     }
@@ -72,15 +72,15 @@ export class UpdateArtistDTO {
           isThumbnail: image.isThumbnail,
         })),
       },
-      saleTypes: this.saleTypeIds && {
+      saleTypes: this.saleTypeId && {
         deleteMany: {},
-        create: this.saleTypeIds.map((saleTypeId) => ({
+        create: {
           saleType: {
             connect: {
-              id: saleTypeId,
+              id: this.saleTypeId,
             },
           },
-        })),
+        },
       },
       licenses: this.licenses && {
         deleteMany: {},

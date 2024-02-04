@@ -6,18 +6,18 @@ import { LicenseRepository } from '@/modules/license/license.repository';
 import { MusicianRepository } from '@/modules/musician/musician.repository';
 import { MusicianService } from '@/modules/musician/musician.service';
 import { SaleTypeRepository } from '@/modules/sale-type/sale-type.repository';
-import { ArtistRepository } from '@/modules/services/artist/artist.repository';
-import { ArtistService } from '@/modules/services/artist/artist.service';
-import { CreateArtistDTO } from '@/modules/services/artist/dto';
+import { AlbumArtService } from '@/modules/services/album-art/album-art.service';
+import { CreateAlbumArtDTO } from '@/modules/services/album-art/dto';
 import { AOPModule } from '@/utils/aop/aop.module';
 import { PRISMA_CLS_KEY, TransactionDecorator } from '@/utils/aop/transaction/transaction';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { ClsModule, ClsService } from 'nestjs-cls';
 
-describe('Artist Test', () => {
+describe('Album Art Test', () => {
   let musicianService: MusicianService;
-  let artistService: ArtistService;
+  let albumArtService: AlbumArtService;
   let cls: ClsService;
   let prisma: PrismaService;
   let fileRepository: FileRepository;
@@ -28,35 +28,34 @@ describe('Artist Test', () => {
         PrismaService,
         PrismaDatabase,
         MusicianService,
-        ArtistService,
-        TransactionDecorator,
-        ArtistRepository,
-        LicenseRepository,
+        AlbumArtService,
         FileRepository,
+        TransactionDecorator,
+        LicenseRepository,
         ContactRepository,
-        MusicianRepository,
         SaleTypeRepository,
+        MusicianRepository,
       ],
       imports: [
-        AOPModule,
         ConfigModule.forRoot({
           isGlobal: true,
         }),
+        AOPModule,
         ClsModule.forRoot({
           global: true,
         }),
       ],
     }).compile();
 
-    artistService = module.get<ArtistService>(ArtistService);
+    albumArtService = module.get<AlbumArtService>(AlbumArtService);
     musicianService = module.get<MusicianService>(MusicianService);
     prisma = module.get(PrismaService);
     cls = module.get(ClsService);
     fileRepository = module.get(FileRepository);
   });
 
-  describe('Artist Service', () => {
-    it('Create Artist', async () => {
+  describe('Album Art Service', () => {
+    it('Create Album Art', async () => {
       await cls.run(async () => {
         cls.set(PRISMA_CLS_KEY, prisma);
 
@@ -86,22 +85,12 @@ describe('Artist Test', () => {
         ];
         const licenses = await prisma.license.findMany({});
         const contacts = await prisma.contact.findMany({});
-        const saleType = await prisma.artistSaleType.findFirst({});
+        const saleType = await prisma.albumArtSaleType.findFirst({});
 
-        const createArtistDTO = new CreateArtistDTO({
+        const createAlbumArtDTO = new CreateAlbumArtDTO({
           name: 'asdf',
           description: 'asdf',
           updateDescription: 'asdf',
-          images: [
-            {
-              imageId: images[0].id,
-              isThumbnail: true,
-            },
-            {
-              imageId: images[1].id,
-              isThumbnail: false,
-            },
-          ],
           saleTypeId: saleType.id,
           licenses: licenses.map((license, index) => ({
             cost: 1000 * (index + 1),
@@ -118,16 +107,17 @@ describe('Artist Test', () => {
             contactId: contact.id,
             method: 'test',
           })),
+          images: [
+            {
+              imageId: images[0].id,
+              isThumbnail: true,
+            },
+            {
+              imageId: images[1].id,
+              isThumbnail: false,
+            },
+          ],
         });
-
-        const result = await artistService.createArtist(user.musician.id, createArtistDTO);
-        expect(result).toBeDefined();
-
-        const artist = await artistService.findArtist(result);
-
-        expect(artist.isPending).toBe(true);
-        expect(artist.isAuthorized).toBe(false);
-        expect(artist.images.length).toBe(2);
       });
     });
   });

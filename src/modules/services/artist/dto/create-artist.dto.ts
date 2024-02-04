@@ -11,7 +11,7 @@ export interface CreateArtistDTOProps {
   description: string;
   updateDescription: string;
   images: CreateArtistImageDTOProps[];
-  saleTypeIds: string[];
+  saleTypeId: string;
   licenses: CreateArtistLicenseDTOProps[];
   contacts: CreateArtistContactDTOProps[];
 }
@@ -29,8 +29,8 @@ export class CreateArtistDTO {
   @Property({ apiProperty: { description: '아티스트 이미지', type: CreateArtistImageDTO, isArray: true } })
   images: CreateArtistImageDTO[];
 
-  @Property({ apiProperty: { description: '아티스트 판매 타입', type: 'string', isArray: true } })
-  saleTypeIds: string[];
+  @Property({ apiProperty: { description: '아티스트 판매 타입', type: 'string' } })
+  saleTypeId: string;
 
   @Property({ apiProperty: { description: '아티스트 라이센스', type: CreateArtistLicenseDTO, isArray: true } })
   licenses: CreateArtistLicenseDTO[];
@@ -44,7 +44,7 @@ export class CreateArtistDTO {
       this.description = props.description;
       this.updateDescription = props.updateDescription;
       this.images = props.images.map((image) => new CreateArtistImageDTO(image));
-      this.saleTypeIds = props.saleTypeIds;
+      this.saleTypeId = props.saleTypeId;
       this.licenses = props.licenses.map((license) => new CreateArtistLicenseDTO(license));
       this.contacts = props.contacts.map((contact) => new CreateArtistContactDTO(contact));
     }
@@ -97,13 +97,13 @@ export class CreateArtistDTO {
       isAuthorized: false,
       isPending: true,
       saleTypes: {
-        create: this.saleTypeIds.map((saleTypeId) => ({
+        create: {
           saleType: {
             connect: {
-              id: saleTypeId,
+              id: this.saleTypeId,
             },
           },
-        })),
+        },
       },
     };
   }
