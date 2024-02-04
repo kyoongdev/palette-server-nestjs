@@ -63,6 +63,8 @@ export class AlbumArtService {
       throw new CustomException(ALBUM_ART_ERROR_CODE.IMAGE_ID_DUPLICATED);
     }
 
+    await this.saleTypeRepository.findAlbumArtSaleType(data.saleTypeId);
+
     const contactIds = await Promise.all(
       data.contacts.map(async (contact) => {
         const isExists = await this.contactRepository.findContact(contact.contactId);
@@ -150,6 +152,10 @@ export class AlbumArtService {
       if (isLicenseIdDuplicated) {
         throw new CustomException(ALBUM_ART_ERROR_CODE.LICENSE_ID_DUPLICATED);
       }
+    }
+
+    if (data.saleTypeId) {
+      await this.saleTypeRepository.findAlbumArtSaleType(data.saleTypeId);
     }
 
     await this.albumArtRepository.updateAlbumArt(id, data.toUpdateArgs());

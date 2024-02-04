@@ -72,6 +72,8 @@ export class ArtistService {
     if (isContactIdDuplicated) throw new CustomException(ARTIST_ERROR_CODE.CONTACT_ID_DUPLICATED);
     if (isLicenseIdDuplicated) throw new CustomException(ARTIST_ERROR_CODE.LICENSE_ID_DUPLICATED);
 
+    await this.saleTypeRepository.findArtistSaleType(data.saleTypeId);
+
     const artist = await this.artistRepository.createArtist(data.toCreateArgs(musicianId));
 
     return artist.id;
@@ -112,6 +114,10 @@ export class ArtistService {
       const isLicenseIdDuplicated = licenseIds.length !== new Set(licenseIds).size;
 
       if (isLicenseIdDuplicated) throw new CustomException(ARTIST_ERROR_CODE.LICENSE_ID_DUPLICATED);
+    }
+
+    if (data.saleTypeId) {
+      await this.saleTypeRepository.findArtistSaleType(data.saleTypeId);
     }
 
     await this.artistRepository.updateArtist(id, data.toUpdateArgs());

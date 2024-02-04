@@ -28,6 +28,6 @@ export class SaleTypeController {
     isArray: true,
   })
   async findAlbumArtsSaleTypes() {
-    return await this.saleTypeService.findArtistSaleTypes();
+    return await this.saleTypeService.findAlbumArtSaleTypes();
   }
 }
