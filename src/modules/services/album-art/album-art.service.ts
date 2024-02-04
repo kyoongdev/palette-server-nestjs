@@ -11,6 +11,7 @@ import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { AlbumArtRepository } from './album-art.repository';
 import { AlbumArtDTO, AlbumArtListDTO, CreateAlbumArtDTO, UpdateAlbumArtDTO } from './dto';
+import { FindAlbumArtQuery } from './dto/query/find-album-art.query';
 import { ALBUM_ART_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
@@ -29,12 +30,13 @@ export class AlbumArtService {
     return AlbumArtDTO.fromFindAlbumArt(albumArt);
   }
 
-  async findSQLAlbumArt(paging: PagingDTO) {
+  async findSQLAlbumArt(paging: PagingDTO, query: FindAlbumArtQuery) {
     const sqlPaging = paging.getSqlPaging();
 
     const { data, count } = await this.albumArtRepository.findAlbumArtsWithSQL(
       new AlbumArtSQL({
         paging: sqlPaging,
+        query,
       }).getSqlQuery()
     );
 

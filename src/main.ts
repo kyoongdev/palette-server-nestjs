@@ -27,3 +27,7 @@ import { AppModule } from './app.module';
     )
     .startServer();
 })();
+
+//TODO: sort 옵션 기능
+//TODO: 리뷰 작성
+//TODO: 휴대폰 인증 & 이메일 인증
