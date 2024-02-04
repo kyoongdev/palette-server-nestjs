@@ -11,7 +11,7 @@ export interface CreateAlbumArtDTOProps {
   description: string;
   updateDescription: string;
   images: CreateAlbumArtImageDTOProps[];
-  saleTypeIds: string[];
+  saleTypeId: string;
   contacts: CreateAlbumArtContactDTOProps[];
   licenses: CreateAlbumArtLicenseDTOProps[];
 }
@@ -29,8 +29,8 @@ export class CreateAlbumArtDTO {
   @Property({ apiProperty: { description: '이미지', type: CreateAlbumArtImageDTO, isArray: true } })
   images: CreateAlbumArtImageDTO[];
 
-  @Property({ apiProperty: { description: '판매 타입', type: 'string', isArray: true } })
-  saleTypeIds: string[];
+  @Property({ apiProperty: { description: '판매 타입', type: 'string' } })
+  saleTypeId: string;
 
   @Property({ apiProperty: { description: '연락처', type: CreateAlbumArtContactDTO, isArray: true } })
   contacts: CreateAlbumArtContactDTO[];
@@ -44,7 +44,7 @@ export class CreateAlbumArtDTO {
       this.description = props.description;
       this.updateDescription = props.updateDescription;
       this.images = props.images.map((image) => new CreateAlbumArtImageDTO(image));
-      this.saleTypeIds = props.saleTypeIds;
+      this.saleTypeId = props.saleTypeId;
       this.contacts = props.contacts.map((contact) => new CreateAlbumArtContactDTO(contact));
       this.licenses = props.licenses.map((license) => new CreateAlbumArtLicenseDTO(license));
     }
@@ -75,13 +75,13 @@ export class CreateAlbumArtDTO {
         })),
       },
       saleTypes: {
-        create: this.saleTypeIds.map((id) => ({
+        create: {
           saleType: {
             connect: {
-              id,
+              id: this.saleTypeId,
             },
           },
-        })),
+        },
       },
       contacts: {
         create: this.contacts.map((contact) => ({
