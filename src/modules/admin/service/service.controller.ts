@@ -1,16 +1,25 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { EmptyResponseDTO } from '@/utils';
 import { ResponseApi } from '@/utils/swagger';
 
-import { ApproveServiceDTO, RejectServiceDTO } from './dto';
+import { ApproveServiceDTO, RejectServiceDTO, ServiceCountDTO } from './dto';
 import { AdminServiceService } from './service.service';
 
 @ApiTags('[관리자] 서비스')
 @Controller('services')
 export class AdminServiceController {
   constructor(private readonly serviceService: AdminServiceService) {}
+
+  @Get('count')
+  @ApiOperation({ summary: '서비스 카운트 API', description: '서비스 카운트' })
+  @ResponseApi({
+    type: ServiceCountDTO,
+  })
+  async countServices() {
+    return await this.serviceService.countServices();
+  }
 
   @Post(':serviceId/approve')
   @ApiOperation({ summary: '서비스 승인 API', description: '서비스 승인' })

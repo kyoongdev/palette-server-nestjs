@@ -7,7 +7,8 @@ import { MrBeatRepository } from '@/modules/services/mr-beat/mr-beat.repository'
 import { RecordingRepository } from '@/modules/services/recording/recording.repository';
 import { Transactional } from '@/utils/aop/transaction/transaction';
 
-import { ApproveServiceDTO, RejectServiceDTO } from './dto';
+import { ApproveServiceDTO, RejectServiceDTO, ServiceCountDTO } from './dto';
+import { AdminServiceRepository } from './service.repository';
 
 @Injectable()
 export class AdminServiceService {
@@ -16,8 +17,65 @@ export class AdminServiceService {
     private readonly mrBeatRepository: MrBeatRepository,
     private readonly recordingRepository: RecordingRepository,
     private readonly albumArtRepository: AlbumArtRepository,
-    private readonly mixMasteringRepository: MixMasteringRepository
+    private readonly mixMasteringRepository: MixMasteringRepository,
+    private readonly adminServiceRepository: AdminServiceRepository
   ) {}
+
+  async countServices() {
+    const totalCount = await this.adminServiceRepository.countService();
+    const artistCount = await this.adminServiceRepository.countService({
+      where: {
+        artist: {
+          isAuthorized: true,
+          isPending: false,
+        },
+      },
+    });
+    const mrBeatCount = await this.adminServiceRepository.countService({
+      where: {
+        mrBeat: {
+          isAuthorized: true,
+          isPending: false,
+        },
+      },
+    });
+
+    const recordingCount = await this.adminServiceRepository.countService({
+      where: {
+        recording: {
+          isAuthorized: true,
+          isPending: false,
+        },
+      },
+    });
+
+    const albumArtCount = await this.adminServiceRepository.countService({
+      where: {
+        albumArt: {
+          isAuthorized: true,
+          isPending: false,
+        },
+      },
+    });
+
+    const mixMasteringCount = await this.adminServiceRepository.countService({
+      where: {
+        mixMastering: {
+          isAuthorized: true,
+          isPending: false,
+        },
+      },
+    });
+
+    return new ServiceCountDTO({
+      totalCount,
+      artistCount,
+      mrBeatCount,
+      recordingCount,
+      albumArtCount,
+      mixMasteringCount,
+    });
+  }
 
   @Transactional()
   async approveService(serviceId: string, data: ApproveServiceDTO) {
