@@ -4,7 +4,7 @@ import { CustomException } from '@/common/error/custom.exception';
 import { Transactional } from '@/utils/aop/transaction/transaction';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
-import { CreateReviewDTO, ReviewDTO, UpdateReviewDTO } from './dto';
+import { CreateReviewDTO, CreateReviewReplyDTO, ReviewDTO, UpdateReviewDTO } from './dto';
 import { FindReviewQuery } from './dto/query';
 import { REVIEW_ERROR_CODE } from './exception/error-code';
 import { ReviewRepository } from './review.repository';
@@ -44,6 +44,15 @@ export class ReviewService {
   }
 
   @Transactional()
+  async createReviewReply(musicianId: string, serviceReviewId: string, data: CreateReviewReplyDTO) {
+    const isExists = await this.reviewRepository.checkReviewReplyExists({
+      musicianId,
+      serviceReviewId,
+    });
+    await this.reviewRepository.createReviewReply(data.toCrateArgs(musicianId, serviceReviewId));
+  }
+
+  @Transactional()
   async updateReview(id: string, userId: string, data: UpdateReviewDTO) {
     const review = await this.reviewRepository.findReview(id);
 
@@ -52,6 +61,28 @@ export class ReviewService {
     }
 
     await this.reviewRepository.updateReview(review.id, data.toUpdateArgs());
+  }
+
+  @Transactional()
+  async updateReviewReply(id: string, musicianId: string, data: UpdateReviewDTO) {
+    const reviewReply = await this.reviewRepository.findReviewReply(id);
+
+    if (reviewReply.musicianId !== musicianId) {
+      throw new CustomException(REVIEW_ERROR_CODE.ONLY_OWNER_CAN_UPDATE_REPLY);
+    }
+
+    await this.reviewRepository.updateReviewReply(reviewReply.id, data.toUpdateArgs());
+  }
+
+  @Transactional()
+  async deleteReviewReply(id: string, musicianId: string) {
+    const reviewReply = await this.reviewRepository.findReviewReply(id);
+
+    if (reviewReply.musicianId !== musicianId) {
+      throw new CustomException(REVIEW_ERROR_CODE.ONLY_OWNER_CAN_DELETE_REPLY);
+    }
+
+    await this.reviewRepository.deleteReviewReply(reviewReply.id);
   }
 
   @Transactional()

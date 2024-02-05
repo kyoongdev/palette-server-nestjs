@@ -2,11 +2,13 @@ import { Prisma } from '@prisma/client';
 
 import { commonUserInclude } from './user';
 
+export const reviewReplyInclude = {
+  musician: true,
+} satisfies Prisma.ServiceReviewReplyInclude;
+
 export const reviewInclude = {
   replies: {
-    include: {
-      musician: true,
-    },
+    include: reviewReplyInclude,
   },
   user: {
     include: commonUserInclude,

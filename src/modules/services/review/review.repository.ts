@@ -40,12 +40,34 @@ export class ReviewRepository {
     return review;
   }
 
+  async findReviewReply(id: string) {
+    const reviewReply = await this.database.getRepository().serviceReviewReply.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!reviewReply) {
+      throw new CustomException(REVIEW_ERROR_CODE.REVIEW_REPLY_NOT_FOUND);
+    }
+
+    return reviewReply;
+  }
+
   async checkReviewExists(where = {} as Prisma.ServiceReviewWhereInput) {
     const review = await this.database.getRepository().serviceReview.findFirst({
       where,
     });
 
     return review ?? null;
+  }
+
+  async checkReviewReplyExists(where = {} as Prisma.ServiceReviewReplyWhereInput) {
+    const reviewReply = await this.database.getRepository().serviceReviewReply.findFirst({
+      where,
+    });
+
+    return reviewReply ?? null;
   }
 
   async findReviews(args = {} as Prisma.ServiceReviewFindManyArgs) {
@@ -70,12 +92,35 @@ export class ReviewRepository {
     });
   }
 
+  async createReviewReply(data: Prisma.ServiceReviewReplyCreateInput) {
+    return await this.database.getRepository().serviceReviewReply.create({
+      data,
+    });
+  }
+
   async updateReview(id: string, data: Prisma.ServiceReviewUpdateInput) {
     await this.database.getRepository().serviceReview.update({
       where: {
         id,
       },
       data,
+    });
+  }
+
+  async updateReviewReply(id: string, data: Prisma.ServiceReviewReplyUpdateInput) {
+    await this.database.getRepository().serviceReviewReply.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
+
+  async deleteReviewReply(id: string) {
+    await this.database.getRepository().serviceReviewReply.delete({
+      where: {
+        id,
+      },
     });
   }
 

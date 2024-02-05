@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client';
+
 import { Property } from '@/utils/swagger';
 
 export interface UpdateReviewReplyDTOProps {
@@ -12,5 +14,11 @@ export class UpdateReviewReplyDTO {
     if (props) {
       this.content = props.content;
     }
+  }
+
+  public toUpdateArgs(): Prisma.ServiceReviewReplyUpdateInput {
+    return {
+      content: this.content,
+    };
   }
 }
