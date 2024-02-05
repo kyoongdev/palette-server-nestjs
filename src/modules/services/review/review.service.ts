@@ -21,8 +21,8 @@ export class ReviewService {
 
   async findReviews(paging: PagingDTO, query: FindReviewQuery) {
     const { skip, take } = paging.getSkipTake();
-    const reviews = await this.reviewRepository.findReviews({ where: query.toWhereArgs(), skip, take });
-    const count = await this.reviewRepository.countReviews({ where: query.toWhereArgs() });
+    const reviews = await this.reviewRepository.findReviews({ ...query.toFindManyArgs(), skip, take });
+    const count = await this.reviewRepository.countReviews({ where: query.toFindManyArgs().where });
 
     return new PaginationDTO(reviews.map(ReviewDTO.fromFindReview), { count, paging });
   }
