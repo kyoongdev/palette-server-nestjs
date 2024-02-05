@@ -8,3 +8,11 @@ export const musicianServiceInclude = {
   },
   reviews: true,
 } satisfies Prisma.MusicianServiceInclude;
+
+export const adminServiceInclude = {
+  albumArt: true,
+  artist: true,
+  mixMastering: true,
+  mrBeat: true,
+  recording: true,
+} satisfies Prisma.MusicianServiceInclude;
