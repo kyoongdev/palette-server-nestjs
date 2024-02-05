@@ -33,7 +33,7 @@ export class ServiceListDTO {
   }
 
   static fromAdminFindServiceList(data: AdminFindServiceList): ServiceListDTO {
-    const { id, musicianId, ...rest } = data;
+    const { id, musicianId, createdAt, ...rest } = data;
 
     const result = Object.entries(rest)
       .filter(([_, value]) => Boolean(value))
@@ -59,7 +59,7 @@ export class ServiceListDTO {
         {
           serviceName: '',
           marketName: 'ALBUM_ART',
-          createdAt: new Date(),
+          createdAt,
         }
       );
 

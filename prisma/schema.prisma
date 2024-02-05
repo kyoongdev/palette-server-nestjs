@@ -92,6 +92,8 @@ model MusicianService {
   albumArt     AlbumArt?
   mrBeat       MrBeat?
 
+  createdAt DateTime @default(now())
+
   reviews ServiceReview[]
 }
 

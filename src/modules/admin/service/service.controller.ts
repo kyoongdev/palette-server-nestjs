@@ -15,7 +15,7 @@ import { AdminServiceService } from './service.service';
 
 @ApiTags('[관리자] 서비스')
 @Controller('services')
-@Auth([JwtAuthGuard, RoleGuard('ADMIN')])
+// @Auth([JwtAuthGuard, RoleGuard('ADMIN')])
 export class AdminServiceController {
   constructor(private readonly serviceService: AdminServiceService) {}
 

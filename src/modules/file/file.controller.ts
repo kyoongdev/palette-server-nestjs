@@ -108,7 +108,6 @@ export class FileController {
     file: Express.Multer.File,
     @Request() req: any
   ) {
-    console.log(req.fileValidationError);
     return this.fileService.uploadImage(file);
   }
 

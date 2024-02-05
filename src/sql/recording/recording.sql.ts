@@ -17,7 +17,6 @@ export class RecordingSQL extends BaseRecordingSQL {
   }
 
   getSqlQuery(isAdmin = false) {
-    console.log(this.getWhere(isAdmin));
     return Prisma.sql`
     ${this.getBaseSelect()}
     FROM Recording recording
@@ -46,11 +45,6 @@ export class RecordingSQL extends BaseRecordingSQL {
       typeof this.query.isEngineerSupported === 'boolean'
         ? Prisma.sql`AND recording.isEngineerSupported = ${this.query.isEngineerSupported ? '1' : '0'}`
         : Prisma.empty;
-
-    console.log(isAdminWhere);
-    console.log(regionLargeGroupWhere);
-    console.log(regionSmallGroupWhere);
-    console.log(isEngineerSupportedWhere);
 
     return Prisma.sql`
     WHERE
