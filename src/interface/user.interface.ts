@@ -1,6 +1,6 @@
-import { File, Image, Musician, User } from '@prisma/client';
+import { File, Musician, Prisma } from '@prisma/client';
 
-import { FindCommonMusician } from './musician.interface';
+import { commonUserInclude } from '@/utils/constants/include/user';
 
 export const SOCIAL_TYPE = {
   naver: 'naver',
@@ -14,7 +14,4 @@ export interface UserMusician extends Musician {
   evidenceFile: File;
 }
 
-export interface FindCommonUser extends User {
-  musician?: UserMusician;
-  profileImage?: Image;
-}
+export type FindCommonUser = Prisma.UserGetPayload<{ include: typeof commonUserInclude }>;

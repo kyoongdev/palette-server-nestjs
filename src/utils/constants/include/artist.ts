@@ -1,5 +1,8 @@
 import { Prisma } from '@prisma/client';
 
+import { commonMusicianInclude } from './musician';
+import { musicianServiceInclude } from './service';
+
 export const artistLicenseInclude = {
   license: true,
 } satisfies Prisma.ArtistLicenseInclude;
@@ -12,17 +15,7 @@ export const artistSaleTypeInclude = {
   saleType: true,
 } satisfies Prisma.ArtistSaleTypeBridgeInclude;
 
-export const artistDetailInclude = {
-  contacts: {
-    include: {
-      contact: true,
-    },
-    orderBy: {
-      contact: {
-        order: 'asc',
-      },
-    },
-  },
+export const artistListInclude = {
   licenses: {
     include: {
       license: true,
@@ -38,6 +31,9 @@ export const artistDetailInclude = {
       image: true,
     },
   },
+  musicianService: {
+    include: musicianServiceInclude,
+  },
   saleTypes: {
     include: {
       saleType: true,
@@ -45,26 +41,13 @@ export const artistDetailInclude = {
     orderBy: {
       saleType: {
         order: 'asc',
-      },
-    },
-  },
-  musicianService: {
-    include: {
-      musician: {
-        include: {
-          evidenceFile: true,
-          user: {
-            include: {
-              profileImage: true,
-            },
-          },
-        },
       },
     },
   },
 } satisfies Prisma.ArtistInclude;
 
-export const artistListInclude = {
+export const artistDetailInclude = {
+  ...artistListInclude,
   contacts: {
     include: {
       contact: true,
@@ -82,36 +65,6 @@ export const artistListInclude = {
     orderBy: {
       license: {
         name: 'asc',
-      },
-    },
-  },
-  images: {
-    include: {
-      image: true,
-    },
-  },
-  musicianService: {
-    include: {
-      musician: {
-        include: {
-          evidenceFile: true,
-          user: {
-            include: {
-              profileImage: true,
-            },
-          },
-        },
-      },
-      reviews: true,
-    },
-  },
-  saleTypes: {
-    include: {
-      saleType: true,
-    },
-    orderBy: {
-      saleType: {
-        order: 'asc',
       },
     },
   },

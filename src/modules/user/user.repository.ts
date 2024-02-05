@@ -4,6 +4,7 @@ import type { Prisma } from '@prisma/client';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
+import { checkUserBySocialIdInclude, commonUserInclude } from '@/utils/constants/include/user';
 
 import { CommonUserDTO, CreateUserDTO, UpdateUserDTO, UserDTO } from './dto';
 import { CreateSocialUserDTO } from './dto/create-social-user.dto';
@@ -18,14 +19,7 @@ export class UserRepository {
       where: {
         id,
       },
-      include: {
-        musician: {
-          include: {
-            evidenceFile: true,
-          },
-        },
-        profileImage: true,
-      },
+      include: commonUserInclude,
     });
 
     if (!user) {
@@ -42,14 +36,7 @@ export class UserRepository {
           socialId,
         },
       },
-      include: {
-        musician: {
-          include: {
-            evidenceFile: true,
-          },
-        },
-        profileImage: true,
-      },
+      include: commonUserInclude,
     });
 
     if (!user) {
@@ -66,18 +53,7 @@ export class UserRepository {
           socialId,
         },
       },
-      include: {
-        musician: {
-          where: {
-            isAuthorized: true,
-            isPending: false,
-          },
-          include: {
-            evidenceFile: true,
-          },
-        },
-        profileImage: true,
-      },
+      include: checkUserBySocialIdInclude,
     });
 
     return user ?? null;
@@ -88,14 +64,7 @@ export class UserRepository {
       where: {
         email,
       },
-      include: {
-        musician: {
-          include: {
-            evidenceFile: true,
-          },
-        },
-        profileImage: true,
-      },
+      include: commonUserInclude,
     });
 
     return user ?? null;
@@ -106,14 +75,7 @@ export class UserRepository {
       where: {
         nickname,
       },
-      include: {
-        musician: {
-          include: {
-            evidenceFile: true,
-          },
-        },
-        profileImage: true,
-      },
+      include: commonUserInclude,
     });
 
     return user ?? null;
@@ -123,14 +85,7 @@ export class UserRepository {
     const { where, include, select, ...rest } = args;
     const users = await this.database.getRepository().user.findMany({
       where: where,
-      include: {
-        musician: {
-          include: {
-            evidenceFile: true,
-          },
-        },
-        profileImage: true,
-      },
+      include: commonUserInclude,
       ...rest,
     });
 
@@ -144,13 +99,7 @@ export class UserRepository {
   async createUser(data: Prisma.UserCreateInput) {
     const user = await this.database.getRepository().user.create({
       data,
-      include: {
-        musician: {
-          include: {
-            evidenceFile: true,
-          },
-        },
-      },
+      include: commonUserInclude,
     });
 
     return user;
@@ -173,14 +122,7 @@ export class UserRepository {
           },
         },
       },
-      include: {
-        musician: {
-          include: {
-            evidenceFile: true,
-          },
-        },
-        profileImage: true,
-      },
+      include: commonUserInclude,
     });
 
     return user;

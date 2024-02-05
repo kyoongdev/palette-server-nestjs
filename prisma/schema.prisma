@@ -108,7 +108,7 @@ model ServiceReview {
 
   createdAt DateTime             @default(now())
   updatedAt DateTime             @updatedAt
-  replys    ServiceReviewReply[]
+  replies   ServiceReviewReply[]
 }
 
 model ServiceReviewReply {

@@ -1,4 +1,6 @@
-import { File, Image, Musician, User } from '@prisma/client';
+import { File, Image, Musician, Prisma, User } from '@prisma/client';
+
+import { commonMusicianInclude, musicianInclude } from '@/utils/constants/include/musician';
 
 export type MusicianApproveStatus = 'APPROVED' | 'REJECTED' | 'PENDING';
 
@@ -12,10 +14,8 @@ export interface MusicianUser extends User {
   profileImage?: Image;
 }
 
-export interface FindCommonMusician extends Musician {
-  evidenceFile: File;
-  user: MusicianUser;
-}
+export type FindCommonMusician = Prisma.MusicianGetPayload<{ include: typeof commonMusicianInclude }>;
+export type FindMusician = Prisma.MusicianGetPayload<{ include: typeof musicianInclude }>;
 export interface FindSQLCommonMusician {
   musicianId: string;
   stageName: string;

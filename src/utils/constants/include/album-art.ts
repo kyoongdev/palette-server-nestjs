@@ -1,5 +1,8 @@
 import { Prisma } from '@prisma/client';
 
+import { commonMusicianInclude } from './musician';
+import { musicianServiceInclude } from './service';
+
 export const albumArtLicenseInclude = {
   license: true,
 } satisfies Prisma.AlbumArtLicenseInclude;
@@ -28,19 +31,7 @@ export const albumArtListInclude = {
   },
   licenses: true,
   musicianService: {
-    include: {
-      musician: {
-        include: {
-          evidenceFile: true,
-          user: {
-            include: {
-              profileImage: true,
-            },
-          },
-        },
-      },
-      reviews: true,
-    },
+    include: musicianServiceInclude,
   },
 } satisfies Prisma.AlbumArtInclude;
 

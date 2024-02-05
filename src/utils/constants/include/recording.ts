@@ -1,5 +1,8 @@
 import { Prisma } from '@prisma/client';
 
+import { commonMusicianInclude } from './musician';
+import { musicianServiceInclude } from './service';
+
 export const recordingLicenseInclude = {
   license: true,
 } satisfies Prisma.RecordingLicenseInclude;
@@ -29,48 +32,19 @@ export const recordingListInclude = {
     },
   },
   musicianService: {
-    include: {
-      musician: {
-        include: {
-          user: {
-            include: {
-              profileImage: true,
-            },
-          },
-        },
-      },
-      reviews: true,
-    },
+    include: musicianServiceInclude,
   },
 } satisfies Prisma.RecordingInclude;
 
 export const recordingInclude = {
+  ...recordingListInclude,
   licenses: {
     include: {
       license: true,
     },
-  },
-  recordingRegion: {
-    include: {
-      regionLargeGroup: true,
-      regionSmallGroup: true,
-    },
-  },
-  images: {
-    include: {
-      image: true,
-    },
-  },
-  musicianService: {
-    include: {
-      musician: {
-        include: {
-          user: {
-            include: {
-              profileImage: true,
-            },
-          },
-        },
+    orderBy: {
+      license: {
+        name: 'asc',
       },
     },
   },

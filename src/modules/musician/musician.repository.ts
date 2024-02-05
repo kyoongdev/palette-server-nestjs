@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
+import { commonMusicianInclude } from '@/utils/constants/include/musician';
 
 import { MUSICIAN_ERROR_CODE } from './exception/error-code';
 
@@ -44,18 +45,7 @@ export class MusicianRepository {
     const { where, include, select, ...rest } = args;
     const musicians = await this.database.getRepository().musician.findMany({
       where,
-      include: {
-        _count: {
-          select: {
-            services: true,
-          },
-        },
-        user: {
-          include: {
-            profileImage: true,
-          },
-        },
-      },
+      include: commonMusicianInclude,
       ...rest,
     });
 

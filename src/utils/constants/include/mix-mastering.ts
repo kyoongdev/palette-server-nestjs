@@ -1,5 +1,8 @@
 import { Prisma } from '@prisma/client';
 
+import { commonMusicianInclude } from './musician';
+import { musicianServiceInclude } from './service';
+
 export const mixMasteringLicenseInclude = {
   license: true,
 } satisfies Prisma.MixMasteringLicenseInclude;
@@ -41,18 +44,7 @@ export const mixMasteringListInclude = {
     },
   },
   musicianService: {
-    include: {
-      musician: {
-        include: {
-          user: {
-            include: {
-              profileImage: true,
-            },
-          },
-        },
-      },
-      reviews: true,
-    },
+    include: musicianServiceInclude,
   },
 } satisfies Prisma.MixMasteringInclude;
 
