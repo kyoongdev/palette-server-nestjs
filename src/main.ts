@@ -1,6 +1,8 @@
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 
+import { camelCase } from 'lodash';
+
 import AppConfig from '@/appConfig';
 import { logger } from '@/log';
 

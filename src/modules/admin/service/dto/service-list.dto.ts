@@ -1,8 +1,9 @@
+import { camelCase } from 'lodash';
+
 import { AdminFindServiceList } from '@/interface/service.interface';
 import { Property } from '@/utils/swagger';
 
 import { SERVICE_TYPE_VALUE, ServiceType } from '../validation';
-import {} from 'lodash';
 
 export interface ServiceListDTOProps {
   serviceId: string;
@@ -49,6 +50,7 @@ export class ServiceListDTO {
           } else if (key === 'recording') {
             acc.marketName = 'RECORDING';
           }
+
           acc.serviceName = value.name;
           acc.createdAt = value.createdAt;
 

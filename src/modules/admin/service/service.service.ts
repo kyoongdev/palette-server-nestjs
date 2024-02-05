@@ -6,8 +6,11 @@ import { MixMasteringRepository } from '@/modules/services/mix-mastering/mix-mas
 import { MrBeatRepository } from '@/modules/services/mr-beat/mr-beat.repository';
 import { RecordingRepository } from '@/modules/services/recording/recording.repository';
 import { Transactional } from '@/utils/aop/transaction/transaction';
+import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { ApproveServiceDTO, RejectServiceDTO, ServiceCountDTO } from './dto';
+import { FindServiceQuery } from './dto/query/find-service.query';
+import { ServiceListDTO } from './dto/service-list.dto';
 import { AdminServiceRepository } from './service.repository';
 
 @Injectable()
@@ -20,6 +23,21 @@ export class AdminServiceService {
     private readonly mixMasteringRepository: MixMasteringRepository,
     private readonly adminServiceRepository: AdminServiceRepository
   ) {}
+
+  async findServices(paging: PagingDTO, query: FindServiceQuery) {
+    const { skip, take } = paging.getSkipTake();
+    const services = await this.adminServiceRepository.findServices({
+      ...query.toFindManyArgs(),
+      skip,
+      take,
+    });
+
+    const count = await this.adminServiceRepository.countService({
+      where: query.toFindManyArgs().where,
+    });
+
+    return new PaginationDTO(services.map(ServiceListDTO.fromAdminFindServiceList), { paging, count });
+  }
 
   async countServices() {
     const totalCount = await this.adminServiceRepository.countService();
