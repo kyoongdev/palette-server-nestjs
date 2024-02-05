@@ -27,6 +27,27 @@ export class ReviewRepository {
     return review;
   }
 
+  async findFirstReview(where = {} as Prisma.ServiceReviewWhereInput) {
+    const review = await this.database.getRepository().serviceReview.findFirst({
+      where,
+      include: reviewInclude,
+    });
+
+    if (!review) {
+      throw new CustomException(REVIEW_ERROR_CODE.REVIEW_NOT_FOUND);
+    }
+
+    return review;
+  }
+
+  async checkReviewExists(where = {} as Prisma.ServiceReviewWhereInput) {
+    const review = await this.database.getRepository().serviceReview.findFirst({
+      where,
+    });
+
+    return review ?? null;
+  }
+
   async findReviews(args = {} as Prisma.ServiceReviewFindManyArgs) {
     const { where, include, select, ...rest } = args;
 
