@@ -1,3 +1,7 @@
+import { Prisma } from '@prisma/client';
+
+import { adminServiceInclude } from '@/utils/constants/include/service';
+
 export const SERVICE_TYPE = {
   ARTIST: 'ARTIST',
   MR_BEAT: 'MR_BEAT',
@@ -7,3 +11,5 @@ export const SERVICE_TYPE = {
 };
 
 export type ServiceType = keyof typeof SERVICE_TYPE;
+
+export type AdminFindServiceList = Prisma.MusicianServiceGetPayload<{ include: typeof adminServiceInclude }>;
