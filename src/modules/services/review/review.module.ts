@@ -6,6 +6,7 @@ import { MixMasteringRepository } from '../mix-mastering/mix-mastering.repositor
 import { MrBeatRepository } from '../mr-beat/mr-beat.repository';
 import { RecordingRepository } from '../recording/recording.repository';
 
+import { ReviewController } from './review.controller';
 import { ReviewRepository } from './review.repository';
 import { ReviewService } from './review.service';
 
@@ -19,5 +20,6 @@ import { ReviewService } from './review.service';
     // MrBeatRepository,
     // RecordingRepository,
   ],
+  controllers: [ReviewController],
 })
 export class ReviewModule {}
