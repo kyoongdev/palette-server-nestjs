@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 import { FindCommonUser } from '@/interface/user.interface';
+import { ImageDTO, ImageDTOProps } from '@/modules/file/dto';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto/common-musician.dto';
 import { DateDTO, DateDTOProps } from '@/utils';
 
@@ -8,7 +9,7 @@ export interface CommonUserDTOProps extends DateDTOProps {
   id: string;
   email?: string;
   name?: string;
-  profileImage?: string;
+  profileImage?: ImageDTOProps;
   musician?: CommonMusicianDTOProps;
 }
 
@@ -25,8 +26,8 @@ export class CommonUserDTO extends DateDTO {
   @ApiProperty({ type: 'string', description: '이름', nullable: true })
   role?: string;
 
-  @ApiProperty({ type: 'string', description: '프로필 이미지', nullable: true })
-  profileImage?: string;
+  @ApiProperty({ type: ImageDTO, description: '프로필 이미지', nullable: true })
+  profileImage?: ImageDTO;
 
   @ApiProperty({ type: 'string', description: '뮤지션 정보', nullable: true })
   musician?: CommonMusicianDTO | null;
@@ -41,17 +42,16 @@ export class CommonUserDTO extends DateDTO {
   }
 
   static fromFindCommonUser(data: FindCommonUser): CommonUserDTO {
-    const { profileImage, musician, ...rest } = data;
+    const { musician, ...rest } = data;
 
     return new CommonUserDTO({
       ...rest,
       musician: data.musician
         ? {
             ...data.musician,
-            profileImageUrl: profileImage ? profileImage.url : null,
+            profileImageUrl: rest.profileImage ? rest.profileImage.url : null,
           }
         : null,
-      profileImage: profileImage ? profileImage.url : null,
     });
   }
 }

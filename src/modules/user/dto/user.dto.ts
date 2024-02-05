@@ -36,7 +36,7 @@ export class UserDTO extends CommonUserDTO {
             profileImageUrl: profileImage ? profileImage.url : null,
           }
         : null,
-      profileImage: profileImage ? profileImage.url : null,
+      profileImage,
     });
   }
 }

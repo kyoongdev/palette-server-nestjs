@@ -1,5 +1,7 @@
 import { Prisma } from '@prisma/client';
 
+import { commonUserInclude } from './user';
+
 export const reviewInclude = {
   replies: {
     include: {
@@ -7,8 +9,6 @@ export const reviewInclude = {
     },
   },
   user: {
-    include: {
-      profileImage: true,
-    },
+    include: commonUserInclude,
   },
 } satisfies Prisma.ServiceReviewInclude;
