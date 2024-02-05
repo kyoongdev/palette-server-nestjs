@@ -1,14 +1,17 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { JwtAuthGuard } from '@/common/guards/jwt.guard';
+import { RoleGuard } from '@/common/guards/role.guard';
 import { EmptyResponseDTO } from '@/utils';
-import { ResponseApi } from '@/utils/swagger';
+import { Auth, ResponseApi } from '@/utils/swagger';
 
 import { ApproveServiceDTO, RejectServiceDTO, ServiceCountDTO } from './dto';
 import { AdminServiceService } from './service.service';
 
 @ApiTags('[관리자] 서비스')
 @Controller('services')
+@Auth([JwtAuthGuard, RoleGuard('ADMIN')])
 export class AdminServiceController {
   constructor(private readonly serviceService: AdminServiceService) {}
 

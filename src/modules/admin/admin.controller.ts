@@ -2,14 +2,17 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { Paging } from '@/common/decorator';
+import { JwtAuthGuard } from '@/common/guards/jwt.guard';
+import { RoleGuard } from '@/common/guards/role.guard';
 import { PagingDTO } from '@/utils/pagination';
-import { ResponseApi } from '@/utils/swagger';
+import { Auth, ResponseApi } from '@/utils/swagger';
 
 import { AdminService } from './admin.service';
 import { AdminDTO } from './dto';
 
 @ApiTags('[관리자]')
 @Controller()
+@Auth([JwtAuthGuard, RoleGuard('ADMIN')])
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 

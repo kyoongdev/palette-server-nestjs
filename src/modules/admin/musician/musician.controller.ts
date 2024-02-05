@@ -2,10 +2,12 @@ import { Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { Paging } from '@/common/decorator';
+import { JwtAuthGuard } from '@/common/guards/jwt.guard';
+import { RoleGuard } from '@/common/guards/role.guard';
 import { UpdateMusicianDTO } from '@/modules/musician/dto/update-musician.dto';
 import { EmptyResponseDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
-import { ResponseApi } from '@/utils/swagger';
+import { Auth, ResponseApi } from '@/utils/swagger';
 
 import { AdminMusicianCountDTO } from './dto/musician-count.dto';
 import { AdminMusiciansDTO } from './dto/musicians.dto';
@@ -13,6 +15,7 @@ import { AdminMusicianService } from './musician.service';
 
 @ApiTags('[관리자] 뮤지션')
 @Controller('/musicians')
+@Auth([JwtAuthGuard, RoleGuard('ADMIN')])
 export class AdminMusicianController {
   constructor(private readonly musicianService: AdminMusicianService) {}
 
