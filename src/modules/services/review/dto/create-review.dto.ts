@@ -22,6 +22,7 @@ export class CreateReviewDTO {
     if (props) {
       this.content = props.content;
       this.score = props.score;
+      this.serviceId = props.serviceId;
     }
   }
 

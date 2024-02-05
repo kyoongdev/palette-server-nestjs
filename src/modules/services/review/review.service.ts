@@ -27,6 +27,7 @@ export class ReviewService {
     return new PaginationDTO(reviews.map(ReviewDTO.fromFindReview), { count, paging });
   }
 
+  //TODO: 결제 이후에만 리뷰 작성 가능하도록
   @Transactional()
   async createReview(userId: string, data: CreateReviewDTO) {
     const isExists = await this.reviewRepository.checkReviewExists({
