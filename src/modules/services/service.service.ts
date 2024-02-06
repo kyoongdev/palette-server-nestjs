@@ -146,4 +146,45 @@ export class ServiceService {
       await this.recordingRepository.updateRecording(service.recording.id, { isSaleStopped: false });
     }
   }
+
+  @Transactional()
+  async deleteService(serviceId: string, musicianId: string) {
+    const service = await this.serviceRepository.findService(serviceId);
+
+    if (service.musicianId !== musicianId) {
+      throw new CustomException(SERVICE_ERROR_CODE.ONLY_OWNER_CAN_DELETE);
+    }
+
+    if (service.albumArt) {
+      if (!service.albumArt.isAuthorized) {
+        throw new CustomException(SERVICE_ERROR_CODE.ONLY_AUTHORIZE_CAN_UPDATE);
+      }
+
+      await this.albumArtRepository.deleteAlbumArt(service.albumArt.id);
+    } else if (service.artist) {
+      if (!service.artist.isAuthorized) {
+        throw new CustomException(SERVICE_ERROR_CODE.ONLY_AUTHORIZE_CAN_UPDATE);
+      }
+
+      await this.artistRepository.deleteArtist(service.artist.id);
+    } else if (service.mixMastering) {
+      if (!service.mixMastering.isAuthorized) {
+        throw new CustomException(SERVICE_ERROR_CODE.ONLY_AUTHORIZE_CAN_UPDATE);
+      }
+
+      await this.mixMasteringRepository.deleteMixMastering(service.mixMastering.id);
+    } else if (service.mrBeat) {
+      if (!service.mrBeat.isAuthorized) {
+        throw new CustomException(SERVICE_ERROR_CODE.ONLY_AUTHORIZE_CAN_UPDATE);
+      }
+
+      await this.mrBeatRepository.deleteMrBeat(service.mrBeat.id);
+    } else if (service.recording) {
+      if (!service.recording.isAuthorized) {
+        throw new CustomException(SERVICE_ERROR_CODE.ONLY_AUTHORIZE_CAN_UPDATE);
+      }
+
+      await this.recordingRepository.deleteRecording(service.recording.id);
+    }
+  }
 }
