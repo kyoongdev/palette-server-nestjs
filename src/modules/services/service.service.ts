@@ -4,6 +4,7 @@ import { CustomException } from '@/common/error/custom.exception';
 import { FindServiceWithDetailList } from '@/interface/service.interface';
 import { Transactional } from '@/utils/aop/transaction/transaction';
 import { serviceWithDetailInclude } from '@/utils/constants/include/service';
+import { findPendingServicesWhere, findServicesWhere } from '@/utils/constants/where/service';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { AlbumArtRepository } from './album-art/album-art.repository';
@@ -30,76 +31,33 @@ export class ServiceService {
     const count = await this.serviceRepository.countService({
       where: {
         musicianId,
-        OR: [
-          {
-            artist: {
-              isAuthorized: true,
-              isPending: false,
-            },
-          },
-          {
-            mrBeat: {
-              isAuthorized: true,
-              isPending: false,
-            },
-          },
-          {
-            recording: {
-              isAuthorized: true,
-              isPending: false,
-            },
-          },
-          {
-            mixMastering: {
-              isAuthorized: true,
-              isPending: false,
-            },
-          },
-          {
-            albumArt: {
-              isAuthorized: true,
-              isPending: false,
-            },
-          },
-        ],
+        ...findServicesWhere,
       },
     });
 
     const services = await this.serviceRepository.findServices<FindServiceWithDetailList>({
       where: {
         musicianId,
-        OR: [
-          {
-            artist: {
-              isAuthorized: true,
-              isPending: false,
-            },
-          },
-          {
-            mrBeat: {
-              isAuthorized: true,
-              isPending: false,
-            },
-          },
-          {
-            recording: {
-              isAuthorized: true,
-              isPending: false,
-            },
-          },
-          {
-            mixMastering: {
-              isAuthorized: true,
-              isPending: false,
-            },
-          },
-          {
-            albumArt: {
-              isAuthorized: true,
-              isPending: false,
-            },
-          },
-        ],
+        ...findServicesWhere,
+      },
+      include: serviceWithDetailInclude,
+    });
+
+    return new PaginationDTO(services.map(MusicianServiceListDTO.fromFindServiceWithDetailList), { paging, count });
+  }
+
+  async findPendingServices(musicianId: string, paging: PagingDTO) {
+    const count = await this.serviceRepository.countService({
+      where: {
+        musicianId,
+        ...findPendingServicesWhere,
+      },
+    });
+
+    const services = await this.serviceRepository.findServices<FindServiceWithDetailList>({
+      where: {
+        musicianId,
+        ...findPendingServicesWhere,
       },
       include: serviceWithDetailInclude,
     });

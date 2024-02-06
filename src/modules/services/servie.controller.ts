@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { Paging } from '@/common/decorator';
@@ -29,6 +29,20 @@ export class ServiceController {
   @ApiQuery({ type: PagingDTO })
   @ApiOperation({ summary: '판매 서비스 목록 조회 API - 뮤지션만 사용 가능', description: '판매 서비스 목록 조회' })
   async findPendingServices(@Paging() paging: PagingDTO, @ReqUser() user: RequestMusician) {
-    // return await this.serviceService.findPendingServices(user.musician.id, paging);
+    return await this.serviceService.findPendingServices(user.musician.id, paging);
+  }
+
+  @Post(':serviceId/sale-stop')
+  @Auth([JwtAuthGuard, RoleGuard('MUSICIAN')])
+  @ApiOperation({ summary: '서비스 중지 API - 뮤지션만 사용 가능', description: '서비스 중지' })
+  async stopService(@ReqUser() user: RequestMusician, @Param('serviceId') serviceId: string) {
+    return await this.serviceService.stopSaleService(serviceId, user.musician.id);
+  }
+
+  @Post(':serviceId/sale-start')
+  @Auth([JwtAuthGuard, RoleGuard('MUSICIAN')])
+  @ApiOperation({ summary: '서비스 시작 API - 뮤지션만 사용 가능', description: '서비스 시작' })
+  async startService(@ReqUser() user: RequestMusician, @Param('serviceId') serviceId: string) {
+    return await this.serviceService.startSaleService(serviceId, user.musician.id);
   }
 }
