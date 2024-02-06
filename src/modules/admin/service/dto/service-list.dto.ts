@@ -1,18 +1,18 @@
 import { camelCase } from 'lodash';
 
-import { AdminFindServiceList } from '@/interface/service.interface';
+import { FindServiceList } from '@/interface/service.interface';
 import { Property } from '@/utils/swagger';
 
 import { SERVICE_TYPE_VALUE, ServiceType } from '../validation';
 
-export interface ServiceListDTOProps {
+export interface AdminServiceListDTOProps {
   serviceId: string;
   serviceName: string;
   marketName: ServiceType;
   createdAt: Date;
 }
 
-export class ServiceListDTO {
+export class AdminServiceListDTO {
   @Property({ apiProperty: { description: '서비스 아이디', type: 'string' } })
   serviceId: string;
 
@@ -25,19 +25,19 @@ export class ServiceListDTO {
   @Property({ apiProperty: { description: '생성일', type: 'date-time' } })
   createdAt: Date;
 
-  constructor(props: ServiceListDTOProps) {
+  constructor(props: AdminServiceListDTOProps) {
     this.serviceId = props.serviceId;
     this.serviceName = props.serviceName;
     this.marketName = props.marketName;
     this.createdAt = props.createdAt;
   }
 
-  static fromAdminFindServiceList(data: AdminFindServiceList): ServiceListDTO {
+  static fromFindServiceList(data: FindServiceList): AdminServiceListDTO {
     const { id, musicianId, createdAt, ...rest } = data;
 
     const result = Object.entries(rest)
       .filter(([_, value]) => Boolean(value))
-      .reduce<Omit<ServiceListDTOProps, 'serviceId'>>(
+      .reduce<Omit<AdminServiceListDTOProps, 'serviceId'>>(
         (acc, [key, value]) => {
           if (key === 'albumArt') {
             acc.marketName = 'ALBUM_ART';
@@ -63,7 +63,7 @@ export class ServiceListDTO {
         }
       );
 
-    return new ServiceListDTO({
+    return new AdminServiceListDTO({
       serviceId: data.id,
       ...result,
     });

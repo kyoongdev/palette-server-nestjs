@@ -49,13 +49,13 @@ export class MrBeatRepository {
     return this.database.getRepository().mrBeat.count(args);
   }
 
-  async findMrBeats(args = {} as Prisma.MrBeatFindManyArgs) {
+  async findMrBeats<T = FindMrBeatList>(args = {} as Prisma.MrBeatFindManyArgs): Promise<T[]> {
     const { where, include, select, ...rest } = args;
-    const mrBeats: FindMrBeatList[] = await this.database.getRepository().mrBeat.findMany({
+    const mrBeats = (await this.database.getRepository().mrBeat.findMany({
       ...rest,
       where,
-      include: mrBeatListInclude,
-    });
+      include: include ?? mrBeatListInclude,
+    })) as T[];
 
     return mrBeats;
   }

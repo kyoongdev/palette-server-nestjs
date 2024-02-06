@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
-import { FindSQLAlbumArt } from '@/interface/album-art.interface';
+import { FindAlbumArtList, FindSQLAlbumArt } from '@/interface/album-art.interface';
 import { albumArtInclude, albumArtListInclude } from '@/utils/constants/include/album-art';
 
 import { ALBUM_ART_ERROR_CODE } from './exception/error-code';
@@ -47,14 +47,14 @@ export class AlbumArtRepository {
     return service.albumArt;
   }
 
-  async findAlbumArts(args = {} as Prisma.AlbumArtFindManyArgs) {
+  async findAlbumArts<T = FindAlbumArtList>(args = {} as Prisma.AlbumArtFindManyArgs): Promise<T[]> {
     const { include, where, select, ...rest } = args;
 
-    const albumArts = await this.database.getRepository().albumArt.findMany({
+    const albumArts = (await this.database.getRepository().albumArt.findMany({
       where,
-      include: albumArtListInclude,
+      include: include ?? albumArtListInclude,
       ...rest,
-    });
+    })) as T[];
 
     return albumArts;
   }

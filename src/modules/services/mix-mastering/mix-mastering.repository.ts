@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
-import { FindSQLMixMastering } from '@/interface/mix-mastering';
+import { FindMixMasteringList, FindSQLMixMastering } from '@/interface/mix-mastering';
 import { mixMasteringInclude, mixMasteringListInclude } from '@/utils/constants/include/mix-mastering';
 
 import { MIX_MASTERING_ERROR_CODE } from './exception/error-code';
@@ -47,14 +47,14 @@ export class MixMasteringRepository {
     return service.mixMastering;
   }
 
-  async findMixMasterings(args = {} as Prisma.MixMasteringFindManyArgs) {
+  async findMixMasterings<T = FindMixMasteringList>(args = {} as Prisma.MixMasteringFindManyArgs): Promise<T[]> {
     const { where, include, select, ...rest } = args;
 
-    const mixMasterings = await this.database.getRepository().mixMastering.findMany({
+    const mixMasterings = (await this.database.getRepository().mixMastering.findMany({
       where,
-      include: mixMasteringListInclude,
+      include: include ?? mixMasteringListInclude,
       ...rest,
-    });
+    })) as T[];
 
     return mixMasterings;
   }

@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
+import { FindCommonMusician } from '@/interface/musician.interface';
 import { commonMusicianInclude } from '@/utils/constants/include/musician';
 
 import { MUSICIAN_ERROR_CODE } from './exception/error-code';
@@ -41,13 +42,13 @@ export class MusicianRepository {
     return musician;
   }
 
-  async findMusicians(args = {} as Prisma.MusicianFindManyArgs) {
+  async findMusicians<T = FindCommonMusician>(args = {} as Prisma.MusicianFindManyArgs): Promise<T[]> {
     const { where, include, select, ...rest } = args;
-    const musicians = await this.database.getRepository().musician.findMany({
+    const musicians = (await this.database.getRepository().musician.findMany({
       where,
-      include: commonMusicianInclude,
+      include: include ?? commonMusicianInclude,
       ...rest,
-    });
+    })) as T[];
 
     return musicians;
   }

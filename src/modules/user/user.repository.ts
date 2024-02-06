@@ -4,6 +4,7 @@ import type { Prisma } from '@prisma/client';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
+import { FindCommonUser } from '@/interface/user.interface';
 import { checkUserBySocialIdInclude, commonUserInclude } from '@/utils/constants/include/user';
 
 import { CommonUserDTO, CreateUserDTO, UpdateUserDTO, UserDTO } from './dto';
@@ -81,13 +82,13 @@ export class UserRepository {
     return user ?? null;
   }
 
-  async findUsers(args = {} as Prisma.UserFindManyArgs) {
+  async findUsers<T = FindCommonUser>(args = {} as Prisma.UserFindManyArgs): Promise<T[]> {
     const { where, include, select, ...rest } = args;
-    const users = await this.database.getRepository().user.findMany({
+    const users = (await this.database.getRepository().user.findMany({
       where: where,
-      include: commonUserInclude,
+      include: include ?? commonUserInclude,
       ...rest,
-    });
+    })) as T[];
 
     return users;
   }

@@ -17,7 +17,7 @@ import { AdminAlbumArtService } from './album-art/album-art.service';
 import { AdminArtistService } from './artist/artist.service';
 import { ApproveServiceDTO, RejectServiceDTO, ServiceCountDTO } from './dto';
 import { FindServiceQuery } from './dto/query/find-service.query';
-import { ServiceListDTO } from './dto/service-list.dto';
+import { AdminServiceListDTO } from './dto/service-list.dto';
 import { AdminMixMasteringService } from './mix-mastering/mix-mastering.service';
 import { AdminMrBeatService } from './mr-beat/mr-beat.service';
 import { AdminRecordingService } from './recording/recording.service';
@@ -39,7 +39,7 @@ export class AdminServiceController {
   @Get()
   @ApiOperation({ summary: '서비스 목록 조회 API', description: '서비스 목록 조회' })
   @ResponseApi({
-    type: ServiceListDTO,
+    type: AdminServiceListDTO,
     isPaging: true,
   })
   async findServices(@Paging() paging: PagingDTO, @Query() query: FindServiceQuery) {

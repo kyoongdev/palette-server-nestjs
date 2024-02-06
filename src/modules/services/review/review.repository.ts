@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
+import { FindReview } from '@/interface/review.interface';
 import { reviewInclude } from '@/utils/constants/include/review';
 
 import { REVIEW_ERROR_CODE } from './exception/error-code';
@@ -70,14 +71,14 @@ export class ReviewRepository {
     return reviewReply ?? null;
   }
 
-  async findReviews(args = {} as Prisma.ServiceReviewFindManyArgs) {
+  async findReviews<T = FindReview>(args = {} as Prisma.ServiceReviewFindManyArgs): Promise<T[]> {
     const { where, include, select, ...rest } = args;
 
-    const reviews = await this.database.getRepository().serviceReview.findMany({
+    const reviews = (await this.database.getRepository().serviceReview.findMany({
       where,
-      include: reviewInclude,
+      include: include ?? reviewInclude,
       ...rest,
-    });
+    })) as T[];
 
     return reviews;
   }

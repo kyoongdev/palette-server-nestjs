@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
-import { FindSQLRecordingList } from '@/interface/recording.interface';
+import { FindRecordingList, FindSQLRecordingList } from '@/interface/recording.interface';
 import { recordingInclude, recordingListInclude } from '@/utils/constants/include/recording';
 
 import { RECORDING_ERROR_CODE } from './exception/error-code';
@@ -46,13 +46,13 @@ export class RecordingRepository {
     return service.recording;
   }
 
-  async findRecordings(args = {} as Prisma.RecordingFindManyArgs) {
+  async findRecordings<T = FindRecordingList>(args = {} as Prisma.RecordingFindManyArgs): Promise<T[]> {
     const { select, include, where, ...rest } = args;
-    const recordings = await this.database.getRepository().recording.findMany({
+    const recordings = (await this.database.getRepository().recording.findMany({
       where,
-      include: recordingListInclude,
+      include: include ?? recordingListInclude,
       ...rest,
-    });
+    })) as T[];
 
     return recordings;
   }

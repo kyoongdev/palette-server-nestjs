@@ -4,8 +4,8 @@ import { Prisma } from '@prisma/client';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
-import { FindArtist, FindSQLArtistList } from '@/interface/artist.interface';
-import { artistDetailInclude } from '@/utils/constants/include/artist';
+import { FindArtist, FindArtistList, FindSQLArtistList } from '@/interface/artist.interface';
+import { artistDetailInclude, artistListInclude } from '@/utils/constants/include/artist';
 
 import { ARTIST_ERROR_CODE } from './exception/error-code';
 
@@ -51,13 +51,15 @@ export class ArtistRepository {
     return this.database.getRepository().artist.count(args);
   }
 
-  async findArtists(args = {} as Prisma.ArtistFindManyArgs) {
+  async findArtists<T = FindArtistList>(args = {} as Prisma.ArtistFindManyArgs): Promise<T[]> {
     const { where, select, include, ...rest } = args;
-    return this.database.getRepository().artist.findMany({
+    const artists = (await this.database.getRepository().artist.findMany({
       where,
-      include,
+      include: include ?? artistListInclude,
       ...rest,
-    });
+    })) as T[];
+
+    return artists;
   }
 
   async findArtistsWithSQL(sql: Prisma.Sql) {

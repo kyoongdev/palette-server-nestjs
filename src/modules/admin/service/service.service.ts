@@ -5,13 +5,13 @@ import { ArtistRepository } from '@/modules/services/artist/artist.repository';
 import { MixMasteringRepository } from '@/modules/services/mix-mastering/mix-mastering.repository';
 import { MrBeatRepository } from '@/modules/services/mr-beat/mr-beat.repository';
 import { RecordingRepository } from '@/modules/services/recording/recording.repository';
+import { ServiceRepository } from '@/modules/services/service.repository';
 import { Transactional } from '@/utils/aop/transaction/transaction';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { ApproveServiceDTO, RejectServiceDTO, ServiceCountDTO } from './dto';
 import { FindServiceQuery } from './dto/query/find-service.query';
-import { ServiceListDTO } from './dto/service-list.dto';
-import { AdminServiceRepository } from './service.repository';
+import { AdminServiceListDTO } from './dto/service-list.dto';
 
 @Injectable()
 export class AdminServiceService {
@@ -21,27 +21,27 @@ export class AdminServiceService {
     private readonly recordingRepository: RecordingRepository,
     private readonly albumArtRepository: AlbumArtRepository,
     private readonly mixMasteringRepository: MixMasteringRepository,
-    private readonly adminServiceRepository: AdminServiceRepository
+    private readonly serviceRepository: ServiceRepository
   ) {}
 
   async findServices(paging: PagingDTO, query: FindServiceQuery) {
     const { skip, take } = paging.getSkipTake();
-    const services = await this.adminServiceRepository.findServices({
+    const services = await this.serviceRepository.findServices({
       ...query.toFindManyArgs(),
       skip,
       take,
     });
 
-    const count = await this.adminServiceRepository.countService({
+    const count = await this.serviceRepository.countService({
       where: query.toFindManyArgs().where,
     });
 
-    return new PaginationDTO(services.map(ServiceListDTO.fromAdminFindServiceList), { paging, count });
+    return new PaginationDTO(services.map(AdminServiceListDTO.fromFindServiceList), { paging, count });
   }
 
   async countServices() {
-    const totalCount = await this.adminServiceRepository.countService();
-    const artistCount = await this.adminServiceRepository.countService({
+    const totalCount = await this.serviceRepository.countService();
+    const artistCount = await this.serviceRepository.countService({
       where: {
         artist: {
           isAuthorized: true,
@@ -49,7 +49,7 @@ export class AdminServiceService {
         },
       },
     });
-    const mrBeatCount = await this.adminServiceRepository.countService({
+    const mrBeatCount = await this.serviceRepository.countService({
       where: {
         mrBeat: {
           isAuthorized: true,
@@ -58,7 +58,7 @@ export class AdminServiceService {
       },
     });
 
-    const recordingCount = await this.adminServiceRepository.countService({
+    const recordingCount = await this.serviceRepository.countService({
       where: {
         recording: {
           isAuthorized: true,
@@ -67,7 +67,7 @@ export class AdminServiceService {
       },
     });
 
-    const albumArtCount = await this.adminServiceRepository.countService({
+    const albumArtCount = await this.serviceRepository.countService({
       where: {
         albumArt: {
           isAuthorized: true,
@@ -76,7 +76,7 @@ export class AdminServiceService {
       },
     });
 
-    const mixMasteringCount = await this.adminServiceRepository.countService({
+    const mixMasteringCount = await this.serviceRepository.countService({
       where: {
         mixMastering: {
           isAuthorized: true,
