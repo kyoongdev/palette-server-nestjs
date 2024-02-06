@@ -115,6 +115,18 @@ export class AdminServiceService {
         isAuthorized: true,
         isPending: false,
       });
+    } else if (data.serviceType === 'ALBUM_ART') {
+      await this.albumArtRepository.findAlbumArt(serviceId);
+      await this.albumArtRepository.updateAlbumArt(serviceId, {
+        isAuthorized: true,
+        isPending: false,
+      });
+    } else if (data.serviceType === 'MIX_MASTERING') {
+      await this.mixMasteringRepository.findMixMastering(serviceId);
+      await this.mixMasteringRepository.updateMixMastering(serviceId, {
+        isAuthorized: true,
+        isPending: false,
+      });
     }
   }
 
@@ -135,6 +147,19 @@ export class AdminServiceService {
     } else if (data.serviceType === 'RECORDING') {
       await this.recordingRepository.findRecording(serviceId);
       await this.recordingRepository.updateRecording(serviceId, {
+        isAuthorized: false,
+        isPending: false,
+      });
+    }
+    if (data.serviceType === 'ALBUM_ART') {
+      await this.albumArtRepository.findAlbumArt(serviceId);
+      await this.albumArtRepository.updateAlbumArt(serviceId, {
+        isAuthorized: false,
+        isPending: false,
+      });
+    } else if (data.serviceType === 'MIX_MASTERING') {
+      await this.mixMasteringRepository.findMixMastering(serviceId);
+      await this.mixMasteringRepository.updateMixMastering(serviceId, {
         isAuthorized: false,
         isPending: false,
       });
