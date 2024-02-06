@@ -35,6 +35,8 @@ export class BaseArtistSQL {
     musician.id as musicianId, musician.stageName as stageName,
     musician.name as musicianName, musician.groupType as musicianGroupType,
     AVG(serviceReview.score) as score,
+    artist.isPending as isPending, artist.isAuthorized as isAuthorized,
+    artist.isSaleStopped as isSaleStopped,
     musician.isPending as musicianIsPending, musician.isAuthorized as musicianIsAuthorized,
     musician.introduction as musicianIntroduction, profile.url as musicianProfileUrl,
     GROUP_CONCAT(DISTINCT artistSaleType.name) as saleTypes, MIN(artistLicense.cost) as cost,

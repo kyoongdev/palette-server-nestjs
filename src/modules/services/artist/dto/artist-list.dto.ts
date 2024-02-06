@@ -1,5 +1,7 @@
 import { FindArtistList, FindSQLArtistList } from '@/interface/artist.interface';
+import { SERVICE_STATUS, ServiceStatus } from '@/interface/service.interface';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
+import { getServiceStatus, getSQLServiceStatus } from '@/utils/service';
 import { Property } from '@/utils/swagger';
 
 export interface ArtistListDTOProps {
@@ -8,6 +10,7 @@ export interface ArtistListDTOProps {
   thumbnailUrl: string;
   cost: number;
   score: number;
+  status: ServiceStatus;
   createdAt: Date;
   saleTypes: string[];
   musician: CommonMusicianDTOProps;
@@ -29,6 +32,9 @@ export class ArtistListDTO {
   @Property({ apiProperty: { description: '점수', type: 'number' } })
   score: number;
 
+  @Property({ apiProperty: { description: '상태', type: 'string', enum: Object.values(SERVICE_STATUS) } })
+  status: ServiceStatus;
+
   @Property({ apiProperty: { description: '생성일', type: 'string', format: 'date-time' } })
   createdAt: Date;
 
@@ -46,6 +52,7 @@ export class ArtistListDTO {
     this.createdAt = props.createdAt;
     this.saleTypes = props.saleTypes;
     this.score = props.score;
+    this.status = props.status;
     this.musician = new CommonMusicianDTO(props.musician);
   }
 
@@ -56,6 +63,7 @@ export class ArtistListDTO {
       createdAt: data.createdAt,
       musician: data.musicianService.musician,
       name: data.name,
+      status: getServiceStatus(data),
       score:
         data.musicianService.reviews.reduce((acc, cur) => acc + cur.score, 0) / data.musicianService.reviews.length,
       saleTypes: data.saleTypes.map((saleType) => saleType.saleType.name),
@@ -73,6 +81,7 @@ export class ArtistListDTO {
       thumbnailUrl: data.thumbnailUrl,
       score: data.score,
       musician: CommonMusicianDTO.fromFindSQLCommonMusician(data),
+      status: getSQLServiceStatus(data),
     });
   }
 }

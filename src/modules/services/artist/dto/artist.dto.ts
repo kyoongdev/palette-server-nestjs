@@ -1,6 +1,8 @@
 import { FindArtist } from '@/interface/artist.interface';
+import { SERVICE_STATUS, ServiceStatus } from '@/interface/service.interface';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
 import { DateDTO, DateDTOProps } from '@/utils';
+import { getServiceStatus } from '@/utils/service';
 import { Property } from '@/utils/swagger';
 
 import { ArtistContactDTO, ArtistContactDTOProps } from './artist-contact.dto';
@@ -13,8 +15,7 @@ export interface ArtistDTOProps extends DateDTOProps {
   name: string;
   description: string;
   updateDescription: string;
-  isPending: boolean;
-  isAuthorized: boolean;
+  status: ServiceStatus;
   serviceId: string;
   images: ArtistImageDTOProps[];
   saleTypes: ArtistSaleTypeDTOProps[];
@@ -36,11 +37,8 @@ export class ArtistDTO extends DateDTO {
   @Property({ apiProperty: { description: '아티스트 업데이트 설명', type: 'string' } })
   updateDescription: string;
 
-  @Property({ apiProperty: { description: '아티스트 승인 여부', type: 'boolean' } })
-  isAuthorized: boolean;
-
-  @Property({ apiProperty: { description: '아티스트 대기 여부', type: 'boolean' } })
-  isPending: boolean;
+  @Property({ apiProperty: { description: '상태', type: 'string', enum: Object.values(SERVICE_STATUS) } })
+  status: ServiceStatus;
 
   @Property({ apiProperty: { description: '서비스 id', type: 'string' } })
   serviceId: string;
@@ -66,8 +64,7 @@ export class ArtistDTO extends DateDTO {
     this.name = props.name;
     this.description = props.description;
     this.updateDescription = props.updateDescription;
-    this.isAuthorized = props.isAuthorized;
-    this.isPending = props.isPending;
+    this.status = props.status;
     this.serviceId = props.serviceId;
     this.images = props.images.map((image) => new ArtistImageDTO(image));
     this.saleTypes = props.saleTypes.map((saleType) => new ArtistSaleTypeDTO(saleType));
@@ -82,8 +79,7 @@ export class ArtistDTO extends DateDTO {
       name: data.name,
       description: data.description,
       updateDescription: data.updateDescription,
-      isAuthorized: data.isAuthorized,
-      isPending: data.isPending,
+      status: getServiceStatus(data),
       images: data.images,
       saleTypes: data.saleTypes.map(ArtistSaleTypeDTO.fromFindArtistSaleType),
       licenses: data.licenses.map(ArtistLicenseDTO.fromFindArtistLicense),

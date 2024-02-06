@@ -65,11 +65,7 @@ export class AlbumArtListDTO {
       cost: data.cost,
       createdAt: data.createdAt,
       saleType: data.saleTypeNames,
-      status: getSQLServiceStatus({
-        isAuthorized: data.isAuthorized,
-        isPending: data.isPending,
-        isSaleStopped: data.isSaleStopped,
-      }),
+      status: getSQLServiceStatus(data),
       musician: CommonMusicianDTO.fromFindSQLCommonMusician(data),
     });
   }

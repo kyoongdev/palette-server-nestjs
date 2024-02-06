@@ -48,9 +48,9 @@ export class ArtistService {
 
   @Transactional()
   async updateArtist(id: string, musicianId: string, data: UpdateArtistDTO) {
-    const artist = await this.findArtist(id);
+    const artist = await this.artistRepository.findArtist(id);
 
-    if (artist.musician.id !== musicianId) {
+    if (artist.musicianService.musicianId !== musicianId) {
       throw new CustomException(ARTIST_ERROR_CODE.ONLY_OWNER_CAN_UPDATE);
     }
 

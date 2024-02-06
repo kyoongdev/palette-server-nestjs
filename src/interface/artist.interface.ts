@@ -18,6 +18,9 @@ export interface FindSQLArtistList extends FindSQLCommonMusician {
   score: number;
   cost: number;
   saleTypes: string;
+  isPending: boolean;
+  isAuthorized: boolean;
+  isSaleStopped: boolean;
 }
 
 export type FindArtist = Prisma.ArtistGetPayload<{ include: typeof artistDetailInclude }>;
