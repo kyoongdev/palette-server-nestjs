@@ -6,6 +6,7 @@ import { JwtAuthGuard } from '@/common/guards/jwt.guard';
 import { RoleGuard } from '@/common/guards/role.guard';
 import { AlbumArtDTO, UpdateAlbumArtDTO } from '@/modules/services/album-art/dto';
 import { ArtistDTO, UpdateArtistDTO } from '@/modules/services/artist/dto';
+import { MixMasteringDTO, UpdateMixMasteringDTO } from '@/modules/services/mix-mastering/dto';
 import { MrBeatDTO, UpdateMrBeatDTO } from '@/modules/services/mr-beat/dto';
 import { EmptyResponseDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
@@ -16,6 +17,7 @@ import { AdminArtistService } from './artist/artist.service';
 import { ApproveServiceDTO, RejectServiceDTO, ServiceCountDTO } from './dto';
 import { FindServiceQuery } from './dto/query/find-service.query';
 import { ServiceListDTO } from './dto/service-list.dto';
+import { AdminMixMasteringService } from './mix-mastering/mix-mastering.service';
 import { AdminMrBeatService } from './mr-beat/mr-beat.service';
 import { AdminServiceService } from './service.service';
 
@@ -27,7 +29,8 @@ export class AdminServiceController {
     private readonly serviceService: AdminServiceService,
     private readonly mrBeatService: AdminMrBeatService,
     private readonly artistService: AdminArtistService,
-    private readonly albumArtService: AdminAlbumArtService
+    private readonly albumArtService: AdminAlbumArtService,
+    private readonly mixMasteringService: AdminMixMasteringService
   ) {}
 
   @Get()
@@ -76,6 +79,15 @@ export class AdminServiceController {
     return await this.albumArtService.findAlbumArtByServiceId(serviceId);
   }
 
+  @Get(':serviceId/mix-masterings/detail')
+  @ApiOperation({ description: '믹스 마스터링 상세 조회', summary: '믹스 마스터링 상세 조회 API' })
+  @ResponseApi({
+    type: MixMasteringDTO,
+  })
+  async findMixMastering(@Param('serviceId') serviceId: string) {
+    return await this.mixMasteringService.findMixMasteringByServiceId(serviceId);
+  }
+
   @Patch('/mr-beats/:mrBeatId')
   @ApiOperation({ description: 'MrBeat 수정', summary: 'MrBeat 수정 API - 뮤지션만 사용 가능' })
   @ResponseApi(
@@ -112,6 +124,18 @@ export class AdminServiceController {
     return await this.albumArtService.updateAlbumArt(albumArtId, body);
   }
 
+  @Patch('/mix-masterings/:mixMasteringId')
+  @ApiOperation({ description: '믹스 마스터링 수정', summary: '믹스 마스터링 수정 API - 뮤지션만 사용 가능' })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
+  async updateMixMastering(@Param('mixMasteringId') mixMasteringId: string, @Body() body: UpdateMixMasteringDTO) {
+    return await this.mixMasteringService.updateMixMastering(mixMasteringId, body);
+  }
+
   @Delete('/mr-beats/:mrBeatId')
   @ApiOperation({ description: 'MrBeat 삭제', summary: 'MrBeat 삭제 API - 뮤지션만 사용 가능' })
   @ResponseApi(
@@ -146,6 +170,18 @@ export class AdminServiceController {
   )
   async deleteAlbumArt(@Param('albumArtId') albumArtId: string) {
     return await this.albumArtService.deleteAlbumArt(albumArtId);
+  }
+
+  @Delete('/mix-masterings/:mixMasteringId')
+  @ApiOperation({ description: '믹스 마스터링 삭제', summary: '믹스 마스터링 삭제 API - 뮤지션만 사용 가능' })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
+  async deleteMixMastering(@Param('mixMasteringId') mixMasteringId: string) {
+    return await this.mixMasteringService.deleteMixMastering(mixMasteringId);
   }
 
   @Post(':serviceId/approve')

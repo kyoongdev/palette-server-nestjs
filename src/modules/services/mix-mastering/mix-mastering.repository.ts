@@ -28,6 +28,25 @@ export class MixMasteringRepository {
     return mixMastering;
   }
 
+  async findMixMasteringByServiceId(id: string) {
+    const service = await this.database.getRepository().musicianService.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        mixMastering: {
+          include: mixMasteringInclude,
+        },
+      },
+    });
+
+    if (!service || !service.mixMastering) {
+      throw new CustomException(MIX_MASTERING_ERROR_CODE.MIX_MASTERING_NOT_FOUND);
+    }
+
+    return service.mixMastering;
+  }
+
   async findMixMasterings(args = {} as Prisma.MixMasteringFindManyArgs) {
     const { where, include, select, ...rest } = args;
 

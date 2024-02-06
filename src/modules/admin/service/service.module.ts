@@ -9,6 +9,7 @@ import { ValidateServiceModule } from '@/modules/services/validation/validate-se
 
 import { AdminAlbumArtService } from './album-art/album-art.service';
 import { AdminArtistService } from './artist/artist.service';
+import { AdminMixMasteringService } from './mix-mastering/mix-mastering.service';
 import { AdminMrBeatService } from './mr-beat/mr-beat.service';
 import { AdminServiceController } from './service.controller';
 import { AdminServiceRepository } from './service.repository';
@@ -20,6 +21,7 @@ import { AdminServiceService } from './service.service';
     AdminMrBeatService,
     AdminArtistService,
     AdminAlbumArtService,
+    AdminMixMasteringService,
     AdminServiceRepository,
     ArtistRepository,
     MrBeatRepository,
