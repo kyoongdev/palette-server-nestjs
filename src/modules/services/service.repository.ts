@@ -16,6 +16,7 @@ export class ServiceRepository {
 
   async findServices<T = FindServiceList>(args = {} as Prisma.MusicianServiceFindManyArgs): Promise<T[]> {
     const { where, include, select, ...rest } = args;
+
     const services = (await this.database.getRepository().musicianService.findMany({
       where,
       include: include ?? serviceInclude,

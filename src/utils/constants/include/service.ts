@@ -4,15 +4,7 @@ import { albumArtListInclude } from './album-art';
 import { artistListInclude } from './artist';
 import { mixMasteringListInclude } from './mix-mastering';
 import { mrBeatListInclude } from './mr-beat';
-import { commonMusicianInclude } from './musician';
 import { recordingListInclude } from './recording';
-
-export const musicianServiceInclude = {
-  musician: {
-    include: commonMusicianInclude,
-  },
-  reviews: true,
-} satisfies Prisma.MusicianServiceInclude;
 
 export const serviceInclude = {
   albumArt: true,

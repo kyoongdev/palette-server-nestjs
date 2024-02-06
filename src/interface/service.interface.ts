@@ -5,7 +5,7 @@ import { CreateArtistDTO, UpdateArtistDTO } from '@/modules/services/artist/dto'
 import { CreateMixMasteringDTO, UpdateMixMasteringDTO } from '@/modules/services/mix-mastering/dto';
 import { CreateMrBeatDTO, UpdateMrBeatDTO } from '@/modules/services/mr-beat/dto';
 import { CreateRecordingDTO, UpdateRecordingDTO } from '@/modules/services/recording/dto';
-import { serviceInclude } from '@/utils/constants/include/service';
+import { serviceInclude, serviceWithDetailInclude } from '@/utils/constants/include/service';
 
 export const SERVICE_TYPE = {
   ARTIST: 'ARTIST',
@@ -18,6 +18,7 @@ export const SERVICE_TYPE = {
 export type ServiceType = keyof typeof SERVICE_TYPE;
 
 export type FindServiceList = Prisma.MusicianServiceGetPayload<{ include: typeof serviceInclude }>;
+export type FindServiceWithDetailList = Prisma.MusicianServiceGetPayload<{ include: typeof serviceWithDetailInclude }>;
 
 export type ValidateArtist = UpdateArtistDTO | CreateArtistDTO;
 export type ValidateMrBeat = UpdateMrBeatDTO | CreateMrBeatDTO;

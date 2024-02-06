@@ -87,7 +87,7 @@ export class MixMasteringListDTO {
     });
   }
 
-  static fromFindMixMastering(data: FindMixMasteringList) {
+  static fromFindMixMasteringList(data: FindMixMasteringList) {
     return new MixMasteringListDTO({
       id: data.id,
       name: data.name,

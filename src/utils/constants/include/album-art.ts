@@ -1,7 +1,6 @@
 import { Prisma } from '@prisma/client';
 
-import { commonMusicianInclude } from './musician';
-import { musicianServiceInclude } from './service';
+import { musicianServiceInclude } from './common';
 
 export const albumArtLicenseInclude = {
   license: true,
