@@ -8,6 +8,7 @@ import { AlbumArtDTO, UpdateAlbumArtDTO } from '@/modules/services/album-art/dto
 import { ArtistDTO, UpdateArtistDTO } from '@/modules/services/artist/dto';
 import { MixMasteringDTO, UpdateMixMasteringDTO } from '@/modules/services/mix-mastering/dto';
 import { MrBeatDTO, UpdateMrBeatDTO } from '@/modules/services/mr-beat/dto';
+import { RecordingDTO, UpdateRecordingDTO } from '@/modules/services/recording/dto';
 import { EmptyResponseDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
 import { Auth, ResponseApi } from '@/utils/swagger';
@@ -19,6 +20,7 @@ import { FindServiceQuery } from './dto/query/find-service.query';
 import { ServiceListDTO } from './dto/service-list.dto';
 import { AdminMixMasteringService } from './mix-mastering/mix-mastering.service';
 import { AdminMrBeatService } from './mr-beat/mr-beat.service';
+import { AdminRecordingService } from './recording/recording.service';
 import { AdminServiceService } from './service.service';
 
 @ApiTags('[관리자] 서비스')
@@ -30,7 +32,8 @@ export class AdminServiceController {
     private readonly mrBeatService: AdminMrBeatService,
     private readonly artistService: AdminArtistService,
     private readonly albumArtService: AdminAlbumArtService,
-    private readonly mixMasteringService: AdminMixMasteringService
+    private readonly mixMasteringService: AdminMixMasteringService,
+    private readonly recordingService: AdminRecordingService
   ) {}
 
   @Get()
@@ -88,8 +91,17 @@ export class AdminServiceController {
     return await this.mixMasteringService.findMixMasteringByServiceId(serviceId);
   }
 
+  @Get(':serviceId/recordings/detail')
+  @ApiOperation({ description: '녹음 상세 조회', summary: '녹음 상세 조회 API' })
+  @ResponseApi({
+    type: RecordingDTO,
+  })
+  async findRecording(@Param('serviceId') serviceId: string) {
+    return await this.recordingService.findRecordingByServiceId(serviceId);
+  }
+
   @Patch('/mr-beats/:mrBeatId')
-  @ApiOperation({ description: 'MrBeat 수정', summary: 'MrBeat 수정 API - 뮤지션만 사용 가능' })
+  @ApiOperation({ description: 'MrBeat 수정', summary: 'MrBeat 수정 API' })
   @ResponseApi(
     {
       type: EmptyResponseDTO,
@@ -101,7 +113,7 @@ export class AdminServiceController {
   }
 
   @Patch('/artists/:artistId')
-  @ApiOperation({ description: '아티스트 수정', summary: '아티스트 수정 API - 뮤지션만 사용 가능' })
+  @ApiOperation({ description: '아티스트 수정', summary: '아티스트 수정 API' })
   @ResponseApi(
     {
       type: EmptyResponseDTO,
@@ -113,7 +125,7 @@ export class AdminServiceController {
   }
 
   @Patch('/album-arts/:albumArtId')
-  @ApiOperation({ description: '앨범 아트 수정', summary: '앨범 아트 수정 API - 뮤지션만 사용 가능' })
+  @ApiOperation({ description: '앨범 아트 수정', summary: '앨범 아트 수정 API' })
   @ResponseApi(
     {
       type: EmptyResponseDTO,
@@ -125,7 +137,7 @@ export class AdminServiceController {
   }
 
   @Patch('/mix-masterings/:mixMasteringId')
-  @ApiOperation({ description: '믹스 마스터링 수정', summary: '믹스 마스터링 수정 API - 뮤지션만 사용 가능' })
+  @ApiOperation({ description: '믹스 마스터링 수정', summary: '믹스 마스터링 수정 API' })
   @ResponseApi(
     {
       type: EmptyResponseDTO,
@@ -136,8 +148,20 @@ export class AdminServiceController {
     return await this.mixMasteringService.updateMixMastering(mixMasteringId, body);
   }
 
+  @Patch('/recordings/:recordingId')
+  @ApiOperation({ description: '녹음 수정', summary: '녹음 수정 API' })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
+  async updateRecording(@Param('recordingId') recordingId: string, @Body() body: UpdateRecordingDTO) {
+    return await this.recordingService.updateRecording(recordingId, body);
+  }
+
   @Delete('/mr-beats/:mrBeatId')
-  @ApiOperation({ description: 'MrBeat 삭제', summary: 'MrBeat 삭제 API - 뮤지션만 사용 가능' })
+  @ApiOperation({ description: 'MrBeat 삭제', summary: 'MrBeat 삭제 API' })
   @ResponseApi(
     {
       type: EmptyResponseDTO,
@@ -149,7 +173,7 @@ export class AdminServiceController {
   }
 
   @Delete('/artists/:artistId')
-  @ApiOperation({ description: '아티스트 삭제', summary: '아티스트 삭제 API - 뮤지션만 사용 가능' })
+  @ApiOperation({ description: '아티스트 삭제', summary: '아티스트 삭제 API' })
   @ResponseApi(
     {
       type: EmptyResponseDTO,
@@ -161,7 +185,7 @@ export class AdminServiceController {
   }
 
   @Delete('/album-arts/:albumArtId')
-  @ApiOperation({ description: '앨범 아트 삭제', summary: '앨범 아트 삭제 API - 뮤지션만 사용 가능' })
+  @ApiOperation({ description: '앨범 아트 삭제', summary: '앨범 아트 삭제 API' })
   @ResponseApi(
     {
       type: EmptyResponseDTO,
@@ -173,7 +197,7 @@ export class AdminServiceController {
   }
 
   @Delete('/mix-masterings/:mixMasteringId')
-  @ApiOperation({ description: '믹스 마스터링 삭제', summary: '믹스 마스터링 삭제 API - 뮤지션만 사용 가능' })
+  @ApiOperation({ description: '믹스 마스터링 삭제', summary: '믹스 마스터링 삭제 API' })
   @ResponseApi(
     {
       type: EmptyResponseDTO,
@@ -182,6 +206,18 @@ export class AdminServiceController {
   )
   async deleteMixMastering(@Param('mixMasteringId') mixMasteringId: string) {
     return await this.mixMasteringService.deleteMixMastering(mixMasteringId);
+  }
+
+  @Delete('/recordings/:recordingId')
+  @ApiOperation({ description: '녹음 삭제', summary: '녹음 삭제 API' })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
+  async deleteRecording(@Param('recordingId') recordingId: string) {
+    return await this.recordingService.deleteRecording(recordingId);
   }
 
   @Post(':serviceId/approve')

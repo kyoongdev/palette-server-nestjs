@@ -27,6 +27,25 @@ export class RecordingRepository {
     return recording;
   }
 
+  async findRecordingByServiceId(id: string) {
+    const service = await this.database.getRepository().musicianService.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        recording: {
+          include: recordingInclude,
+        },
+      },
+    });
+
+    if (!service || !service.recording) {
+      throw new CustomException(RECORDING_ERROR_CODE.RECORDING_NOT_FOUND);
+    }
+
+    return service.recording;
+  }
+
   async findRecordings(args = {} as Prisma.RecordingFindManyArgs) {
     const { select, include, where, ...rest } = args;
     const recordings = await this.database.getRepository().recording.findMany({

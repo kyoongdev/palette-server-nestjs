@@ -4,6 +4,7 @@ import { AdminMusicianService } from '@/modules/admin/musician/musician.service'
 import { CreateMusicianDTO } from '@/modules/musician/dto';
 import { MusicianRepository } from '@/modules/musician/musician.repository';
 import { MusicianService } from '@/modules/musician/musician.service';
+import { ValidateServiceModule } from '@/modules/services/validation/validate-service.module';
 import { UserRepository } from '@/modules/user/user.repository';
 import { AOPModule } from '@/utils/aop/aop.module';
 import { PRISMA_CLS_KEY, TransactionDecorator } from '@/utils/aop/transaction/transaction';
@@ -31,6 +32,7 @@ describe('Musician Test', () => {
         UserRepository,
       ],
       imports: [
+        ValidateServiceModule,
         AOPModule,
         ConfigModule.forRoot({
           isGlobal: true,

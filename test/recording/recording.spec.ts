@@ -10,6 +10,8 @@ import { CreateRecordingDTO, UpdateRecordingDTO } from '@/modules/services/recor
 import { RECORDING_ERROR_CODE } from '@/modules/services/recording/exception/error-code';
 import { RecordingRepository } from '@/modules/services/recording/recording.repository';
 import { RecordingService } from '@/modules/services/recording/recording.service';
+import { VALIDATE_SERVICE_ERROR_CODE } from '@/modules/services/validation/exception/error-code';
+import { ValidateServiceModule } from '@/modules/services/validation/validate-service.module';
 import { AOPModule } from '@/utils/aop/aop.module';
 import { PRISMA_CLS_KEY, TransactionDecorator } from '@/utils/aop/transaction/transaction';
 import { ConfigModule } from '@nestjs/config';
@@ -39,6 +41,7 @@ describe('Recording Test', () => {
         RecordingRepository,
       ],
       imports: [
+        ValidateServiceModule,
         AOPModule,
         ConfigModule.forRoot({
           isGlobal: true,
@@ -177,7 +180,7 @@ describe('Recording Test', () => {
         });
 
         expect(async () => await recordingService.createRecording(user.musician.id, createArgs)).rejects.toThrow(
-          new CustomException(RECORDING_ERROR_CODE.LICENSE_ID_DUPLICATED)
+          new CustomException(VALIDATE_SERVICE_ERROR_CODE.LICENSE_ID_DUPLICATED)
         );
       });
     });

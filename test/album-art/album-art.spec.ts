@@ -11,6 +11,8 @@ import { AlbumArtRepository } from '@/modules/services/album-art/album-art.repos
 import { AlbumArtService } from '@/modules/services/album-art/album-art.service';
 import { CreateAlbumArtDTO } from '@/modules/services/album-art/dto';
 import { ALBUM_ART_ERROR_CODE } from '@/modules/services/album-art/exception/error-code';
+import { VALIDATE_SERVICE_ERROR_CODE } from '@/modules/services/validation/exception/error-code';
+import { ValidateServiceModule } from '@/modules/services/validation/validate-service.module';
 import { AOPModule } from '@/utils/aop/aop.module';
 import { PRISMA_CLS_KEY, TransactionDecorator } from '@/utils/aop/transaction/transaction';
 import { ConfigModule } from '@nestjs/config';
@@ -48,6 +50,7 @@ describe('Album Art Test', () => {
         ClsModule.forRoot({
           global: true,
         }),
+        ValidateServiceModule,
       ],
     }).compile();
 
@@ -200,7 +203,7 @@ describe('Album Art Test', () => {
         });
 
         expect(async () => await albumArtService.createAlbumArt(user.musician.id, createAlbumArtDTO)).rejects.toThrow(
-          new CustomException(ALBUM_ART_ERROR_CODE.ONLY_ONE_THUMBNAIL)
+          new CustomException(VALIDATE_SERVICE_ERROR_CODE.ONLY_ONE_THUMBNAIL)
         );
       });
     });

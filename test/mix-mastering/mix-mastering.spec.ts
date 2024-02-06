@@ -9,6 +9,7 @@ import { MusicianService } from '@/modules/musician/musician.service';
 import { CreateMixMasteringDTO, UpdateMixMasteringDTO } from '@/modules/services/mix-mastering/dto';
 import { MixMasteringRepository } from '@/modules/services/mix-mastering/mix-mastering.repository';
 import { MixMasteringService } from '@/modules/services/mix-mastering/mix-mastering.service';
+import { ValidateServiceModule } from '@/modules/services/validation/validate-service.module';
 import { AOPModule } from '@/utils/aop/aop.module';
 import { PRISMA_CLS_KEY } from '@/utils/aop/transaction/transaction';
 import { ConfigModule } from '@nestjs/config';
@@ -37,6 +38,7 @@ describe('Mix Mastering Test', () => {
         LicenseRepository,
       ],
       imports: [
+        ValidateServiceModule,
         AOPModule,
         ConfigModule.forRoot({
           isGlobal: true,

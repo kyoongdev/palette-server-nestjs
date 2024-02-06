@@ -9,6 +9,7 @@ import { SaleTypeRepository } from '@/modules/sale-type/sale-type.repository';
 import { ArtistRepository } from '@/modules/services/artist/artist.repository';
 import { ArtistService } from '@/modules/services/artist/artist.service';
 import { CreateArtistDTO } from '@/modules/services/artist/dto';
+import { ValidateServiceModule } from '@/modules/services/validation/validate-service.module';
 import { AOPModule } from '@/utils/aop/aop.module';
 import { PRISMA_CLS_KEY, TransactionDecorator } from '@/utils/aop/transaction/transaction';
 import { ConfigModule } from '@nestjs/config';
@@ -38,6 +39,7 @@ describe('Artist Test', () => {
         SaleTypeRepository,
       ],
       imports: [
+        ValidateServiceModule,
         AOPModule,
         ConfigModule.forRoot({
           isGlobal: true,

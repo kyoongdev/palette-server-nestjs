@@ -11,6 +11,7 @@ import { AdminAlbumArtService } from './album-art/album-art.service';
 import { AdminArtistService } from './artist/artist.service';
 import { AdminMixMasteringService } from './mix-mastering/mix-mastering.service';
 import { AdminMrBeatService } from './mr-beat/mr-beat.service';
+import { AdminRecordingService } from './recording/recording.service';
 import { AdminServiceController } from './service.controller';
 import { AdminServiceRepository } from './service.repository';
 import { AdminServiceService } from './service.service';
@@ -21,6 +22,7 @@ import { AdminServiceService } from './service.service';
     AdminMrBeatService,
     AdminArtistService,
     AdminAlbumArtService,
+    AdminRecordingService,
     AdminMixMasteringService,
     AdminServiceRepository,
     ArtistRepository,

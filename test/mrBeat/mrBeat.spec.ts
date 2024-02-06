@@ -11,6 +11,7 @@ import { MusicianService } from '@/modules/musician/musician.service';
 import { CreateMrBeatDTO, UpdateMrBeatDTO } from '@/modules/services/mr-beat/dto';
 import { MrBeatRepository } from '@/modules/services/mr-beat/mr-beat.repository';
 import { MrBeatService } from '@/modules/services/mr-beat/mr-beat.service';
+import { ValidateServiceModule } from '@/modules/services/validation/validate-service.module';
 import { AOPModule } from '@/utils/aop/aop.module';
 import { PRISMA_CLS_KEY, TransactionDecorator } from '@/utils/aop/transaction/transaction';
 import { ConfigModule } from '@nestjs/config';
@@ -42,6 +43,7 @@ describe('Mr Beat Test', () => {
         GenreRepository,
       ],
       imports: [
+        ValidateServiceModule,
         AOPModule,
         ConfigModule.forRoot({
           isGlobal: true,

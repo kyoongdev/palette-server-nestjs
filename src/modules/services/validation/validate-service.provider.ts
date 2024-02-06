@@ -21,7 +21,7 @@ import { MoodRepository } from '@/modules/mood/mood.repository';
 import { RegionRepository } from '@/modules/region/region.repository';
 import { SaleTypeRepository } from '@/modules/sale-type/sale-type.repository';
 
-import { SERVICE_VALIDATION_ERROR_CODE } from './exception/error-code';
+import { VALIDATE_SERVICE_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
 export class ValidateServiceProvider {
@@ -52,13 +52,13 @@ export class ValidateServiceProvider {
   async validateMixMastering(data: ValidateMixMastering) {
     if (data.musics) {
       if (data.musics.length !== 2) {
-        throw new CustomException(SERVICE_VALIDATION_ERROR_CODE.MUSIC_COUNT);
+        throw new CustomException(VALIDATE_SERVICE_ERROR_CODE.MUSIC_COUNT);
       }
       const beforeMusic = data.musics.filter((music) => music.isBefore);
       const afterMusic = data.musics.filter((music) => !music.isBefore);
 
       if (beforeMusic.length !== 1 || afterMusic.length !== 1) {
-        throw new CustomException(SERVICE_VALIDATION_ERROR_CODE.MUSIC_BEFORE_AFTER_COUNT);
+        throw new CustomException(VALIDATE_SERVICE_ERROR_CODE.MUSIC_BEFORE_AFTER_COUNT);
       }
 
       await this.validateMusics(data.musics);
@@ -96,7 +96,7 @@ export class ValidateServiceProvider {
     const isMusicDuplicated = musicIds.length !== new Set(musicIds).size;
 
     if (isMusicDuplicated) {
-      throw new CustomException(SERVICE_VALIDATION_ERROR_CODE.MUSIC_ID_DUPLICATE);
+      throw new CustomException(VALIDATE_SERVICE_ERROR_CODE.MUSIC_ID_DUPLICATE);
     }
   }
 
@@ -106,7 +106,7 @@ export class ValidateServiceProvider {
     ).map((contact) => contact.id);
 
     if (contactIds.length !== new Set(contactIds).size) {
-      throw new CustomException(SERVICE_VALIDATION_ERROR_CODE.CONTACT_ID_DUPLICATED);
+      throw new CustomException(VALIDATE_SERVICE_ERROR_CODE.CONTACT_ID_DUPLICATED);
     }
   }
 
@@ -122,7 +122,7 @@ export class ValidateServiceProvider {
     const isLicenseDuplicate = licenseIds.length !== new Set(licenseIds).size;
 
     if (isLicenseDuplicate) {
-      throw new CustomException(SERVICE_VALIDATION_ERROR_CODE.LICENSE_ID_DUPLICATED);
+      throw new CustomException(VALIDATE_SERVICE_ERROR_CODE.LICENSE_ID_DUPLICATED);
     }
   }
 
@@ -139,15 +139,15 @@ export class ValidateServiceProvider {
     const isImageDuplicate = imageIds.length !== new Set(imageIds).size;
 
     if (!isThumbnailExist) {
-      throw new CustomException(SERVICE_VALIDATION_ERROR_CODE.NO_THUMBNAIL);
+      throw new CustomException(VALIDATE_SERVICE_ERROR_CODE.NO_THUMBNAIL);
     }
 
     if (thumbnailCount > 1) {
-      throw new CustomException(SERVICE_VALIDATION_ERROR_CODE.ONLY_ONE_THUMBNAIL);
+      throw new CustomException(VALIDATE_SERVICE_ERROR_CODE.ONLY_ONE_THUMBNAIL);
     }
 
     if (isImageDuplicate) {
-      throw new CustomException(SERVICE_VALIDATION_ERROR_CODE.IMAGE_ID_DUPLICATED);
+      throw new CustomException(VALIDATE_SERVICE_ERROR_CODE.IMAGE_ID_DUPLICATED);
     }
   }
 
@@ -157,7 +157,7 @@ export class ValidateServiceProvider {
     if (region.regionSmallGroupId) {
       const isSmallGroupExists = largeGroup.regions.find((smallRegion) => smallRegion.id === region.regionSmallGroupId);
       if (!isSmallGroupExists) {
-        throw new CustomException(SERVICE_VALIDATION_ERROR_CODE.REGION_SMALL_GROUP_NOT_MATCH);
+        throw new CustomException(VALIDATE_SERVICE_ERROR_CODE.REGION_SMALL_GROUP_NOT_MATCH);
       }
     }
   }
