@@ -1,26 +1,14 @@
 import { Module } from '@nestjs/common';
 
-import { ContactRepository } from '@/modules/contact/contact.repository';
-import { FileRepository } from '@/modules/file/file.repository';
-import { FileService } from '@/modules/file/file.service';
-import { GenreRepository } from '@/modules/genre/genre.repository';
-import { LicenseRepository } from '@/modules/license/license.repository';
-import { MoodRepository } from '@/modules/mood/mood.repository';
+import { ValidateServiceModule } from '../validation/validate-service.module';
 
 import { MrBeatController } from './mr-beat-controller';
 import { MrBeatRepository } from './mr-beat.repository';
 import { MrBeatService } from './mr-beat.service';
 
 @Module({
-  providers: [
-    MrBeatRepository,
-    MrBeatService,
-    FileRepository,
-    LicenseRepository,
-    ContactRepository,
-    MoodRepository,
-    GenreRepository,
-  ],
+  providers: [MrBeatRepository, MrBeatService],
+  imports: [ValidateServiceModule],
   controllers: [MrBeatController],
 })
 export class MrBeatModule {}

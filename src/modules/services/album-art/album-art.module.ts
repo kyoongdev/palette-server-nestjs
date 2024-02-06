@@ -1,23 +1,14 @@
 import { Module } from '@nestjs/common';
 
-import { ContactRepository } from '@/modules/contact/contact.repository';
-import { FileRepository } from '@/modules/file/file.repository';
-import { LicenseRepository } from '@/modules/license/license.repository';
-import { SaleTypeRepository } from '@/modules/sale-type/sale-type.repository';
+import { ValidateServiceModule } from '../validation/validate-service.module';
 
 import { AlbumArtController } from './album-art.controller';
 import { AlbumArtRepository } from './album-art.repository';
 import { AlbumArtService } from './album-art.service';
 
 @Module({
-  providers: [
-    AlbumArtRepository,
-    AlbumArtService,
-    FileRepository,
-    SaleTypeRepository,
-    ContactRepository,
-    LicenseRepository,
-  ],
+  providers: [AlbumArtRepository, AlbumArtService],
+  imports: [ValidateServiceModule],
   controllers: [AlbumArtController],
 })
 export class AlbumArtModule {}

@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
 import { CustomException } from '@/common/error/custom.exception';
-import { ContactRepository } from '@/modules/contact/contact.repository';
-import { FileRepository } from '@/modules/file/file.repository';
-import { LicenseRepository } from '@/modules/license/license.repository';
-import { SaleTypeRepository } from '@/modules/sale-type/sale-type.repository';
 import { AlbumArtSQL } from '@/sql/album-art/album-art.sql';
 import { Transactional } from '@/utils/aop/transaction/transaction';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
+
+import { ValidateServiceProvider } from '../validation/validate-service.provider';
 
 import { AlbumArtRepository } from './album-art.repository';
 import { AlbumArtDTO, AlbumArtListDTO, CreateAlbumArtDTO, UpdateAlbumArtDTO } from './dto';
@@ -18,10 +16,7 @@ import { ALBUM_ART_ERROR_CODE } from './exception/error-code';
 export class AlbumArtService {
   constructor(
     private readonly albumArtRepository: AlbumArtRepository,
-    private readonly fileRepository: FileRepository,
-    private readonly saleTypeRepository: SaleTypeRepository,
-    private readonly contactRepository: ContactRepository,
-    private readonly licenseRepository: LicenseRepository
+    private readonly validateService: ValidateServiceProvider
   ) {}
 
   async findAlbumArt(id: string) {
@@ -45,52 +40,7 @@ export class AlbumArtService {
 
   @Transactional()
   async createAlbumArt(musicianId: string, data: CreateAlbumArtDTO) {
-    const thumbnailCount = data.images.filter((image) => image.isThumbnail).length;
-
-    if (thumbnailCount !== 1) {
-      throw new CustomException(ALBUM_ART_ERROR_CODE.ONLY_ONE_THUMBNAIL);
-    }
-
-    const imageIds = await Promise.all(
-      data.images.map(async (image) => {
-        const isExists = await this.fileRepository.findImage(image.imageId);
-        return isExists.id;
-      })
-    );
-    const isImageIdDuplicated = new Set(imageIds).size !== imageIds.length;
-
-    if (isImageIdDuplicated) {
-      throw new CustomException(ALBUM_ART_ERROR_CODE.IMAGE_ID_DUPLICATED);
-    }
-
-    await this.saleTypeRepository.findAlbumArtSaleType(data.saleTypeId);
-
-    const contactIds = await Promise.all(
-      data.contacts.map(async (contact) => {
-        const isExists = await this.contactRepository.findContact(contact.contactId);
-        return isExists.id;
-      })
-    );
-
-    const isContactIdDuplicated = new Set(contactIds).size !== contactIds.length;
-
-    if (isContactIdDuplicated) {
-      throw new CustomException(ALBUM_ART_ERROR_CODE.CONTACT_ID_DUPLICATED);
-    }
-
-    const licenseIds = await Promise.all(
-      data.licenses.map(async (license) => {
-        const isExists = await this.licenseRepository.findLicense(license.licenseId);
-        return isExists.id;
-      })
-    );
-
-    const isLicenseIdDuplicated = new Set(licenseIds).size !== licenseIds.length;
-
-    if (isLicenseIdDuplicated) {
-      throw new CustomException(ALBUM_ART_ERROR_CODE.LICENSE_ID_DUPLICATED);
-    }
-
+    await this.validateService.validateAlbumArt(data);
     const albumArt = await this.albumArtRepository.createAlbumArt(data.toCreateArgs(musicianId));
 
     return albumArt.id;
@@ -104,59 +54,11 @@ export class AlbumArtService {
       throw new CustomException(ALBUM_ART_ERROR_CODE.ONLY_OWNER_CAN_UPDATE);
     }
 
-    if (data.images) {
-      const thumbnailCount = data.images.filter((image) => image.isThumbnail).length;
-
-      if (thumbnailCount !== 1) {
-        throw new CustomException(ALBUM_ART_ERROR_CODE.ONLY_ONE_THUMBNAIL);
-      }
-
-      const imageIds = await Promise.all(
-        data.images.map(async (image) => {
-          const isExists = await this.fileRepository.findImage(image.imageId);
-          return isExists.id;
-        })
-      );
-      const isImageIdDuplicated = new Set(imageIds).size !== imageIds.length;
-
-      if (isImageIdDuplicated) {
-        throw new CustomException(ALBUM_ART_ERROR_CODE.IMAGE_ID_DUPLICATED);
-      }
+    if (!albumArt.isAuthorized) {
+      throw new CustomException(ALBUM_ART_ERROR_CODE.ONLY_AUTHORIZE_CAN_UPDATE);
     }
 
-    if (data.contacts) {
-      const contactIds = await Promise.all(
-        data.contacts.map(async (contact) => {
-          const isExists = await this.contactRepository.findContact(contact.contactId);
-          return isExists.id;
-        })
-      );
-
-      const isContactIdDuplicated = new Set(contactIds).size !== contactIds.length;
-
-      if (isContactIdDuplicated) {
-        throw new CustomException(ALBUM_ART_ERROR_CODE.CONTACT_ID_DUPLICATED);
-      }
-    }
-
-    if (data.licenses) {
-      const licenseIds = await Promise.all(
-        data.licenses.map(async (license) => {
-          const isExists = await this.licenseRepository.findLicense(license.licenseId);
-          return isExists.id;
-        })
-      );
-
-      const isLicenseIdDuplicated = new Set(licenseIds).size !== licenseIds.length;
-
-      if (isLicenseIdDuplicated) {
-        throw new CustomException(ALBUM_ART_ERROR_CODE.LICENSE_ID_DUPLICATED);
-      }
-    }
-
-    if (data.saleTypeId) {
-      await this.saleTypeRepository.findAlbumArtSaleType(data.saleTypeId);
-    }
+    await this.validateService.validateAlbumArt(data);
 
     await this.albumArtRepository.updateAlbumArt(id, data.toUpdateArgs());
   }
