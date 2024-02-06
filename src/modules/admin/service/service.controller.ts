@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { Paging } from '@/common/decorator';
 import { JwtAuthGuard } from '@/common/guards/jwt.guard';
 import { RoleGuard } from '@/common/guards/role.guard';
+import { MrBeatDTO, UpdateMrBeatDTO } from '@/modules/services/mr-beat/dto';
 import { EmptyResponseDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
 import { Auth, ResponseApi } from '@/utils/swagger';
@@ -11,13 +12,17 @@ import { Auth, ResponseApi } from '@/utils/swagger';
 import { ApproveServiceDTO, RejectServiceDTO, ServiceCountDTO } from './dto';
 import { FindServiceQuery } from './dto/query/find-service.query';
 import { ServiceListDTO } from './dto/service-list.dto';
+import { AdminMrBeatService } from './mr-beat/mr-beat.service';
 import { AdminServiceService } from './service.service';
 
 @ApiTags('[관리자] 서비스')
 @Controller('services')
-// @Auth([JwtAuthGuard, RoleGuard('ADMIN')])
+@Auth([JwtAuthGuard, RoleGuard('ADMIN')])
 export class AdminServiceController {
-  constructor(private readonly serviceService: AdminServiceService) {}
+  constructor(
+    private readonly serviceService: AdminServiceService,
+    private readonly mrBeatService: AdminMrBeatService
+  ) {}
 
   @Get()
   @ApiOperation({ summary: '서비스 목록 조회 API', description: '서비스 목록 조회' })
@@ -36,6 +41,39 @@ export class AdminServiceController {
   })
   async countServices() {
     return await this.serviceService.countServices();
+  }
+
+  @Get(':serviceId/mr-beats/detail')
+  @ApiOperation({ description: 'MrBeat 조회', summary: 'MrBeat 조회 API' })
+  @ResponseApi({
+    type: MrBeatDTO,
+  })
+  async findMrBeat(@Param('serviceId') serviceId: string) {
+    return await this.mrBeatService.findMrBeatByServiceId(serviceId);
+  }
+
+  @Patch('/mr-beats/:mrBeatId')
+  @ApiOperation({ description: 'MrBeat 수정', summary: 'MrBeat 수정 API - 뮤지션만 사용 가능' })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
+  async updateMrBeat(@Param('mrBeatId') mrBeatId: string, @Body() body: UpdateMrBeatDTO) {
+    return await this.mrBeatService.updateMrBeat(mrBeatId, body);
+  }
+
+  @Delete('/mr-beats/:mrBeatId')
+  @ApiOperation({ description: 'MrBeat 삭제', summary: 'MrBeat 삭제 API - 뮤지션만 사용 가능' })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
+  async deleteMrBeat(@Param('mrBeatId') mrBeatId: string) {
+    return await this.mrBeatService.deleteMrBeat(mrBeatId);
   }
 
   @Post(':serviceId/approve')

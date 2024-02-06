@@ -27,6 +27,24 @@ export class MrBeatRepository {
     return mrBeat;
   }
 
+  async findMrBeatByServiceId(id: string) {
+    const service = await this.database.getRepository().musicianService.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        mrBeat: {
+          include: mrBeatDetailInclude,
+        },
+      },
+    });
+
+    if (!service) {
+      throw new CustomException(MR_BEAT_ERROR_CODE.MR_BEAT_NOT_FOUND);
+    }
+    return service.mrBeat;
+  }
+
   async countMrBeats(args = {} as Prisma.MrBeatCountArgs) {
     return this.database.getRepository().mrBeat.count(args);
   }
