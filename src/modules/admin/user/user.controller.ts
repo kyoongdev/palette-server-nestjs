@@ -2,15 +2,19 @@ import { Body, Controller, Delete, Get, Param, Patch, Query } from '@nestjs/comm
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { Paging } from '@/common/decorator';
+import { JwtAuthGuard } from '@/common/guards/jwt.guard';
+import { RoleGuard } from '@/common/guards/role.guard';
 import { CommonUserDTO, UpdateUserDTO } from '@/modules/user/dto';
 import { EmptyResponseDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
-import { ResponseApi } from '@/utils/swagger';
+import { Auth, ResponseApi } from '@/utils/swagger';
 
+import { AdminUserCountDTO } from './dto';
 import { AdminFindUserQuery } from './dto/query';
 import { AdminUserService } from './user.service';
 
 @ApiTags('[관리자] 유저')
+@Auth([JwtAuthGuard, RoleGuard('ADMIN')])
 @Controller('users')
 export class AdminUserController {
   constructor(private readonly userService: AdminUserService) {}
@@ -32,6 +36,15 @@ export class AdminUserController {
   })
   async findUsers(@Paging() paging: PagingDTO, @Query() query: AdminFindUserQuery) {
     return await this.userService.findUsers(paging, query);
+  }
+
+  @Get('count')
+  @ApiOperation({ summary: '유저 카운트 API', description: '유저 카운트' })
+  @ResponseApi({
+    type: AdminUserCountDTO,
+  })
+  async countUsers() {
+    return await this.userService.countUsers();
   }
 
   @Patch(':userId')

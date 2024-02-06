@@ -10,6 +10,7 @@ export class AdminFindUserQuery extends PagingDTO {
       type: 'string',
       description: '유저 종류',
       enum: Object.values(Role).filter((role) => role !== 'ADMIN'),
+      nullable: true,
     },
   })
   role?: Exclude<RoleType, 'ADMIN'>;
