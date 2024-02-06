@@ -28,6 +28,25 @@ export class AlbumArtRepository {
     return albumArt;
   }
 
+  async findAlbumArtByServiceId(id: string) {
+    const service = await this.database.getRepository().musicianService.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        albumArt: {
+          include: albumArtInclude,
+        },
+      },
+    });
+
+    if (!service || !service.albumArt) {
+      throw new CustomException(ALBUM_ART_ERROR_CODE.ALBUM_ART_NOT_FOUND);
+    }
+
+    return service.albumArt;
+  }
+
   async findAlbumArts(args = {} as Prisma.AlbumArtFindManyArgs) {
     const { include, where, select, ...rest } = args;
 

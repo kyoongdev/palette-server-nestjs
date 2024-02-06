@@ -8,16 +8,14 @@ import { SaleTypeRepository } from '@/modules/sale-type/sale-type.repository';
 import { ArtistRepository } from '@/modules/services/artist/artist.repository';
 import { ArtistDTO, UpdateArtistDTO } from '@/modules/services/artist/dto';
 import { ARTIST_ERROR_CODE } from '@/modules/services/artist/exception/error-code';
+import { ValidateServiceProvider } from '@/modules/services/validation/validate-service.provider';
 import { Transactional } from '@/utils/aop/transaction/transaction';
 
 @Injectable()
 export class AdminArtistService {
   constructor(
     private readonly artistRepository: ArtistRepository,
-    private readonly fileRepository: FileRepository,
-    private readonly contactRepository: ContactRepository,
-    private readonly licenseRepository: LicenseRepository,
-    private readonly saleTypeRepository: SaleTypeRepository
+    private readonly validateService: ValidateServiceProvider
   ) {}
 
   async findArtistByServiceId(serviceId: string) {
@@ -29,7 +27,7 @@ export class AdminArtistService {
   @Transactional()
   async updateArtist(id: string, data: UpdateArtistDTO) {
     await this.artistRepository.findArtist(id);
-
+    await this.validateService.validateArtist(data);
     await this.artistRepository.updateArtist(id, data.toUpdateArgs());
   }
 

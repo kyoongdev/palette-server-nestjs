@@ -4,12 +4,14 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Paging } from '@/common/decorator';
 import { JwtAuthGuard } from '@/common/guards/jwt.guard';
 import { RoleGuard } from '@/common/guards/role.guard';
+import { AlbumArtDTO, UpdateAlbumArtDTO } from '@/modules/services/album-art/dto';
 import { ArtistDTO, UpdateArtistDTO } from '@/modules/services/artist/dto';
 import { MrBeatDTO, UpdateMrBeatDTO } from '@/modules/services/mr-beat/dto';
 import { EmptyResponseDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
 import { Auth, ResponseApi } from '@/utils/swagger';
 
+import { AdminAlbumArtService } from './album-art/album-art.service';
 import { AdminArtistService } from './artist/artist.service';
 import { ApproveServiceDTO, RejectServiceDTO, ServiceCountDTO } from './dto';
 import { FindServiceQuery } from './dto/query/find-service.query';
@@ -24,7 +26,8 @@ export class AdminServiceController {
   constructor(
     private readonly serviceService: AdminServiceService,
     private readonly mrBeatService: AdminMrBeatService,
-    private readonly artistService: AdminArtistService
+    private readonly artistService: AdminArtistService,
+    private readonly albumArtService: AdminAlbumArtService
   ) {}
 
   @Get()
@@ -64,6 +67,15 @@ export class AdminServiceController {
     return await this.artistService.findArtistByServiceId(serviceId);
   }
 
+  @Get(':serviceId/album-arts/detail')
+  @ApiOperation({ description: '앨범 아트 상세 조회', summary: '앨범 아트 상세 조회 API' })
+  @ResponseApi({
+    type: AlbumArtDTO,
+  })
+  async findAlbumArt(@Param('serviceId') serviceId: string) {
+    return await this.albumArtService.findAlbumArtByServiceId(serviceId);
+  }
+
   @Patch('/mr-beats/:mrBeatId')
   @ApiOperation({ description: 'MrBeat 수정', summary: 'MrBeat 수정 API - 뮤지션만 사용 가능' })
   @ResponseApi(
@@ -88,6 +100,18 @@ export class AdminServiceController {
     return await this.artistService.updateArtist(artistId, body);
   }
 
+  @Patch('/album-arts/:albumArtId')
+  @ApiOperation({ description: '앨범 아트 수정', summary: '앨범 아트 수정 API - 뮤지션만 사용 가능' })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
+  async updateAlbumArt(@Param('albumArtId') albumArtId: string, @Body() body: UpdateAlbumArtDTO) {
+    return await this.albumArtService.updateAlbumArt(albumArtId, body);
+  }
+
   @Delete('/mr-beats/:mrBeatId')
   @ApiOperation({ description: 'MrBeat 삭제', summary: 'MrBeat 삭제 API - 뮤지션만 사용 가능' })
   @ResponseApi(
@@ -110,6 +134,18 @@ export class AdminServiceController {
   )
   async deleteArtist(@Param('artistId') artistId: string) {
     return await this.artistService.deleteArtist(artistId);
+  }
+
+  @Delete('/album-arts/:albumArtId')
+  @ApiOperation({ description: '앨범 아트 삭제', summary: '앨범 아트 삭제 API - 뮤지션만 사용 가능' })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
+  async deleteAlbumArt(@Param('albumArtId') albumArtId: string) {
+    return await this.albumArtService.deleteAlbumArt(albumArtId);
   }
 
   @Post(':serviceId/approve')
