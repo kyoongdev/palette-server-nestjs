@@ -23,4 +23,12 @@ export class ServiceController {
   async findSaleServices(@Paging() paging: PagingDTO, @ReqUser() user: RequestMusician) {
     return await this.serviceService.findSaleServices(user.musician.id, paging);
   }
+
+  @Get('pending')
+  @Auth([JwtAuthGuard, RoleGuard('MUSICIAN')])
+  @ApiQuery({ type: PagingDTO })
+  @ApiOperation({ summary: '판매 서비스 목록 조회 API - 뮤지션만 사용 가능', description: '판매 서비스 목록 조회' })
+  async findPendingServices(@Paging() paging: PagingDTO, @ReqUser() user: RequestMusician) {
+    // return await this.serviceService.findPendingServices(user.musician.id, paging);
+  }
 }

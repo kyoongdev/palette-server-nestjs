@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { CustomException } from '@/common/error/custom.exception';
 import { MrBeatSQL } from '@/sql';
 import { Transactional } from '@/utils/aop/transaction/transaction';
-import { artistDetailInclude, artistListInclude } from '@/utils/constants/include/artist';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { ValidateServiceProvider } from '../validation/validate-service.provider';

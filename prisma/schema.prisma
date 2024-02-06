@@ -178,8 +178,9 @@ model MrBeat {
   genres MrBeatGenre[]
   moods  MrBeatMood[]
 
-  isPending    Boolean @default(true)
-  isAuthorized Boolean @default(false)
+  isPending     Boolean @default(true)
+  isAuthorized  Boolean @default(false)
+  isSaleStopped Boolean @default(false)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -242,6 +243,7 @@ model Artist {
   updateDescription String  @db.MediumText
   isPending         Boolean @default(true)
   isAuthorized      Boolean @default(false)
+  isSaleStopped     Boolean @default(false)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -337,6 +339,7 @@ model Recording {
   description         String  @db.MediumText
   isPending           Boolean @default(true)
   isAuthorized        Boolean @default(false)
+  isSaleStopped       Boolean @default(false)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -416,6 +419,7 @@ model MixMastering {
   updateDescription String  @db.MediumText
   isPending         Boolean @default(true)
   isAuthorized      Boolean @default(false)
+  isSaleStopped     Boolean @default(false)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -492,6 +496,7 @@ model AlbumArt {
   updateDescription String  @db.MediumText
   isPending         Boolean @default(true)
   isAuthorized      Boolean @default(false)
+  isSaleStopped     Boolean @default(false)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

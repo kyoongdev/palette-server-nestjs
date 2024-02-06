@@ -15,6 +15,8 @@ export const SERVICE_TYPE = {
   ALBUM_ART: 'ALBUM_ART',
 };
 
+export type ServiceStatus = 'PENDING';
+
 export type ServiceType = keyof typeof SERVICE_TYPE;
 
 export type FindServiceList = Prisma.MusicianServiceGetPayload<{ include: typeof serviceInclude }>;
