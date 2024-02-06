@@ -47,13 +47,13 @@ export class MrBeatService {
 
   @Transactional()
   async updateMrBeat(id: string, musicianId: string, data: UpdateMrBeatDTO) {
-    const mrBeat = await this.findMrBeat(id);
+    const mrBeat = await this.mrBeatRepository.findMrBeat(id);
 
     if (!mrBeat.isAuthorized) {
       throw new CustomException(MR_BEAT_ERROR_CODE.ONLY_AUTHORIZE_CAN_UPDATE);
     }
 
-    if (mrBeat.musician.id !== musicianId) {
+    if (mrBeat.musicianService.musicianId !== musicianId) {
       throw new CustomException(MR_BEAT_ERROR_CODE.ONLY_OWNER_CAN_UPDATE);
     }
 

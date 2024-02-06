@@ -36,6 +36,8 @@ export class BaseMrBeatSQL {
     thumbnail.url as thumbnailUrl, music.url as musicUrl, music.duration as musicDuration, 
     genre.name as genreName, mood.name as moodName, 
     mrBeat.createdAt as createdAt, AVG(serviceReview.score) as score,
+    mrBeat.isPending as isPending, mrBeat.isAuthorized as isAuthorized,
+    mrBeat.isSaleStopped as isSaleStopped,
     musician.id as musicianId, musician.stageName as stageName,
     musician.name as musicianName, musician.groupType as musicianGroupType,
     musician.isPending as musicianIsPending, musician.isAuthorized as musicianIsAuthorized,

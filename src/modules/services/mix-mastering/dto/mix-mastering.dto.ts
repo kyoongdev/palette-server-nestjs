@@ -38,12 +38,6 @@ export class MixMasteringDTO extends DateDTO {
   @Property({ apiProperty: { description: '업데이트 설명', type: 'string' } })
   updateDescription: string;
 
-  @Property({ apiProperty: { description: '대기중', type: 'boolean' } })
-  isPending: boolean;
-
-  @Property({ apiProperty: { description: '승인됨', type: 'boolean' } })
-  isAuthorized: boolean;
-
   @Property({ apiProperty: { description: '썸네일', type: ImageDTO } })
   thumbnail: ImageDTO;
 

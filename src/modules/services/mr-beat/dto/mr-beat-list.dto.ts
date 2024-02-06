@@ -1,6 +1,8 @@
 import { FindMrBeatList, FindSQLMrBeatList } from '@/interface/mr-beat.interface';
+import { SERVICE_STATUS, ServiceStatus } from '@/interface/service.interface';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
 import { GroupTypeResDecorator } from '@/modules/musician/validators';
+import { getServiceStatus, getSQLServiceStatus } from '@/utils/service';
 import { Property } from '@/utils/swagger';
 
 export interface MrBeatListDTOProps {
@@ -16,6 +18,7 @@ export interface MrBeatListDTOProps {
   score: number;
   createdAt: Date;
   musician: CommonMusicianDTOProps;
+  status: ServiceStatus;
 }
 
 export class MrBeatListDTO {
@@ -55,6 +58,9 @@ export class MrBeatListDTO {
   @Property({ apiProperty: { type: CommonMusicianDTO } })
   musician: CommonMusicianDTO;
 
+  @Property({ apiProperty: { description: '상태', type: 'string', enum: Object.values(SERVICE_STATUS) } })
+  status: ServiceStatus;
+
   constructor(props: MrBeatListDTOProps) {
     this.id = props.id;
     this.name = props.name;
@@ -67,6 +73,7 @@ export class MrBeatListDTO {
     this.createdAt = props.createdAt;
     this.cost = props.cost;
     this.score = props.score;
+    this.status = props.status;
     this.musician = new CommonMusicianDTO(props.musician);
   }
 
@@ -85,6 +92,7 @@ export class MrBeatListDTO {
         data.musicianService.reviews.reduce((acc, cur) => acc + cur.score, 0) / data.musicianService.reviews.length,
       cost: Math.min(...data.licenses.map((license) => license.cost)),
       musician: CommonMusicianDTO.fromFindCommonMusician(data.musicianService.musician),
+      status: getServiceStatus(data),
     });
   }
 
@@ -102,6 +110,7 @@ export class MrBeatListDTO {
       cost: data.cost,
       score: data.score,
       musician: CommonMusicianDTO.fromFindSQLCommonMusician(data),
+      status: getSQLServiceStatus(data),
     });
   }
 }
