@@ -31,6 +31,9 @@ export interface FindSQLMixMastering extends FindSQLCommonMusician {
   cost: number;
   score: number;
   createdAt: Date;
+  isAuthorized: boolean;
+  isSaleStopped: boolean;
+  isPending: boolean;
 }
 
 export type FindMixMasteringList = Prisma.MixMasteringGetPayload<{ include: typeof mixMasteringListInclude }>;

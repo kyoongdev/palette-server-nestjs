@@ -1,6 +1,8 @@
 import { FindMixMasteringList, FindSQLMixMastering } from '@/interface/mix-mastering';
+import { SERVICE_STATUS, ServiceStatus } from '@/interface/service.interface';
 import { MusicDTO, MusicDTOProps } from '@/modules/file/dto';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
+import { getServiceStatus, getSQLServiceStatus } from '@/utils/service';
 import { Property } from '@/utils/swagger';
 
 export interface MixMasteringListDTOProps {
@@ -14,6 +16,7 @@ export interface MixMasteringListDTOProps {
   genreName: string;
   musician: CommonMusicianDTOProps;
   createdAt: Date;
+  status: ServiceStatus;
 }
 
 export class MixMasteringListDTO {
@@ -47,6 +50,9 @@ export class MixMasteringListDTO {
   @Property({ apiProperty: { description: '뮤지션', type: CommonMusicianDTO } })
   musician: CommonMusicianDTO;
 
+  @Property({ apiProperty: { description: '상태', type: 'string', enum: Object.values(SERVICE_STATUS) } })
+  status: ServiceStatus;
+
   constructor(props: MixMasteringListDTOProps) {
     this.id = props.id;
     this.name = props.name;
@@ -58,6 +64,7 @@ export class MixMasteringListDTO {
     this.genreName = props.genreName;
     this.musician = new CommonMusicianDTO(props.musician);
     this.createdAt = props.createdAt;
+    this.status = props.status;
   }
 
   static fromFindSQLMixMastering(data: FindSQLMixMastering) {
@@ -84,6 +91,7 @@ export class MixMasteringListDTO {
       genreName: data.genreNames.split(',').at(-1),
       musician: CommonMusicianDTO.fromFindSQLCommonMusician(data),
       createdAt: data.createdAt,
+      status: getSQLServiceStatus(data),
     });
   }
 
@@ -92,6 +100,7 @@ export class MixMasteringListDTO {
       id: data.id,
       name: data.name,
       cost: Math.min(...data.licenses.map((license) => license.cost)),
+      status: getServiceStatus(data),
       score:
         data.musicianService.reviews.reduce((acc, cur) => acc + cur.score, 0) / data.musicianService.reviews.length,
       thumbnailUrl: data.thumbnail.url,

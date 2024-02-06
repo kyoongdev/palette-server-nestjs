@@ -1,7 +1,9 @@
 import { FindMixMastering } from '@/interface/mix-mastering';
+import { SERVICE_STATUS, ServiceStatus } from '@/interface/service.interface';
 import { ImageDTO, ImageDTOProps, MusicDTO, MusicDTOProps } from '@/modules/file/dto';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
 import { DateDTO, DateDTOProps } from '@/utils';
+import { getServiceStatus } from '@/utils/service';
 import { Property } from '@/utils/swagger';
 
 import { MixMasteringContactDTO, MixMasteringContactDTOProps } from './mix-mastering-contact.dto';
@@ -12,8 +14,7 @@ export interface MixMasteringDTOProps extends DateDTOProps {
   name: string;
   description: string;
   updateDescription: string;
-  isPending: boolean;
-  isAuthorized: boolean;
+  status: ServiceStatus;
   thumbnail: ImageDTOProps;
   beforeMusic: MusicDTOProps;
   afterMusic: MusicDTOProps;
@@ -67,14 +68,16 @@ export class MixMasteringDTO extends DateDTO {
   @Property({ apiProperty: { description: '뮤지션', type: CommonMusicianDTO } })
   musician: CommonMusicianDTO;
 
+  @Property({ apiProperty: { description: '상태', type: 'string', enum: Object.values(SERVICE_STATUS) } })
+  status: ServiceStatus;
+
   constructor(props: MixMasteringDTOProps) {
     super(props);
     this.id = props.id;
     this.name = props.name;
     this.description = props.description;
     this.updateDescription = props.updateDescription;
-    this.isPending = props.isPending;
-    this.isAuthorized = props.isAuthorized;
+    this.status = props.status;
     this.thumbnail = new ImageDTO(props.thumbnail);
     this.beforeMusic = new MusicDTO(props.beforeMusic);
     this.afterMusic = new MusicDTO(props.afterMusic);
@@ -91,8 +94,7 @@ export class MixMasteringDTO extends DateDTO {
       name: data.name,
       description: data.description,
       updateDescription: data.updateDescription,
-      isPending: data.isPending,
-      isAuthorized: data.isAuthorized,
+      status: getServiceStatus(data),
       thumbnail: data.thumbnail,
       beforeMusic: data.musics.find((music) => music.isBefore).music,
       afterMusic: data.musics.find((music) => music.isAfter).music,
