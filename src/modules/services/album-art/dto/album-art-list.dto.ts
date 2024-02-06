@@ -1,5 +1,7 @@
 import { FindAlbumArtList, FindSQLAlbumArt } from '@/interface/album-art.interface';
+import { SERVICE_STATUS, ServiceStatus } from '@/interface/service.interface';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
+import { getServiceStatus, getSQLServiceStatus } from '@/utils/service';
 import { Property } from '@/utils/swagger';
 
 export interface AlbumArtListDTOProps {
@@ -8,6 +10,7 @@ export interface AlbumArtListDTOProps {
   score: number | null;
   thumbnailUrl: string;
   cost: number;
+  status: ServiceStatus;
   createdAt: Date;
   saleType: string;
   musician: CommonMusicianDTOProps;
@@ -29,6 +32,9 @@ export class AlbumArtListDTO {
   @Property({ apiProperty: { description: '가격', type: 'number' } })
   cost: number;
 
+  @Property({ apiProperty: { description: '상태', type: 'string', enum: Object.values(SERVICE_STATUS) } })
+  status: ServiceStatus;
+
   @Property({ apiProperty: { description: '생성일', type: 'string', format: 'date-time' } })
   createdAt: Date;
 
@@ -46,6 +52,7 @@ export class AlbumArtListDTO {
     this.cost = props.cost;
     this.createdAt = props.createdAt;
     this.saleType = props.saleType;
+    this.status = props.status;
     this.musician = new CommonMusicianDTO(props.musician);
   }
 
@@ -58,6 +65,11 @@ export class AlbumArtListDTO {
       cost: data.cost,
       createdAt: data.createdAt,
       saleType: data.saleTypeNames,
+      status: getSQLServiceStatus({
+        isAuthorized: data.isAuthorized,
+        isPending: data.isPending,
+        isSaleStopped: data.isSaleStopped,
+      }),
       musician: CommonMusicianDTO.fromFindSQLCommonMusician(data),
     });
   }
@@ -71,6 +83,7 @@ export class AlbumArtListDTO {
       thumbnailUrl: data.images.find((image) => image.isThumbnail).image.url,
       cost: Math.min(...data.licenses.map((license) => license.cost)),
       createdAt: data.createdAt,
+      status: getServiceStatus(data),
       saleType: data.saleTypes.map((saleType) => saleType.saleType.name).join(', '),
       musician: data.musicianService.musician,
     });

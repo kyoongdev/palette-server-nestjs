@@ -18,6 +18,9 @@ export interface FindSQLAlbumArt extends FindSQLCommonMusician {
   cost: number;
   score: number | null;
   createdAt: Date;
+  isPending: boolean;
+  isAuthorized: boolean;
+  isSaleStopped: boolean;
 }
 
 export type FindAlbumArtList = Prisma.AlbumArtGetPayload<{ include: typeof albumArtListInclude }>;

@@ -1,5 +1,7 @@
 import { FindAlbumArt } from '@/interface/album-art.interface';
+import { SERVICE_STATUS, ServiceStatus } from '@/interface/service.interface';
 import { DateDTO, DateDTOProps } from '@/utils';
+import { getServiceStatus } from '@/utils/service';
 import { Property } from '@/utils/swagger';
 
 import { AlbumArtContactDTO, AlbumArtContactDTOProps } from './album-art-contact.dto';
@@ -12,8 +14,7 @@ export interface AlbumArtDTOProps extends DateDTOProps {
   name: string;
   description: string;
   updateDescription: string;
-  isPending: boolean;
-  isAuthorized: boolean;
+  status: ServiceStatus;
   serviceId: string;
   images: AlbumArtImageDTOProps[];
   saleType: AlbumArtSaleTypeDTOProps;
@@ -34,11 +35,8 @@ export class AlbumArtDTO extends DateDTO {
   @Property({ apiProperty: { description: '수정 설명', type: 'string' } })
   updateDescription: string;
 
-  @Property({ apiProperty: { description: '승인 대기 여부', type: 'boolean' } })
-  isPending: boolean;
-
-  @Property({ apiProperty: { description: '승인 여부', type: 'boolean' } })
-  isAuthorized: boolean;
+  @Property({ apiProperty: { description: '상태', type: 'string', enum: Object.values(SERVICE_STATUS) } })
+  status: ServiceStatus;
 
   @Property({ apiProperty: { description: '서비스 id', type: 'string' } })
   serviceId: string;
@@ -61,8 +59,7 @@ export class AlbumArtDTO extends DateDTO {
     this.name = props.name;
     this.description = props.description;
     this.updateDescription = props.updateDescription;
-    this.isPending = props.isPending;
-    this.isAuthorized = props.isAuthorized;
+    this.status = props.status;
     this.serviceId = props.serviceId;
     this.images = props.images.map((image) => new AlbumArtImageDTO(image));
     this.saleType = new AlbumArtSaleTypeDTO(props.saleType);
@@ -76,8 +73,7 @@ export class AlbumArtDTO extends DateDTO {
       name: data.name,
       description: data.description,
       updateDescription: data.updateDescription,
-      isPending: data.isPending,
-      isAuthorized: data.isAuthorized,
+      status: getServiceStatus(data),
       images: data.images.map((image) => ({
         image: image.image,
         imageId: image.imageId,

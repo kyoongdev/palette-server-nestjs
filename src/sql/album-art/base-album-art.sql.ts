@@ -36,6 +36,8 @@ export class BaseAlbumARtSQL {
     GROUP_CONCAT(DISTINCT saleType.name) as saleTypeNames,
     MIN(albumArtLicense.cost) as cost,
     AVG(serviceReview.score) as score,
+    albumArt.isPending as isPending, albumArt.isAuthorized as isAuthorized,
+    albumArt.isSaleStopped as isSaleStopped,
     musician.id as musicianId, musician.stageName as stageName,
     musician.name as musicianName, musician.groupType as musicianGroupType,
     musician.isPending as musicianIsPending, musician.isAuthorized as musicianIsAuthorized,

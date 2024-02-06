@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { AlbumArt, Artist, MixMastering, MrBeat, Prisma, Recording } from '@prisma/client';
 
 import { CreateAlbumArtDTO, UpdateAlbumArtDTO } from '@/modules/services/album-art/dto';
 import { CreateArtistDTO, UpdateArtistDTO } from '@/modules/services/artist/dto';
@@ -15,12 +15,20 @@ export const SERVICE_TYPE = {
   ALBUM_ART: 'ALBUM_ART',
 };
 
-export type ServiceStatus = 'PENDING';
+export const SERVICE_STATUS = {
+  PENDING: 'PENDING',
+  STOPPED: 'STOPPED',
+  REJECTED: 'REJECTED',
+  ON_SALE: 'ON_SALE',
+};
 
+export type ServiceStatus = keyof typeof SERVICE_STATUS;
 export type ServiceType = keyof typeof SERVICE_TYPE;
 
 export type FindServiceList = Prisma.MusicianServiceGetPayload<{ include: typeof serviceInclude }>;
 export type FindServiceWithDetailList = Prisma.MusicianServiceGetPayload<{ include: typeof serviceWithDetailInclude }>;
+
+export type AllService = Artist | MrBeat | Recording | MixMastering | AlbumArt;
 
 export type ValidateArtist = UpdateArtistDTO | CreateArtistDTO;
 export type ValidateMrBeat = UpdateMrBeatDTO | CreateMrBeatDTO;
