@@ -18,7 +18,7 @@ export class BaseAlbumARtSQL {
     LEFT JOIN AlbumArtImage albumArtImage ON albumArtImage.albumArtId = albumArt.id AND albumArtImage.isThumbnail = 1
     LEFT JOIN Image image ON image.id = albumArtImage.imageId
     LEFT JOIN AlbumArtSaleTypeBridge albumArtSaleTypeBridge ON albumArtSaleTypeBridge.albumArtId = albumArt.id
-    LEFT JOIN SaleType saleType ON saleType.id = albumArtSaleTypeBridge.saleTypeId
+    LEFT JOIN ArtistSaleType saleType ON saleType.id = albumArtSaleTypeBridge.saleTypeId
     LEFT JOIN AlbumArtLicense albumArtLicense ON albumArtLicense.albumArtId = albumArt.id
     LEFT JOIN MusicianService musicianService ON musicianService.id = albumArt.musicianServiceId
     LEFT JOIN ServiceReview serviceReview ON serviceReview.serviceId = musicianService.id

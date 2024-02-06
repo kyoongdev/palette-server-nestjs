@@ -1,6 +1,8 @@
-import { FindRecording, FindRecordingList } from '@/interface/recording.interface';
+import { FindRecording } from '@/interface/recording.interface';
+import { SERVICE_STATUS, ServiceStatus } from '@/interface/service.interface';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
 import { DateDTO, DateDTOProps } from '@/utils';
+import { getServiceStatus } from '@/utils/service';
 import { Property } from '@/utils/swagger';
 
 import { RecordingImageDTO, RecordingImageDTOProps } from './recording-image.dto';
@@ -14,8 +16,7 @@ export interface RecordingDTOProps extends DateDTOProps {
   isEngineerSupported: boolean;
   reservationLink: string;
   description: string;
-  isPending: boolean;
-  isAuthorized: boolean;
+  status: ServiceStatus;
   serviceId: string;
   images: RecordingImageDTOProps[];
   region: RecordingRegionDTOProps;
@@ -42,11 +43,8 @@ export class RecordingDTO extends DateDTO {
   @Property({ apiProperty: { description: '레코딩 설명', type: 'string' } })
   description: string;
 
-  @Property({ apiProperty: { description: '승인 대기 여부', type: 'boolean' } })
-  isPending: boolean;
-
-  @Property({ apiProperty: { description: '승인 여부', type: 'boolean' } })
-  isAuthorized: boolean;
+  @Property({ apiProperty: { description: '상태', type: 'string', enum: Object.values(SERVICE_STATUS) } })
+  status: ServiceStatus;
 
   @Property({ apiProperty: { description: '서비스 id', type: 'string' } })
   serviceId: string;
@@ -71,8 +69,7 @@ export class RecordingDTO extends DateDTO {
     this.isEngineerSupported = props.isEngineerSupported;
     this.reservationLink = props.reservationLink;
     this.description = props.description;
-    this.isPending = props.isPending;
-    this.isAuthorized = props.isAuthorized;
+    this.status = props.status;
     this.serviceId = props.serviceId;
     this.images = props.images.map((image) => new RecordingImageDTO(image));
     this.region = new RecordingRegionDTO(props.region);
@@ -88,8 +85,7 @@ export class RecordingDTO extends DateDTO {
       isEngineerSupported: data.isEngineerSupported,
       reservationLink: data.reservationLink,
       description: data.description,
-      isPending: data.isPending,
-      isAuthorized: data.isAuthorized,
+      status: getServiceStatus(data),
       images: data.images.map((image) => new RecordingImageDTO(image)),
       region: RecordingRegionDTO.fromFindRecordingRegion(data.recordingRegion),
       licenses: data.licenses.map((license) => RecordingLicenseDTO.fromFindRecordingLicense(license)),

@@ -22,7 +22,7 @@ export class AlbumArtSQL extends BaseAlbumARtSQL {
     FROM AlbumArt albumArt
     ${this.getBaseJoin()}
     ${this.getWhere(isAdmin)}
-    GROUP BY albumArt.id, serviceReview.id
+    GROUP BY albumArt.id, serviceReview.id, image.id
     ${this.getOrderBy()}
     LIMIT ${this.paging.page},${this.paging.limit ?? 10}
     `;

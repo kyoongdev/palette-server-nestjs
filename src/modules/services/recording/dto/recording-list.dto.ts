@@ -1,5 +1,7 @@
 import { FindRecordingList, FindSQLRecordingList } from '@/interface/recording.interface';
+import { SERVICE_STATUS, ServiceStatus } from '@/interface/service.interface';
 import { CommonMusicianDTO, CommonMusicianDTOProps } from '@/modules/musician/dto';
+import { getServiceStatus, getSQLServiceStatus } from '@/utils/service';
 import { Property } from '@/utils/swagger';
 
 export interface RecordingListDTOProps {
@@ -12,6 +14,7 @@ export interface RecordingListDTOProps {
   score: number;
   createdAt: Date;
   musician: CommonMusicianDTOProps;
+  status: ServiceStatus;
 }
 
 export class RecordingListDTO {
@@ -42,6 +45,9 @@ export class RecordingListDTO {
   @Property({ apiProperty: { description: '음악가', type: CommonMusicianDTO } })
   musician: CommonMusicianDTO;
 
+  @Property({ apiProperty: { description: '상태', type: 'string', enum: Object.values(SERVICE_STATUS) } })
+  status: ServiceStatus;
+
   constructor(props: RecordingListDTOProps) {
     this.id = props.id;
     this.name = props.name;
@@ -66,6 +72,7 @@ export class RecordingListDTO {
         data.musicianService.reviews.reduce((acc, cur) => acc + cur.score, 0) / data.musicianService.reviews.length,
       createdAt: data.createdAt,
       musician: data.musicianService.musician,
+      status: getServiceStatus(data),
     });
   }
 
@@ -80,6 +87,7 @@ export class RecordingListDTO {
       score: data.score,
       createdAt: data.createdAt,
       musician: CommonMusicianDTO.fromFindSQLCommonMusician(data),
+      status: getSQLServiceStatus(data),
     });
   }
 }

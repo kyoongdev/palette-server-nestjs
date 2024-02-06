@@ -8,7 +8,7 @@ export class FindAlbumArtQuery extends PagingDTO {
   saleTypeId?: string;
 
   @Property({
-    apiProperty: { description: '작품 이름', nullable: true, type: 'string', enum: ['POPULAR'] },
+    apiProperty: { description: '정렬', nullable: true, type: 'string', enum: ['POPULAR'] },
   })
   sort?: FindAlbumArtSort;
 }
