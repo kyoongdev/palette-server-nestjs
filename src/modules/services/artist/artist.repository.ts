@@ -28,6 +28,25 @@ export class ArtistRepository {
     return artist;
   }
 
+  async findArtistByServiceId(id: string) {
+    const service = await this.database.getRepository().musicianService.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        artist: {
+          include: artistDetailInclude,
+        },
+      },
+    });
+
+    if (!service || !service.artist) {
+      throw new CustomException(ARTIST_ERROR_CODE.ARTIST_NOT_FOUND);
+    }
+
+    return service.artist;
+  }
+
   async countArtists(args = {} as Prisma.ArtistCountArgs) {
     return this.database.getRepository().artist.count(args);
   }

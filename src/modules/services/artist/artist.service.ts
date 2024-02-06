@@ -88,6 +88,9 @@ export class ArtistService {
     }
 
     if (data.images) {
+      (await Promise.all(data.images.map((image) => this.fileRepository.findImage(image.imageId)))).map(
+        (image) => image.id
+      );
       const isThumbnailExist = data.images.some((image) => image.isThumbnail);
 
       if (!isThumbnailExist) throw new CustomException(ARTIST_ERROR_CODE.NO_THUMBNAIL);

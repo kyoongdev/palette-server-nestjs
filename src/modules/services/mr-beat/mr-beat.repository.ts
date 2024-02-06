@@ -39,7 +39,7 @@ export class MrBeatRepository {
       },
     });
 
-    if (!service) {
+    if (!service || !service.mrBeat) {
       throw new CustomException(MR_BEAT_ERROR_CODE.MR_BEAT_NOT_FOUND);
     }
     return service.mrBeat;
