@@ -11,18 +11,19 @@ import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { AdminMusicianCountDTO } from './dto/musician-count.dto';
 import { AdminMusiciansDTO } from './dto/musicians.dto';
+import { AdminFindMusicianQuery } from './dto/query';
 
 @Injectable()
 export class AdminMusicianService {
   constructor(private readonly musicianRepository: MusicianRepository) {}
 
-  async findMusicians(paging: PagingDTO, args = {} as Prisma.MusicianFindManyArgs) {
+  async findMusicians(paging: PagingDTO, query: AdminFindMusicianQuery) {
     const { skip, take } = paging.getSkipTake();
     const count = await this.musicianRepository.countMusicians({
-      where: args.where,
+      where: query.toFindManyArgs().where,
     });
     const musicians = await this.musicianRepository.findMusicians({
-      where: args.where,
+      ...query.toFindManyArgs(),
       skip,
       take,
     });

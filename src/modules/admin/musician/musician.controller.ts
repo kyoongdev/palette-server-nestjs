@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { Paging } from '@/common/decorator';
@@ -11,6 +11,7 @@ import { Auth, ResponseApi } from '@/utils/swagger';
 
 import { AdminMusicianCountDTO } from './dto/musician-count.dto';
 import { AdminMusiciansDTO } from './dto/musicians.dto';
+import { AdminFindMusicianQuery } from './dto/query';
 import { AdminMusicianService } from './musician.service';
 
 @ApiTags('[관리자] 뮤지션')
@@ -21,15 +22,12 @@ export class AdminMusicianController {
 
   @Get('')
   @ApiOperation({ summary: '뮤지션 목록 조회 API', description: '뮤지션 목록 조회' })
-  @ApiQuery({
-    type: PagingDTO,
-  })
   @ResponseApi({
     type: AdminMusiciansDTO,
     isPaging: true,
   })
-  async findMusicians(@Paging() paging: PagingDTO) {
-    return await this.musicianService.findMusicians(paging);
+  async findMusicians(@Paging() paging: PagingDTO, @Query() query: AdminFindMusicianQuery) {
+    return await this.musicianService.findMusicians(paging, query);
   }
 
   @Get('count')
