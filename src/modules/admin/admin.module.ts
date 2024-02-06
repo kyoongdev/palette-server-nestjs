@@ -6,8 +6,9 @@ import { AdminService } from './admin.service';
 import { AdminAuthModule } from './auth/auth.module';
 import { AdminMusicianModule } from './musician/musician.module';
 import { AdminServiceModule } from './service/service.module';
+import { AdminUserModule } from './user/user.module';
 
-export const AdminModules = [AdminAuthModule, AdminMusicianModule, AdminServiceModule];
+export const AdminModules = [AdminAuthModule, AdminMusicianModule, AdminServiceModule, AdminUserModule];
 
 @Module({
   providers: [AdminService, AdminRepository],

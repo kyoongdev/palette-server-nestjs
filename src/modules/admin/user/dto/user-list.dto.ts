@@ -2,7 +2,7 @@ import { Role, RoleType } from '@/interface/token.interface';
 import { FindCommonUser } from '@/interface/user.interface';
 import { Property } from '@/utils/swagger';
 
-export interface AdminUserDTOProps {
+export interface AdminUserListDTOProps {
   id: string;
   nickname: string;
   name: string;
@@ -10,7 +10,7 @@ export interface AdminUserDTOProps {
   createdAt: Date;
 }
 
-export class AdminUserDTO {
+export class AdminUserListDTO {
   @Property({ apiProperty: { type: 'string', description: 'id' } })
   id: string;
 
@@ -32,7 +32,7 @@ export class AdminUserDTO {
   @Property({ apiProperty: { type: 'string', format: 'date-time', description: '가입일' } })
   createdAt: Date;
 
-  constructor(props: AdminUserDTOProps) {
+  constructor(props: AdminUserListDTOProps) {
     this.id = props.id;
     this.nickname = props.nickname;
     this.name = props.name;
@@ -41,7 +41,7 @@ export class AdminUserDTO {
   }
 
   static fromFindCommonUser(user: FindCommonUser) {
-    return new AdminUserDTO({
+    return new AdminUserListDTO({
       id: user.id,
       nickname: user.nickname,
       name: user.name,
