@@ -225,8 +225,8 @@ export class AdminServiceController {
   @ResponseApi({
     type: EmptyResponseDTO,
   })
-  async approveService(@Param('serviceId') serviceId: string, @Body() body: ApproveServiceDTO) {
-    await this.serviceService.approveService(serviceId, body);
+  async approveService(@Param('serviceId') serviceId: string) {
+    await this.serviceService.approveService(serviceId);
   }
 
   @Post(':serviceId/reject')
@@ -234,7 +234,7 @@ export class AdminServiceController {
   @ResponseApi({
     type: EmptyResponseDTO,
   })
-  async rejectService(@Param('serviceId') serviceId: string, @Body() body: RejectServiceDTO) {
-    await this.serviceService.rejectService(serviceId, body);
+  async rejectService(@Param('serviceId') serviceId: string) {
+    await this.serviceService.rejectService(serviceId);
   }
 }

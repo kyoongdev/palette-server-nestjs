@@ -96,32 +96,34 @@ export class AdminServiceService {
   }
 
   @Transactional()
-  async approveService(serviceId: string, data: ApproveServiceDTO) {
-    if (data.serviceType === 'ARTIST') {
+  async approveService(serviceId: string) {
+    const service = await this.serviceRepository.findService(serviceId);
+
+    if (service.artist) {
       await this.artistRepository.findArtist(serviceId);
       await this.artistRepository.updateArtist(serviceId, {
         isAuthorized: true,
         isPending: false,
       });
-    } else if (data.serviceType === 'MR_BEAT') {
+    } else if (service.mrBeat) {
       await this.mrBeatRepository.findMrBeat(serviceId);
       await this.mrBeatRepository.updateMrBeat(serviceId, {
         isAuthorized: true,
         isPending: false,
       });
-    } else if (data.serviceType === 'RECORDING') {
+    } else if (service.recording) {
       await this.recordingRepository.findRecording(serviceId);
       await this.recordingRepository.updateRecording(serviceId, {
         isAuthorized: true,
         isPending: false,
       });
-    } else if (data.serviceType === 'ALBUM_ART') {
+    } else if (service.albumArt) {
       await this.albumArtRepository.findAlbumArt(serviceId);
       await this.albumArtRepository.updateAlbumArt(serviceId, {
         isAuthorized: true,
         isPending: false,
       });
-    } else if (data.serviceType === 'MIX_MASTERING') {
+    } else if (service.mixMastering) {
       await this.mixMasteringRepository.findMixMastering(serviceId);
       await this.mixMasteringRepository.updateMixMastering(serviceId, {
         isAuthorized: true,
@@ -131,33 +133,33 @@ export class AdminServiceService {
   }
 
   @Transactional()
-  async rejectService(serviceId: string, data: RejectServiceDTO) {
-    if (data.serviceType === 'ARTIST') {
+  async rejectService(serviceId: string) {
+    const service = await this.serviceRepository.findService(serviceId);
+    if (service.artist) {
       await this.artistRepository.findArtist(serviceId);
       await this.artistRepository.updateArtist(serviceId, {
         isAuthorized: false,
         isPending: false,
       });
-    } else if (data.serviceType === 'MR_BEAT') {
+    } else if (service.mrBeat) {
       await this.mrBeatRepository.findMrBeat(serviceId);
       await this.mrBeatRepository.updateMrBeat(serviceId, {
         isAuthorized: false,
         isPending: false,
       });
-    } else if (data.serviceType === 'RECORDING') {
+    } else if (service.recording) {
       await this.recordingRepository.findRecording(serviceId);
       await this.recordingRepository.updateRecording(serviceId, {
         isAuthorized: false,
         isPending: false,
       });
-    }
-    if (data.serviceType === 'ALBUM_ART') {
+    } else if (service.albumArt) {
       await this.albumArtRepository.findAlbumArt(serviceId);
       await this.albumArtRepository.updateAlbumArt(serviceId, {
         isAuthorized: false,
         isPending: false,
       });
-    } else if (data.serviceType === 'MIX_MASTERING') {
+    } else if (service.mixMastering) {
       await this.mixMasteringRepository.findMixMastering(serviceId);
       await this.mixMasteringRepository.updateMixMastering(serviceId, {
         isAuthorized: false,
