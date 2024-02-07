@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { AnnouncementRepository } from '@/modules/announcement/announcement.repository';
 import { AnnouncementDTO, CreateAnnouncementDTO, UpdateAnnouncementDTO } from '@/modules/announcement/dto';
+import { Transactional } from '@/utils/aop/transaction/transaction';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 @Injectable()
@@ -30,16 +31,19 @@ export class AdminAnnouncementService {
     );
   }
 
+  @Transactional()
   async createAnnouncement(data: CreateAnnouncementDTO) {
     const announcement = await this.announcementRepository.createAnnouncement(data);
     return announcement.id;
   }
 
+  @Transactional()
   async updateAnnouncement(id: string, data: UpdateAnnouncementDTO) {
     await this.announcementRepository.findAnnouncement(id);
     await this.announcementRepository.updateAnnouncement(id, data);
   }
 
+  @Transactional()
   async deleteAnnouncement(id: string) {
     await this.announcementRepository.findAnnouncement(id);
     await this.announcementRepository.deleteAnnouncement(id);

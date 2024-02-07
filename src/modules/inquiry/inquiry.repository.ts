@@ -17,6 +17,7 @@ export class InquiryRepository {
       where: {
         id,
       },
+      include: inquiryInclude,
     });
 
     if (!inquiry) {
