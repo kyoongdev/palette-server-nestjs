@@ -11,12 +11,20 @@ import { PagingDTO } from '@/utils/pagination';
 import { Auth, ResponseApi } from '@/utils/swagger';
 
 import { MusicianServiceListDTO } from './dto';
+import { Top5DTO } from './dto/top-5.dto';
 import { ServiceService } from './service.service';
 
 @ApiTags('서비스')
 @Controller()
 export class ServiceController {
   constructor(private readonly serviceService: ServiceService) {}
+
+  @Get('top5')
+  @ApiOperation({ summary: 'Top 5 서비스 조회 API', description: 'Top 5 서비스 조회' })
+  @ResponseApi({ type: Top5DTO })
+  async findTop5() {
+    return await this.serviceService.findTop5Services();
+  }
 
   @Get('sale-services')
   @Auth([JwtAuthGuard, RoleGuard('MUSICIAN')])

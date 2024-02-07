@@ -8,11 +8,17 @@ import { findPendingServicesWhere, findServicesWhere } from '@/utils/constants/w
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { AlbumArtRepository } from './album-art/album-art.repository';
+import { AlbumArtListDTO } from './album-art/dto';
 import { ArtistRepository } from './artist/artist.repository';
+import { ArtistListDTO } from './artist/dto';
 import { MusicianServiceListDTO } from './dto';
+import { Top5DTO } from './dto/top-5.dto';
 import { SERVICE_ERROR_CODE } from './exception/error-code';
+import { MixMasteringListDTO } from './mix-mastering/dto';
 import { MixMasteringRepository } from './mix-mastering/mix-mastering.repository';
+import { MrBeatListDTO } from './mr-beat/dto/mr-beat-list.dto';
 import { MrBeatRepository } from './mr-beat/mr-beat.repository';
+import { RecordingListDTO } from './recording/dto';
 import { RecordingRepository } from './recording/recording.repository';
 import { ServiceRepository } from './service.repository';
 
@@ -26,6 +32,110 @@ export class ServiceService {
     private readonly recordingRepository: RecordingRepository,
     private readonly mrBeatRepository: MrBeatRepository
   ) {}
+
+  async findTop5Services() {
+    const firstDay = new Date();
+    firstDay.setDate(1);
+    firstDay.setHours(0, 0, 0, 0);
+
+    const lastDay = new Date();
+    lastDay.setMonth(lastDay.getMonth() + 1);
+    lastDay.setDate(1);
+    lastDay.setHours(0, 0, 0, 0);
+
+    const artists = await this.artistRepository.findArtists({
+      where: {
+        musicianService: {
+          clicks: {
+            some: {
+              createdAt: {
+                gte: firstDay,
+                lt: lastDay,
+              },
+            },
+          },
+        },
+      },
+      skip: 0,
+      take: 5,
+    });
+
+    const albumArts = await this.albumArtRepository.findAlbumArts({
+      where: {
+        musicianService: {
+          clicks: {
+            some: {
+              createdAt: {
+                gte: firstDay,
+                lt: lastDay,
+              },
+            },
+          },
+        },
+      },
+      skip: 0,
+      take: 5,
+    });
+
+    const mixMasterings = await this.mixMasteringRepository.findMixMasterings({
+      where: {
+        musicianService: {
+          clicks: {
+            some: {
+              createdAt: {
+                gte: firstDay,
+                lt: lastDay,
+              },
+            },
+          },
+        },
+      },
+      skip: 0,
+      take: 5,
+    });
+
+    const mrBeats = await this.mrBeatRepository.findMrBeats({
+      where: {
+        musicianService: {
+          clicks: {
+            some: {
+              createdAt: {
+                gte: firstDay,
+                lt: lastDay,
+              },
+            },
+          },
+        },
+      },
+      skip: 0,
+      take: 5,
+    });
+
+    const recordings = await this.recordingRepository.findRecordings({
+      where: {
+        musicianService: {
+          clicks: {
+            some: {
+              createdAt: {
+                gte: firstDay,
+                lt: lastDay,
+              },
+            },
+          },
+        },
+      },
+      skip: 0,
+      take: 5,
+    });
+
+    return new Top5DTO({
+      albumArts: albumArts.map(AlbumArtListDTO.fromFindAlbumArtList),
+      artists: artists.map(ArtistListDTO.fromFindArtistList),
+      mixMasterings: mixMasterings.map(MixMasteringListDTO.fromFindMixMasteringList),
+      mrBeats: mrBeats.map(MrBeatListDTO.fromFindMrBeatList),
+      recordings: recordings.map(RecordingListDTO.fromFindRecordingList),
+    });
+  }
 
   async findSaleServices(musicianId: string, paging: PagingDTO) {
     const count = await this.serviceRepository.countService({
@@ -195,6 +305,7 @@ export class ServiceService {
 
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
 
     await this.serviceRepository.updateService(serviceId, {
       clicks: {
