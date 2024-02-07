@@ -187,4 +187,36 @@ export class ServiceService {
       await this.recordingRepository.deleteRecording(service.recording.id);
     }
   }
+
+  @Transactional()
+  async clickService(serviceId: string, userId: string) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    await this.serviceRepository.updateService(serviceId, {
+      clicks: {
+        upsert: {
+          where: {
+            userId_musicianServiceId: {
+              userId,
+              musicianServiceId: serviceId,
+            },
+            createdAt: {
+              gte: today,
+              lt: tomorrow,
+            },
+          },
+          update: {
+            createdAt: new Date(),
+          },
+          create: {
+            userId,
+          },
+        },
+      },
+    });
+  }
 }

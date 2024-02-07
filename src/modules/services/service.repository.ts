@@ -43,4 +43,13 @@ export class ServiceRepository {
 
     return services;
   }
+
+  async updateService(id: string, data: Prisma.MusicianServiceUpdateInput) {
+    await this.database.getRepository().musicianService.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
 }

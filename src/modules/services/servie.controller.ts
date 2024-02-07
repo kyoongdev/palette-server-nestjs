@@ -5,7 +5,7 @@ import { Paging } from '@/common/decorator';
 import { ReqUser } from '@/common/decorator/user.decorator';
 import { JwtAuthGuard } from '@/common/guards/jwt.guard';
 import { RoleGuard } from '@/common/guards/role.guard';
-import { RequestMusician } from '@/interface/token.interface';
+import { RequestMusician, RequestUser } from '@/interface/token.interface';
 import { EmptyResponseDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
 import { Auth, ResponseApi } from '@/utils/swagger';
@@ -79,5 +79,18 @@ export class ServiceController {
   )
   async deleteService(@ReqUser() user: RequestMusician, @Param('serviceId') serviceId: string) {
     await this.serviceService.deleteService(serviceId, user.musician.id);
+  }
+
+  @Post(':serviceId/click')
+  @Auth([JwtAuthGuard, RoleGuard('USER')])
+  @ApiOperation({ summary: '서비스 클릭 API ', description: '서비스 클릭' })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
+  async clickService(@ReqUser() user: RequestUser, @Param('serviceId') serviceId: string) {
+    await this.serviceService.clickService(serviceId, user.id);
   }
 }

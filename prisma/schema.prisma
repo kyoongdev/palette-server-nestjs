@@ -105,6 +105,8 @@ model MuscianServiceClicked {
   musicianServiceId String
   musicianService   MusicianService @relation(fields: [musicianServiceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
+  createdAt DateTime @default(now())
+
   @@id([userId, musicianServiceId])
 }
 
