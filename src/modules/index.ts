@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ContactModule } from './contact/contact.module';
 import { FileModule } from './file/file.module';
 import { GenreModule } from './genre/genre.module';
+import { InquiryModule } from './inquiry/inquiry.module';
 import { LicenseModule } from './license/license.module';
 import { MoodModule } from './mood/mood.module';
 import { PaymentModule } from './payment/payment.module';
@@ -26,6 +27,7 @@ export const Modules = [
   ContactModule,
   SaleTypeModule,
   AnnouncementModule,
+  InquiryModule,
   AOPModule,
 ];
 
