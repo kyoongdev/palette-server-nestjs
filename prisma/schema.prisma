@@ -35,6 +35,7 @@ model User {
   social         UserSocial?
   musician       Musician?
   serviceReviews ServiceReview[]
+  clicks         MuscianServiceClicked[]
 }
 
 model UserSocial {
@@ -95,6 +96,16 @@ model MusicianService {
   createdAt DateTime @default(now())
 
   reviews ServiceReview[]
+  clicks  MuscianServiceClicked[]
+}
+
+model MuscianServiceClicked {
+  userId            String
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  musicianServiceId String
+  musicianService   MusicianService @relation(fields: [musicianServiceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([userId, musicianServiceId])
 }
 
 model ServiceReview {

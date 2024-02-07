@@ -222,18 +222,24 @@ export class AdminServiceController {
 
   @Post(':serviceId/approve')
   @ApiOperation({ summary: '서비스 승인 API', description: '서비스 승인' })
-  @ResponseApi({
-    type: EmptyResponseDTO,
-  })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
   async approveService(@Param('serviceId') serviceId: string) {
     await this.serviceService.approveService(serviceId);
   }
 
   @Post(':serviceId/reject')
   @ApiOperation({ summary: '서비스 반려 API', description: '서비스 반려' })
-  @ResponseApi({
-    type: EmptyResponseDTO,
-  })
+  @ResponseApi(
+    {
+      type: EmptyResponseDTO,
+    },
+    204
+  )
   async rejectService(@Param('serviceId') serviceId: string) {
     await this.serviceService.rejectService(serviceId);
   }
