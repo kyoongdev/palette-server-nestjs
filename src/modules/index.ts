@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { AOPModule } from '@/utils/aop/aop.module';
 
+import { AnnouncementModule } from './announcement/announcement.module';
 import { AuthModule } from './auth/auth.module';
 import { ContactModule } from './contact/contact.module';
 import { FileModule } from './file/file.module';
@@ -24,6 +25,7 @@ export const Modules = [
   LicenseModule,
   ContactModule,
   SaleTypeModule,
+  AnnouncementModule,
   AOPModule,
 ];
 
