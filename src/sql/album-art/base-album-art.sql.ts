@@ -6,7 +6,7 @@ export interface BaseAlbumArtSQLProps {
   paging: PagingDTO;
 }
 
-export class BaseAlbumARtSQL {
+export class BaseAlbumArtSQL {
   paging: PagingDTO;
 
   constructor(props: BaseAlbumArtSQLProps) {

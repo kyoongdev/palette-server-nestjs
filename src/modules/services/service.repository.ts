@@ -52,4 +52,8 @@ export class ServiceRepository {
       data,
     });
   }
+
+  async checkServiceClicked(args = {} as Prisma.MusicianServiceClickedFindFirstArgs) {
+    return await this.database.getRepository().musicianServiceClicked.findFirst(args);
+  }
 }

@@ -65,11 +65,12 @@ export class AlbumArtRepository {
     return count;
   }
 
-  async findAlbumArtsWithSQL(sql: Prisma.Sql) {
-    const data = await this.database.getRepository().$queryRaw<FindSQLAlbumArt[]>(sql);
+  async findAlbumArtsWithSQL<T = FindSQLAlbumArt>(sql: Prisma.Sql) {
+    const data = await this.database.getRepository().$queryRaw<T[]>(sql);
     const count: {
       'FOUND_ROWS()': number;
     }[] = await this.database.getRepository().$queryRaw(Prisma.sql`SELECT FOUND_ROWS()`);
+    const countALL = await this.database.getRepository().albumArt.count();
 
     return {
       data,

@@ -62,8 +62,8 @@ export class RecordingRepository {
     return count;
   }
 
-  async findRecordingsWithSQL(sql: Prisma.Sql) {
-    const data = await this.database.getRepository().$queryRaw<FindSQLRecordingList[]>(sql);
+  async findRecordingsWithSQL<T = FindSQLRecordingList>(sql: Prisma.Sql) {
+    const data = await this.database.getRepository().$queryRaw<T[]>(sql);
     const count: {
       'FOUND_ROWS()': number;
     }[] = await this.database.getRepository().$queryRaw(Prisma.sql`SELECT FOUND_ROWS()`);

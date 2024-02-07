@@ -63,6 +63,17 @@ CREATE TABLE `Musician` (
 CREATE TABLE `MusicianService` (
     `id` VARCHAR(191) NOT NULL,
     `musicianId` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `MusicianServiceClicked` (
+    `id` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
+    `musicianServiceId` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -132,10 +143,9 @@ CREATE TABLE `MrBeat` (
     `groupType` TINYINT NOT NULL,
     `thumbnailId` VARCHAR(191) NOT NULL,
     `musicId` VARCHAR(191) NOT NULL,
-    `genreId` VARCHAR(191) NOT NULL,
-    `moodId` VARCHAR(191) NOT NULL,
     `isPending` BOOLEAN NOT NULL DEFAULT true,
     `isAuthorized` BOOLEAN NOT NULL DEFAULT false,
+    `isSaleStopped` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `deletedAt` DATETIME(3) NULL,
@@ -158,7 +168,7 @@ CREATE TABLE `MrBeatContact` (
 CREATE TABLE `MrBeatLicense` (
     `id` VARCHAR(191) NOT NULL,
     `usePeriod` VARCHAR(191) NULL,
-    `cost` SMALLINT NOT NULL,
+    `cost` MEDIUMINT UNSIGNED NOT NULL,
     `isNewSongWithVoiceAllowed` BOOLEAN NOT NULL,
     `isProfitActivityAllowed` BOOLEAN NOT NULL,
     `isPerformanceActivityAllowed` BOOLEAN NOT NULL,
@@ -190,6 +200,7 @@ CREATE TABLE `Artist` (
     `updateDescription` MEDIUMTEXT NOT NULL,
     `isPending` BOOLEAN NOT NULL DEFAULT true,
     `isAuthorized` BOOLEAN NOT NULL DEFAULT false,
+    `isSaleStopped` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `deletedAt` DATETIME(3) NULL,
@@ -202,7 +213,7 @@ CREATE TABLE `Artist` (
 -- CreateTable
 CREATE TABLE `ArtistLicense` (
     `id` VARCHAR(191) NOT NULL,
-    `cost` SMALLINT NOT NULL,
+    `cost` MEDIUMINT UNSIGNED NOT NULL,
     `updateCount` TINYINT NOT NULL,
     `workPeriod` SMALLINT NOT NULL,
     `draftCount` SMALLINT NOT NULL,
@@ -271,6 +282,7 @@ CREATE TABLE `Recording` (
     `description` MEDIUMTEXT NOT NULL,
     `isPending` BOOLEAN NOT NULL DEFAULT true,
     `isAuthorized` BOOLEAN NOT NULL DEFAULT false,
+    `isSaleStopped` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `deletedAt` DATETIME(3) NULL,
@@ -285,7 +297,7 @@ CREATE TABLE `Recording` (
 CREATE TABLE `RecordingLicense` (
     `id` VARCHAR(191) NOT NULL,
     `useTime` TINYINT NOT NULL,
-    `cost` SMALLINT NOT NULL,
+    `cost` MEDIUMINT UNSIGNED NOT NULL,
     `recordingId` VARCHAR(191) NOT NULL,
     `licenseId` VARCHAR(191) NOT NULL,
 
@@ -337,6 +349,7 @@ CREATE TABLE `MixMastering` (
     `updateDescription` MEDIUMTEXT NOT NULL,
     `isPending` BOOLEAN NOT NULL DEFAULT true,
     `isAuthorized` BOOLEAN NOT NULL DEFAULT false,
+    `isSaleStopped` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `deletedAt` DATETIME(3) NULL,
@@ -350,7 +363,7 @@ CREATE TABLE `MixMastering` (
 -- CreateTable
 CREATE TABLE `MixMasteringLicense` (
     `id` VARCHAR(191) NOT NULL,
-    `cost` SMALLINT NOT NULL,
+    `cost` MEDIUMINT UNSIGNED NOT NULL,
     `updateCount` TINYINT NOT NULL,
     `workPeriod` SMALLINT NOT NULL,
     `draftCount` SMALLINT NOT NULL,
@@ -400,6 +413,7 @@ CREATE TABLE `AlbumArt` (
     `updateDescription` MEDIUMTEXT NOT NULL,
     `isPending` BOOLEAN NOT NULL DEFAULT true,
     `isAuthorized` BOOLEAN NOT NULL DEFAULT false,
+    `isSaleStopped` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `deletedAt` DATETIME(3) NULL,
@@ -412,7 +426,7 @@ CREATE TABLE `AlbumArt` (
 -- CreateTable
 CREATE TABLE `AlbumArtLicense` (
     `id` VARCHAR(191) NOT NULL,
-    `cost` SMALLINT NOT NULL,
+    `cost` MEDIUMINT UNSIGNED NOT NULL,
     `updateCount` TINYINT NOT NULL,
     `workPeriod` SMALLINT NOT NULL,
     `draftCount` SMALLINT NOT NULL,
@@ -503,12 +517,28 @@ CREATE TABLE `Contact` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `MrBeatGenre` (
+    `mrBeatId` VARCHAR(191) NOT NULL,
+    `genreId` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`mrBeatId`, `genreId`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Genre` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(20) NOT NULL,
     `order` TINYINT NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `MrBeatMood` (
+    `mrBeatId` VARCHAR(191) NOT NULL,
+    `moodId` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`mrBeatId`, `moodId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -541,7 +571,13 @@ ALTER TABLE `Musician` ADD CONSTRAINT `Musician_evidenceFileId_fkey` FOREIGN KEY
 ALTER TABLE `Musician` ADD CONSTRAINT `Musician_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MusicianService` ADD CONSTRAINT `MusicianService_musicianId_fkey` FOREIGN KEY (`musicianId`) REFERENCES `Musician`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MusicianService` ADD CONSTRAINT `MusicianService_musicianId_fkey` FOREIGN KEY (`musicianId`) REFERENCES `Musician`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `MusicianServiceClicked` ADD CONSTRAINT `MusicianServiceClicked_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `MusicianServiceClicked` ADD CONSTRAINT `MusicianServiceClicked_musicianServiceId_fkey` FOREIGN KEY (`musicianServiceId`) REFERENCES `MusicianService`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ServiceReview` ADD CONSTRAINT `ServiceReview_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -574,58 +610,52 @@ ALTER TABLE `MrBeat` ADD CONSTRAINT `MrBeat_thumbnailId_fkey` FOREIGN KEY (`thum
 ALTER TABLE `MrBeat` ADD CONSTRAINT `MrBeat_musicId_fkey` FOREIGN KEY (`musicId`) REFERENCES `Music`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MrBeat` ADD CONSTRAINT `MrBeat_genreId_fkey` FOREIGN KEY (`genreId`) REFERENCES `Genre`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `MrBeat` ADD CONSTRAINT `MrBeat_moodId_fkey` FOREIGN KEY (`moodId`) REFERENCES `Mood`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE `MrBeat` ADD CONSTRAINT `MrBeat_musicianServiceId_fkey` FOREIGN KEY (`musicianServiceId`) REFERENCES `MusicianService`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MrBeatContact` ADD CONSTRAINT `MrBeatContact_mrBeatId_fkey` FOREIGN KEY (`mrBeatId`) REFERENCES `MrBeat`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MrBeatContact` ADD CONSTRAINT `MrBeatContact_mrBeatId_fkey` FOREIGN KEY (`mrBeatId`) REFERENCES `MrBeat`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MrBeatContact` ADD CONSTRAINT `MrBeatContact_contactId_fkey` FOREIGN KEY (`contactId`) REFERENCES `Contact`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MrBeatContact` ADD CONSTRAINT `MrBeatContact_contactId_fkey` FOREIGN KEY (`contactId`) REFERENCES `Contact`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MrBeatLicense` ADD CONSTRAINT `MrBeatLicense_licenseId_fkey` FOREIGN KEY (`licenseId`) REFERENCES `License`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MrBeatLicense` ADD CONSTRAINT `MrBeatLicense_licenseId_fkey` FOREIGN KEY (`licenseId`) REFERENCES `License`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MrBeatLicense` ADD CONSTRAINT `MrBeatLicense_mrBeatId_fkey` FOREIGN KEY (`mrBeatId`) REFERENCES `MrBeat`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MrBeatLicense` ADD CONSTRAINT `MrBeatLicense_mrBeatId_fkey` FOREIGN KEY (`mrBeatId`) REFERENCES `MrBeat`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MrBeatLicenseProvidedFile` ADD CONSTRAINT `MrBeatLicenseProvidedFile_mrBeatLicenseId_fkey` FOREIGN KEY (`mrBeatLicenseId`) REFERENCES `MrBeatLicense`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MrBeatLicenseProvidedFile` ADD CONSTRAINT `MrBeatLicenseProvidedFile_mrBeatLicenseId_fkey` FOREIGN KEY (`mrBeatLicenseId`) REFERENCES `MrBeatLicense`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Artist` ADD CONSTRAINT `Artist_musicianServiceId_fkey` FOREIGN KEY (`musicianServiceId`) REFERENCES `MusicianService`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ArtistLicense` ADD CONSTRAINT `ArtistLicense_licenseId_fkey` FOREIGN KEY (`licenseId`) REFERENCES `License`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ArtistLicense` ADD CONSTRAINT `ArtistLicense_licenseId_fkey` FOREIGN KEY (`licenseId`) REFERENCES `License`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ArtistLicense` ADD CONSTRAINT `ArtistLicense_artistId_fkey` FOREIGN KEY (`artistId`) REFERENCES `Artist`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ArtistLicense` ADD CONSTRAINT `ArtistLicense_artistId_fkey` FOREIGN KEY (`artistId`) REFERENCES `Artist`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ArtistLicenseProvidedFile` ADD CONSTRAINT `ArtistLicenseProvidedFile_artistLicenseId_fkey` FOREIGN KEY (`artistLicenseId`) REFERENCES `ArtistLicense`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ArtistLicenseProvidedFile` ADD CONSTRAINT `ArtistLicenseProvidedFile_artistLicenseId_fkey` FOREIGN KEY (`artistLicenseId`) REFERENCES `ArtistLicense`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ArtistContact` ADD CONSTRAINT `ArtistContact_artistId_fkey` FOREIGN KEY (`artistId`) REFERENCES `Artist`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ArtistContact` ADD CONSTRAINT `ArtistContact_artistId_fkey` FOREIGN KEY (`artistId`) REFERENCES `Artist`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ArtistContact` ADD CONSTRAINT `ArtistContact_contactId_fkey` FOREIGN KEY (`contactId`) REFERENCES `Contact`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ArtistContact` ADD CONSTRAINT `ArtistContact_contactId_fkey` FOREIGN KEY (`contactId`) REFERENCES `Contact`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ArtistSaleTypeBridge` ADD CONSTRAINT `ArtistSaleTypeBridge_artistId_fkey` FOREIGN KEY (`artistId`) REFERENCES `Artist`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ArtistSaleTypeBridge` ADD CONSTRAINT `ArtistSaleTypeBridge_artistId_fkey` FOREIGN KEY (`artistId`) REFERENCES `Artist`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ArtistSaleTypeBridge` ADD CONSTRAINT `ArtistSaleTypeBridge_saleTypeId_fkey` FOREIGN KEY (`saleTypeId`) REFERENCES `ArtistSaleType`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ArtistSaleTypeBridge` ADD CONSTRAINT `ArtistSaleTypeBridge_saleTypeId_fkey` FOREIGN KEY (`saleTypeId`) REFERENCES `ArtistSaleType`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ArtistImage` ADD CONSTRAINT `ArtistImage_artistId_fkey` FOREIGN KEY (`artistId`) REFERENCES `Artist`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ArtistImage` ADD CONSTRAINT `ArtistImage_artistId_fkey` FOREIGN KEY (`artistId`) REFERENCES `Artist`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ArtistImage` ADD CONSTRAINT `ArtistImage_imageId_fkey` FOREIGN KEY (`imageId`) REFERENCES `Image`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ArtistImage` ADD CONSTRAINT `ArtistImage_imageId_fkey` FOREIGN KEY (`imageId`) REFERENCES `Image`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Recording` ADD CONSTRAINT `Recording_recordingRegionId_fkey` FOREIGN KEY (`recordingRegionId`) REFERENCES `RecordingRegion`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -634,22 +664,22 @@ ALTER TABLE `Recording` ADD CONSTRAINT `Recording_recordingRegionId_fkey` FOREIG
 ALTER TABLE `Recording` ADD CONSTRAINT `Recording_musicianServiceId_fkey` FOREIGN KEY (`musicianServiceId`) REFERENCES `MusicianService`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `RecordingLicense` ADD CONSTRAINT `RecordingLicense_recordingId_fkey` FOREIGN KEY (`recordingId`) REFERENCES `Recording`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `RecordingLicense` ADD CONSTRAINT `RecordingLicense_recordingId_fkey` FOREIGN KEY (`recordingId`) REFERENCES `Recording`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `RecordingLicense` ADD CONSTRAINT `RecordingLicense_licenseId_fkey` FOREIGN KEY (`licenseId`) REFERENCES `License`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `RecordingLicense` ADD CONSTRAINT `RecordingLicense_licenseId_fkey` FOREIGN KEY (`licenseId`) REFERENCES `License`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `RecordingRegion` ADD CONSTRAINT `RecordingRegion_regionLargeGroupId_fkey` FOREIGN KEY (`regionLargeGroupId`) REFERENCES `RegionLargeGroup`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `RecordingRegion` ADD CONSTRAINT `RecordingRegion_regionLargeGroupId_fkey` FOREIGN KEY (`regionLargeGroupId`) REFERENCES `RegionLargeGroup`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `RecordingRegion` ADD CONSTRAINT `RecordingRegion_regionSmallGroupId_fkey` FOREIGN KEY (`regionSmallGroupId`) REFERENCES `RegionSmallGroup`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `RecordingRegion` ADD CONSTRAINT `RecordingRegion_regionSmallGroupId_fkey` FOREIGN KEY (`regionSmallGroupId`) REFERENCES `RegionSmallGroup`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `RecordingImage` ADD CONSTRAINT `RecordingImage_imageId_fkey` FOREIGN KEY (`imageId`) REFERENCES `Image`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `RecordingImage` ADD CONSTRAINT `RecordingImage_imageId_fkey` FOREIGN KEY (`imageId`) REFERENCES `Image`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `RecordingImage` ADD CONSTRAINT `RecordingImage_recordingId_fkey` FOREIGN KEY (`recordingId`) REFERENCES `Recording`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `RecordingImage` ADD CONSTRAINT `RecordingImage_recordingId_fkey` FOREIGN KEY (`recordingId`) REFERENCES `Recording`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `RegionSmallGroup` ADD CONSTRAINT `RegionSmallGroup_largeGroupId_fkey` FOREIGN KEY (`largeGroupId`) REFERENCES `RegionLargeGroup`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -661,52 +691,64 @@ ALTER TABLE `MixMastering` ADD CONSTRAINT `MixMastering_thumbnailId_fkey` FOREIG
 ALTER TABLE `MixMastering` ADD CONSTRAINT `MixMastering_musicianServiceId_fkey` FOREIGN KEY (`musicianServiceId`) REFERENCES `MusicianService`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MixMasteringLicense` ADD CONSTRAINT `MixMasteringLicense_licenseId_fkey` FOREIGN KEY (`licenseId`) REFERENCES `License`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MixMasteringLicense` ADD CONSTRAINT `MixMasteringLicense_licenseId_fkey` FOREIGN KEY (`licenseId`) REFERENCES `License`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MixMasteringLicense` ADD CONSTRAINT `MixMasteringLicense_mixMasteringId_fkey` FOREIGN KEY (`mixMasteringId`) REFERENCES `MixMastering`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MixMasteringLicense` ADD CONSTRAINT `MixMasteringLicense_mixMasteringId_fkey` FOREIGN KEY (`mixMasteringId`) REFERENCES `MixMastering`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MixMasteringContact` ADD CONSTRAINT `MixMasteringContact_mixMasteringId_fkey` FOREIGN KEY (`mixMasteringId`) REFERENCES `MixMastering`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MixMasteringContact` ADD CONSTRAINT `MixMasteringContact_mixMasteringId_fkey` FOREIGN KEY (`mixMasteringId`) REFERENCES `MixMastering`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MixMasteringContact` ADD CONSTRAINT `MixMasteringContact_contactId_fkey` FOREIGN KEY (`contactId`) REFERENCES `Contact`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MixMasteringContact` ADD CONSTRAINT `MixMasteringContact_contactId_fkey` FOREIGN KEY (`contactId`) REFERENCES `Contact`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MixMasteringGenre` ADD CONSTRAINT `MixMasteringGenre_mixMasteringId_fkey` FOREIGN KEY (`mixMasteringId`) REFERENCES `MixMastering`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MixMasteringGenre` ADD CONSTRAINT `MixMasteringGenre_mixMasteringId_fkey` FOREIGN KEY (`mixMasteringId`) REFERENCES `MixMastering`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MixMasteringGenre` ADD CONSTRAINT `MixMasteringGenre_genreId_fkey` FOREIGN KEY (`genreId`) REFERENCES `Genre`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MixMasteringGenre` ADD CONSTRAINT `MixMasteringGenre_genreId_fkey` FOREIGN KEY (`genreId`) REFERENCES `Genre`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MixMasteringMusic` ADD CONSTRAINT `MixMasteringMusic_mixMasteringId_fkey` FOREIGN KEY (`mixMasteringId`) REFERENCES `MixMastering`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MixMasteringMusic` ADD CONSTRAINT `MixMasteringMusic_mixMasteringId_fkey` FOREIGN KEY (`mixMasteringId`) REFERENCES `MixMastering`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MixMasteringMusic` ADD CONSTRAINT `MixMasteringMusic_musicId_fkey` FOREIGN KEY (`musicId`) REFERENCES `Music`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `MixMasteringMusic` ADD CONSTRAINT `MixMasteringMusic_musicId_fkey` FOREIGN KEY (`musicId`) REFERENCES `Music`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `AlbumArt` ADD CONSTRAINT `AlbumArt_musicianServiceId_fkey` FOREIGN KEY (`musicianServiceId`) REFERENCES `MusicianService`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `AlbumArtLicense` ADD CONSTRAINT `AlbumArtLicense_licenseId_fkey` FOREIGN KEY (`licenseId`) REFERENCES `License`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `AlbumArtLicense` ADD CONSTRAINT `AlbumArtLicense_licenseId_fkey` FOREIGN KEY (`licenseId`) REFERENCES `License`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `AlbumArtLicense` ADD CONSTRAINT `AlbumArtLicense_albumArtId_fkey` FOREIGN KEY (`albumArtId`) REFERENCES `AlbumArt`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `AlbumArtLicense` ADD CONSTRAINT `AlbumArtLicense_albumArtId_fkey` FOREIGN KEY (`albumArtId`) REFERENCES `AlbumArt`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `AlbumArtContact` ADD CONSTRAINT `AlbumArtContact_albumArtId_fkey` FOREIGN KEY (`albumArtId`) REFERENCES `AlbumArt`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `AlbumArtContact` ADD CONSTRAINT `AlbumArtContact_albumArtId_fkey` FOREIGN KEY (`albumArtId`) REFERENCES `AlbumArt`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `AlbumArtContact` ADD CONSTRAINT `AlbumArtContact_contactId_fkey` FOREIGN KEY (`contactId`) REFERENCES `Contact`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `AlbumArtContact` ADD CONSTRAINT `AlbumArtContact_contactId_fkey` FOREIGN KEY (`contactId`) REFERENCES `Contact`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `AlbumArtImage` ADD CONSTRAINT `AlbumArtImage_albumArtId_fkey` FOREIGN KEY (`albumArtId`) REFERENCES `AlbumArt`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `AlbumArtImage` ADD CONSTRAINT `AlbumArtImage_albumArtId_fkey` FOREIGN KEY (`albumArtId`) REFERENCES `AlbumArt`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `AlbumArtImage` ADD CONSTRAINT `AlbumArtImage_imageId_fkey` FOREIGN KEY (`imageId`) REFERENCES `Image`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `AlbumArtImage` ADD CONSTRAINT `AlbumArtImage_imageId_fkey` FOREIGN KEY (`imageId`) REFERENCES `Image`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `AlbumArtSaleTypeBridge` ADD CONSTRAINT `AlbumArtSaleTypeBridge_albumArtId_fkey` FOREIGN KEY (`albumArtId`) REFERENCES `AlbumArt`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `AlbumArtSaleTypeBridge` ADD CONSTRAINT `AlbumArtSaleTypeBridge_albumArtId_fkey` FOREIGN KEY (`albumArtId`) REFERENCES `AlbumArt`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `AlbumArtSaleTypeBridge` ADD CONSTRAINT `AlbumArtSaleTypeBridge_saleTypeId_fkey` FOREIGN KEY (`saleTypeId`) REFERENCES `AlbumArtSaleType`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `AlbumArtSaleTypeBridge` ADD CONSTRAINT `AlbumArtSaleTypeBridge_saleTypeId_fkey` FOREIGN KEY (`saleTypeId`) REFERENCES `AlbumArtSaleType`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `MrBeatGenre` ADD CONSTRAINT `MrBeatGenre_mrBeatId_fkey` FOREIGN KEY (`mrBeatId`) REFERENCES `MrBeat`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `MrBeatGenre` ADD CONSTRAINT `MrBeatGenre_genreId_fkey` FOREIGN KEY (`genreId`) REFERENCES `Genre`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `MrBeatMood` ADD CONSTRAINT `MrBeatMood_mrBeatId_fkey` FOREIGN KEY (`mrBeatId`) REFERENCES `MrBeat`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `MrBeatMood` ADD CONSTRAINT `MrBeatMood_moodId_fkey` FOREIGN KEY (`moodId`) REFERENCES `Mood`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

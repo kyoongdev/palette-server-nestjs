@@ -35,7 +35,7 @@ model User {
   social         UserSocial?
   musician       Musician?
   serviceReviews ServiceReview[]
-  clicks         MuscianServiceClicked[]
+  clicks         MusicianServiceClicked[]
 }
 
 model UserSocial {
@@ -96,18 +96,17 @@ model MusicianService {
   createdAt DateTime @default(now())
 
   reviews ServiceReview[]
-  clicks  MuscianServiceClicked[]
+  clicks  MusicianServiceClicked[]
 }
 
-model MuscianServiceClicked {
+model MusicianServiceClicked {
+  id                String          @id @default(uuid())
   userId            String
   user              User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   musicianServiceId String
   musicianService   MusicianService @relation(fields: [musicianServiceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   createdAt DateTime @default(now())
-
-  @@id([userId, musicianServiceId])
 }
 
 model ServiceReview {

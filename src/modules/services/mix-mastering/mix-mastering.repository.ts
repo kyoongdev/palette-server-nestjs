@@ -65,8 +65,8 @@ export class MixMasteringRepository {
     return count;
   }
 
-  async findSQLMixMasterings(sql: Prisma.Sql) {
-    const data = await this.database.getRepository().$queryRaw<FindSQLMixMastering[]>(sql);
+  async findMixMasteringsWithSQL<T = FindSQLMixMastering>(sql: Prisma.Sql) {
+    const data = await this.database.getRepository().$queryRaw<T[]>(sql);
     const count: {
       'FOUND_ROWS()': number;
     }[] = await this.database.getRepository().$queryRaw(Prisma.sql`SELECT FOUND_ROWS()`);

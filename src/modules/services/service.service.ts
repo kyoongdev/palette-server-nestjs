@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
+import { Prisma } from '@prisma/client';
+
 import { CustomException } from '@/common/error/custom.exception';
+import { PrismaDatabase } from '@/database/prisma.repository';
 import { FindServiceWithDetailList } from '@/interface/service.interface';
+import { AlbumArtSQL } from '@/sql/album-art/album-art.sql';
+import { Top5SQL } from '@/sql/home/top5.sql';
 import { Transactional } from '@/utils/aop/transaction/transaction';
 import { serviceWithDetailInclude } from '@/utils/constants/include/service';
 import { findPendingServicesWhere, findServicesWhere } from '@/utils/constants/where/service';
@@ -12,6 +17,7 @@ import { AlbumArtListDTO } from './album-art/dto';
 import { ArtistRepository } from './artist/artist.repository';
 import { ArtistListDTO } from './artist/dto';
 import { MusicianServiceListDTO } from './dto';
+import { Top5ServiceDTOProps } from './dto/top-5-service.dto';
 import { Top5DTO } from './dto/top-5.dto';
 import { SERVICE_ERROR_CODE } from './exception/error-code';
 import { MixMasteringListDTO } from './mix-mastering/dto';
@@ -34,158 +40,28 @@ export class ServiceService {
   ) {}
 
   async findTop5Services() {
-    const firstDay = new Date();
-    firstDay.setDate(1);
-    firstDay.setHours(0, 0, 0, 0);
-
-    const lastDay = new Date();
-    lastDay.setMonth(lastDay.getMonth() + 1);
-    lastDay.setDate(1);
-    lastDay.setHours(0, 0, 0, 0);
-
-    const artists = await this.artistRepository.findArtists({
-      where: {
-        musicianService: {
-          OR: [
-            {
-              clicks: {
-                none: {},
-              },
-            },
-            {
-              clicks: {
-                some: {
-                  createdAt: {
-                    gte: firstDay,
-                    lt: lastDay,
-                  },
-                },
-              },
-            },
-          ],
-        },
-      },
-      skip: 0,
-      take: 5,
-    });
-
-    const albumArts = await this.albumArtRepository.findAlbumArts({
-      where: {
-        musicianService: {
-          OR: [
-            {
-              clicks: {
-                none: {},
-              },
-            },
-            {
-              clicks: {
-                some: {
-                  createdAt: {
-                    gte: firstDay,
-                    lt: lastDay,
-                  },
-                },
-              },
-            },
-          ],
-        },
-      },
-      skip: 0,
-      take: 5,
-    });
-
-    const mixMasterings = await this.mixMasteringRepository.findMixMasterings({
-      where: {
-        musicianService: {
-          OR: [
-            {
-              clicks: {
-                none: {},
-              },
-            },
-            {
-              clicks: {
-                some: {
-                  createdAt: {
-                    gte: firstDay,
-                    lt: lastDay,
-                  },
-                },
-              },
-            },
-          ],
-        },
-      },
-      skip: 0,
-      take: 5,
-    });
-
-    const mrBeats = await this.mrBeatRepository.findMrBeats({
-      where: {
-        musicianService: {
-          OR: [
-            {
-              clicks: {
-                none: {},
-              },
-            },
-            {
-              clicks: {
-                some: {
-                  createdAt: {
-                    gte: firstDay,
-                    lt: lastDay,
-                  },
-                },
-              },
-            },
-          ],
-        },
-      },
-      orderBy: {
-        musicianService: {
-          clicks: {
-            _count: 'desc',
-          },
-        },
-      },
-      skip: 0,
-      take: 5,
-    });
-
-    const recordings = await this.recordingRepository.findRecordings({
-      where: {
-        musicianService: {
-          OR: [
-            {
-              clicks: {
-                none: {},
-              },
-            },
-            {
-              clicks: {
-                some: {
-                  createdAt: {
-                    gte: firstDay,
-                    lt: lastDay,
-                  },
-                },
-              },
-            },
-          ],
-        },
-      },
-      skip: 0,
-      take: 5,
-    });
+    const { data: albumArts } = await this.albumArtRepository.findAlbumArtsWithSQL<Top5ServiceDTOProps>(
+      new Top5SQL('ALBUM_ART').getTop5SQL()
+    );
+    const { data: artists } = await this.artistRepository.findArtistsWithSQL<Top5ServiceDTOProps>(
+      new Top5SQL('ARTIST').getTop5SQL()
+    );
+    const { data: mixMasterings } = await this.mixMasteringRepository.findMixMasteringsWithSQL<Top5ServiceDTOProps>(
+      new Top5SQL('MIX_MASTERING').getTop5SQL()
+    );
+    const { data: mrBeats } = await this.mrBeatRepository.findMrBeatsWithSQL<Top5ServiceDTOProps>(
+      new Top5SQL('MR_BEAT').getTop5SQL()
+    );
+    const { data: recordings } = await this.recordingRepository.findRecordingsWithSQL<Top5ServiceDTOProps>(
+      new Top5SQL('RECORDING').getTop5SQL()
+    );
 
     return new Top5DTO({
-      albumArts: albumArts.map(AlbumArtListDTO.fromFindAlbumArtList),
-      artists: artists.map(ArtistListDTO.fromFindArtistList),
-      mixMasterings: mixMasterings.map(MixMasteringListDTO.fromFindMixMasteringList),
-      mrBeats: mrBeats.map(MrBeatListDTO.fromFindMrBeatList),
-      recordings: recordings.map(RecordingListDTO.fromFindRecordingList),
+      albumArts,
+      artists,
+      mixMasterings,
+      mrBeats,
+      recordings,
     });
   }
 
@@ -359,27 +235,30 @@ export class ServiceService {
     tomorrow.setDate(tomorrow.getDate() + 1);
     tomorrow.setHours(0, 0, 0, 0);
 
-    await this.serviceRepository.updateService(serviceId, {
-      clicks: {
-        upsert: {
-          where: {
-            userId_musicianServiceId: {
-              userId,
-              musicianServiceId: serviceId,
-            },
-            createdAt: {
-              gte: today,
-              lt: tomorrow,
-            },
-          },
-          update: {
-            createdAt: new Date(),
-          },
-          create: {
-            userId,
-          },
+    const isExists = await this.serviceRepository.checkServiceClicked({
+      where: {
+        userId,
+        musicianServiceId: serviceId,
+        createdAt: {
+          gte: today,
+          lt: tomorrow,
         },
       },
     });
+
+    if (!isExists) {
+      await this.serviceRepository.updateService(serviceId, {
+        clicks: {
+          create: {
+            createdAt: new Date(),
+            user: {
+              connect: {
+                id: userId,
+              },
+            },
+          },
+        },
+      });
+    }
   }
 }

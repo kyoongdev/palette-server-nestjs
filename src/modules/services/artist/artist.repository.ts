@@ -62,8 +62,8 @@ export class ArtistRepository {
     return artists;
   }
 
-  async findArtistsWithSQL(sql: Prisma.Sql) {
-    const data = await this.database.getRepository().$queryRaw<FindSQLArtistList[]>(sql);
+  async findArtistsWithSQL<T = FindSQLArtistList>(sql: Prisma.Sql) {
+    const data = await this.database.getRepository().$queryRaw<T[]>(sql);
     const count: {
       'FOUND_ROWS()': number;
     }[] = await this.database.getRepository().$queryRaw(Prisma.sql`SELECT FOUND_ROWS()`);

@@ -27,7 +27,7 @@ export class PagingDTO {
   public getSqlPaging(): PagingDTO {
     return {
       ...this,
-      page: (this.page ? this.page - 1 : 1) * (this.limit || 1),
+      page: (this.page ? this.page - 1 : 0) * (this.limit || 1),
     };
   }
 }

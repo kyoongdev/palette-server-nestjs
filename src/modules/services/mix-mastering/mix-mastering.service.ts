@@ -25,10 +25,10 @@ export class MixMasteringService {
     return MixMasteringDTO.fromFindMixMastering(mixMastering);
   }
 
-  async findSQLMixMasterings(paging: PagingDTO, query: FindMixMasteringQuery) {
+  async findMixMasteringsWithSQL(paging: PagingDTO, query: FindMixMasteringQuery) {
     const sqlPaging = paging.getSqlPaging();
 
-    const { data, count } = await this.mixMasteringRepository.findSQLMixMasterings(
+    const { data, count } = await this.mixMasteringRepository.findMixMasteringsWithSQL(
       new MixMasteringSQL({
         paging: sqlPaging,
         query,

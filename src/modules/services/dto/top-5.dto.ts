@@ -1,41 +1,36 @@
-import { FindServiceWithDetailList } from '@/interface/service.interface';
 import { Property } from '@/utils/swagger';
 
-import { AlbumArtListDTO } from '../album-art/dto';
-import { ArtistListDTO } from '../artist/dto';
-import { MixMasteringListDTO } from '../mix-mastering/dto';
-import { MrBeatListDTO } from '../mr-beat/dto/mr-beat-list.dto';
-import { RecordingListDTO } from '../recording/dto';
+import { Top5ServiceDTO, Top5ServiceDTOProps } from './top-5-service.dto';
 
 export interface Top5DTOProps {
-  albumArts: AlbumArtListDTO[];
-  artists: ArtistListDTO[];
-  mixMasterings: MixMasteringListDTO[];
-  mrBeats: MrBeatListDTO[];
-  recordings: RecordingListDTO[];
+  albumArts: Top5ServiceDTOProps[];
+  artists: Top5ServiceDTOProps[];
+  mixMasterings: Top5ServiceDTOProps[];
+  mrBeats: Top5ServiceDTOProps[];
+  recordings: Top5ServiceDTOProps[];
 }
 
 export class Top5DTO {
-  @Property({ apiProperty: { description: '앨범아트', type: AlbumArtListDTO, isArray: true } })
-  albumArts: AlbumArtListDTO[];
+  @Property({ apiProperty: { description: '앨범아트', type: Top5ServiceDTO, isArray: true } })
+  albumArts: Top5ServiceDTO[];
 
-  @Property({ apiProperty: { description: '아티스트', type: ArtistListDTO, isArray: true } })
-  artists: ArtistListDTO[];
+  @Property({ apiProperty: { description: '아티스트', type: Top5ServiceDTO, isArray: true } })
+  artists: Top5ServiceDTO[];
 
-  @Property({ apiProperty: { description: '믹스마스터링', type: MixMasteringListDTO, isArray: true } })
-  mixMasterings: MixMasteringListDTO[];
+  @Property({ apiProperty: { description: '믹스마스터링', type: Top5ServiceDTO, isArray: true } })
+  mixMasterings: Top5ServiceDTO[];
 
-  @Property({ apiProperty: { description: 'Mr Beat', type: MrBeatListDTO, isArray: true } })
-  mrBeats: MrBeatListDTO[];
+  @Property({ apiProperty: { description: 'Mr Beat', type: Top5ServiceDTO, isArray: true } })
+  mrBeats: Top5ServiceDTO[];
 
-  @Property({ apiProperty: { description: '녹음', type: RecordingListDTO, isArray: true } })
-  recordings: RecordingListDTO[];
+  @Property({ apiProperty: { description: '녹음', type: Top5ServiceDTO, isArray: true } })
+  recordings: Top5ServiceDTO[];
 
   constructor(props: Top5DTOProps) {
-    this.albumArts = props.albumArts;
-    this.artists = props.artists;
-    this.mixMasterings = props.mixMasterings;
-    this.mrBeats = props.mrBeats;
-    this.recordings = props.recordings;
+    this.albumArts = props.albumArts.map((albumArt) => new Top5ServiceDTO(albumArt));
+    this.artists = props.artists.map((artist) => new Top5ServiceDTO(artist));
+    this.mixMasterings = props.mixMasterings.map((mixMastering) => new Top5ServiceDTO(mixMastering));
+    this.mrBeats = props.mrBeats.map((mrBeat) => new Top5ServiceDTO(mrBeat));
+    this.recordings = props.recordings.map((recording) => new Top5ServiceDTO(recording));
   }
 }

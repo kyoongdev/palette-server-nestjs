@@ -14,7 +14,7 @@ export const SERVICE_TYPE = {
 };
 
 export type ServiceType = keyof typeof SERVICE_TYPE;
-export const SERVICE_TYPE_VALUE = Object.values(SERVICE_TYPE);
+export const SERVICE_TYPE_VALUE = Object.keys(SERVICE_TYPE);
 
 const ServiceTypeValidateConstraint = (nullable = false) => {
   @ValidatorConstraint()

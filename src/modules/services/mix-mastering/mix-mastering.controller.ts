@@ -27,7 +27,7 @@ export class MixMasteringController {
     isPaging: true,
   })
   async findMixMasteringList(@Paging() paging: PagingDTO, @Query() query: FindMixMasteringQuery) {
-    return await this.mixMasteringService.findSQLMixMasterings(paging, query);
+    return await this.mixMasteringService.findMixMasteringsWithSQL(paging, query);
   }
 
   @Get(':mixMasteringId/detail')
