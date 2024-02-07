@@ -8,6 +8,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Inquiry {
+  id      String @id @default(uuid())
+  content String @db.MediumText
+
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Announcement {
+  id      String @id @default(uuid())
+  title   String @db.VarChar(255)
+  content String @db.LongText
+
+  createdAt DateTime @default(now())
+}
+
 model Admin {
   id String @id @default(uuid())
 
@@ -36,6 +54,7 @@ model User {
   musician       Musician?
   serviceReviews ServiceReview[]
   clicks         MusicianServiceClicked[]
+  inquiries      Inquiry[]
 }
 
 model UserSocial {
