@@ -51,6 +51,7 @@ export class BaseMixMasteringSQL {
     mixMastering.isAuthorized as isAuthorized,
     mixMastering.isSaleStopped as isSaleStopped,
     mixMastering.isPending as isPending,
+    musicianService.id as serviceId,
     musician.id as musicianId, musician.stageName as stageName,
     musician.name as musicianName, musician.groupType as musicianGroupType,
     musician.isPending as musicianIsPending, musician.isAuthorized as musicianIsAuthorized,

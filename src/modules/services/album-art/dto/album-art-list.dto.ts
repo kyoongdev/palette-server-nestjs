@@ -14,6 +14,7 @@ export interface AlbumArtListDTOProps {
   createdAt: Date;
   saleType: string;
   musician: CommonMusicianDTOProps;
+  serviceId: string;
 }
 
 export class AlbumArtListDTO {
@@ -44,6 +45,9 @@ export class AlbumArtListDTO {
   @Property({ apiProperty: { type: CommonMusicianDTO } })
   musician: CommonMusicianDTO;
 
+  @Property({ apiProperty: { description: '서비스 아이디', type: 'string' } })
+  serviceId: string;
+
   constructor(props: AlbumArtListDTOProps) {
     this.id = props.id;
     this.name = props.name;
@@ -53,6 +57,7 @@ export class AlbumArtListDTO {
     this.createdAt = props.createdAt;
     this.saleType = props.saleType;
     this.status = props.status;
+    this.serviceId = props.serviceId;
     this.musician = new CommonMusicianDTO(props.musician);
   }
 
@@ -67,6 +72,7 @@ export class AlbumArtListDTO {
       saleType: data.saleTypeNames,
       status: getSQLServiceStatus(data),
       musician: CommonMusicianDTO.fromFindSQLCommonMusician(data),
+      serviceId: data.serviceId,
     });
   }
 
@@ -82,6 +88,7 @@ export class AlbumArtListDTO {
       status: getServiceStatus(data),
       saleType: data.saleTypes.map((saleType) => saleType.saleType.name).join(', '),
       musician: data.musicianService.musician,
+      serviceId: data.musicianServiceId,
     });
   }
 }

@@ -19,6 +19,7 @@ export interface MrBeatListDTOProps {
   createdAt: Date;
   musician: CommonMusicianDTOProps;
   status: ServiceStatus;
+  serviceId: string;
 }
 
 export class MrBeatListDTO {
@@ -61,6 +62,9 @@ export class MrBeatListDTO {
   @Property({ apiProperty: { description: '상태', type: 'string', enum: Object.values(SERVICE_STATUS) } })
   status: ServiceStatus;
 
+  @Property({ apiProperty: { description: '서비스 아이디', type: 'string' } })
+  serviceId: string;
+
   constructor(props: MrBeatListDTOProps) {
     this.id = props.id;
     this.name = props.name;
@@ -74,6 +78,7 @@ export class MrBeatListDTO {
     this.cost = props.cost;
     this.score = props.score;
     this.status = props.status;
+    this.serviceId = props.serviceId;
     this.musician = new CommonMusicianDTO(props.musician);
   }
 
@@ -93,6 +98,7 @@ export class MrBeatListDTO {
       cost: Math.min(...data.licenses.map((license) => license.cost)),
       musician: CommonMusicianDTO.fromFindCommonMusician(data.musicianService.musician),
       status: getServiceStatus(data),
+      serviceId: data.musicianServiceId,
     });
   }
 
@@ -111,6 +117,7 @@ export class MrBeatListDTO {
       score: data.score,
       musician: CommonMusicianDTO.fromFindSQLCommonMusician(data),
       status: getSQLServiceStatus(data),
+      serviceId: data.serviceId,
     });
   }
 }

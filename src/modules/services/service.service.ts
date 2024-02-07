@@ -46,14 +46,23 @@ export class ServiceService {
     const artists = await this.artistRepository.findArtists({
       where: {
         musicianService: {
-          clicks: {
-            some: {
-              createdAt: {
-                gte: firstDay,
-                lt: lastDay,
+          OR: [
+            {
+              clicks: {
+                none: {},
               },
             },
-          },
+            {
+              clicks: {
+                some: {
+                  createdAt: {
+                    gte: firstDay,
+                    lt: lastDay,
+                  },
+                },
+              },
+            },
+          ],
         },
       },
       skip: 0,
@@ -63,14 +72,23 @@ export class ServiceService {
     const albumArts = await this.albumArtRepository.findAlbumArts({
       where: {
         musicianService: {
-          clicks: {
-            some: {
-              createdAt: {
-                gte: firstDay,
-                lt: lastDay,
+          OR: [
+            {
+              clicks: {
+                none: {},
               },
             },
-          },
+            {
+              clicks: {
+                some: {
+                  createdAt: {
+                    gte: firstDay,
+                    lt: lastDay,
+                  },
+                },
+              },
+            },
+          ],
         },
       },
       skip: 0,
@@ -80,14 +98,23 @@ export class ServiceService {
     const mixMasterings = await this.mixMasteringRepository.findMixMasterings({
       where: {
         musicianService: {
-          clicks: {
-            some: {
-              createdAt: {
-                gte: firstDay,
-                lt: lastDay,
+          OR: [
+            {
+              clicks: {
+                none: {},
               },
             },
-          },
+            {
+              clicks: {
+                some: {
+                  createdAt: {
+                    gte: firstDay,
+                    lt: lastDay,
+                  },
+                },
+              },
+            },
+          ],
         },
       },
       skip: 0,
@@ -97,13 +124,29 @@ export class ServiceService {
     const mrBeats = await this.mrBeatRepository.findMrBeats({
       where: {
         musicianService: {
-          clicks: {
-            some: {
-              createdAt: {
-                gte: firstDay,
-                lt: lastDay,
+          OR: [
+            {
+              clicks: {
+                none: {},
               },
             },
+            {
+              clicks: {
+                some: {
+                  createdAt: {
+                    gte: firstDay,
+                    lt: lastDay,
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
+      orderBy: {
+        musicianService: {
+          clicks: {
+            _count: 'desc',
           },
         },
       },
@@ -114,14 +157,23 @@ export class ServiceService {
     const recordings = await this.recordingRepository.findRecordings({
       where: {
         musicianService: {
-          clicks: {
-            some: {
-              createdAt: {
-                gte: firstDay,
-                lt: lastDay,
+          OR: [
+            {
+              clicks: {
+                none: {},
               },
             },
-          },
+            {
+              clicks: {
+                some: {
+                  createdAt: {
+                    gte: firstDay,
+                    lt: lastDay,
+                  },
+                },
+              },
+            },
+          ],
         },
       },
       skip: 0,

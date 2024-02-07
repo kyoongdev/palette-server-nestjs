@@ -18,6 +18,7 @@ export interface FindSQLAlbumArt extends FindSQLCommonMusician {
   cost: number;
   score: number | null;
   createdAt: Date;
+  serviceId: string;
   isPending: boolean;
   isAuthorized: boolean;
   isSaleStopped: boolean;

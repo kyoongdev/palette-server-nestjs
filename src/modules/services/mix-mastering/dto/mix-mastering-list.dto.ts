@@ -17,6 +17,7 @@ export interface MixMasteringListDTOProps {
   musician: CommonMusicianDTOProps;
   createdAt: Date;
   status: ServiceStatus;
+  serviceId: string;
 }
 
 export class MixMasteringListDTO {
@@ -53,6 +54,9 @@ export class MixMasteringListDTO {
   @Property({ apiProperty: { description: '상태', type: 'string', enum: Object.values(SERVICE_STATUS) } })
   status: ServiceStatus;
 
+  @Property({ apiProperty: { description: '서비스 아이디', type: 'string' } })
+  serviceId: string;
+
   constructor(props: MixMasteringListDTOProps) {
     this.id = props.id;
     this.name = props.name;
@@ -65,6 +69,7 @@ export class MixMasteringListDTO {
     this.musician = new CommonMusicianDTO(props.musician);
     this.createdAt = props.createdAt;
     this.status = props.status;
+    this.serviceId = props.serviceId;
   }
 
   static fromFindSQLMixMastering(data: FindSQLMixMastering) {
@@ -92,6 +97,7 @@ export class MixMasteringListDTO {
       musician: CommonMusicianDTO.fromFindSQLCommonMusician(data),
       createdAt: data.createdAt,
       status: getSQLServiceStatus(data),
+      serviceId: data.serviceId,
     });
   }
 
@@ -109,6 +115,7 @@ export class MixMasteringListDTO {
       genreName: data.genres.at(-1).genre.name,
       musician: data.musicianService.musician,
       createdAt: data.createdAt,
+      serviceId: data.musicianServiceId,
     });
   }
 }

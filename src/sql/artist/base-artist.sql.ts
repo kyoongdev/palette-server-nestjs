@@ -35,6 +35,7 @@ export class BaseArtistSQL {
     musician.id as musicianId, musician.stageName as stageName,
     musician.name as musicianName, musician.groupType as musicianGroupType,
     AVG(serviceReview.score) as score,
+    musicianService.id as serviceId,
     artist.isPending as isPending, artist.isAuthorized as isAuthorized,
     artist.isSaleStopped as isSaleStopped,
     musician.isPending as musicianIsPending, musician.isAuthorized as musicianIsAuthorized,

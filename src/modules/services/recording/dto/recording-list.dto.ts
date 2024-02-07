@@ -15,6 +15,7 @@ export interface RecordingListDTOProps {
   createdAt: Date;
   musician: CommonMusicianDTOProps;
   status: ServiceStatus;
+  serviceId: string;
 }
 
 export class RecordingListDTO {
@@ -48,6 +49,9 @@ export class RecordingListDTO {
   @Property({ apiProperty: { description: '상태', type: 'string', enum: Object.values(SERVICE_STATUS) } })
   status: ServiceStatus;
 
+  @Property({ apiProperty: { description: '서비스 아이디', type: 'string' } })
+  serviceId: string;
+
   constructor(props: RecordingListDTOProps) {
     this.id = props.id;
     this.name = props.name;
@@ -57,6 +61,7 @@ export class RecordingListDTO {
     this.cost = props.cost;
     this.score = props.score;
     this.createdAt = props.createdAt;
+    this.status = props.status;
     this.musician = new CommonMusicianDTO(props.musician);
   }
 
@@ -73,6 +78,7 @@ export class RecordingListDTO {
       createdAt: data.createdAt,
       musician: data.musicianService.musician,
       status: getServiceStatus(data),
+      serviceId: data.musicianServiceId,
     });
   }
 
@@ -88,6 +94,7 @@ export class RecordingListDTO {
       createdAt: data.createdAt,
       musician: CommonMusicianDTO.fromFindSQLCommonMusician(data),
       status: getSQLServiceStatus(data),
+      serviceId: data.serviceId,
     });
   }
 }

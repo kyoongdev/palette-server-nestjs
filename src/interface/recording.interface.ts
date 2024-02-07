@@ -24,6 +24,7 @@ export interface FindSQLRecordingList extends FindSQLCommonMusician {
   isAuthorized: boolean;
   isSaleStopped: boolean;
   isPending: boolean;
+  serviceId: string;
 }
 
 export type FindRecordingList = Prisma.RecordingGetPayload<{ include: typeof recordingListInclude }>;

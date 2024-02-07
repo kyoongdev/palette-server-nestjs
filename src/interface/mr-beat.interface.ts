@@ -24,6 +24,7 @@ export interface FindSQLMrBeatList extends FindSQLCommonMusician {
   isAuthorized: boolean;
   isSaleStopped: boolean;
   isPending: boolean;
+  serviceId: string;
 }
 
 export type FindMrBeat = Prisma.MrBeatGetPayload<{ include: typeof mrBeatDetailInclude }>;

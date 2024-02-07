@@ -38,6 +38,7 @@ export class BaseMrBeatSQL {
     mrBeat.createdAt as createdAt, AVG(serviceReview.score) as score,
     mrBeat.isPending as isPending, mrBeat.isAuthorized as isAuthorized,
     mrBeat.isSaleStopped as isSaleStopped,
+    musicianService.id as serviceId,
     musician.id as musicianId, musician.stageName as stageName,
     musician.name as musicianName, musician.groupType as musicianGroupType,
     musician.isPending as musicianIsPending, musician.isAuthorized as musicianIsAuthorized,

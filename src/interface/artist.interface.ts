@@ -18,6 +18,7 @@ export interface FindSQLArtistList extends FindSQLCommonMusician {
   score: number;
   cost: number;
   saleTypes: string;
+  serviceId: string;
   isPending: boolean;
   isAuthorized: boolean;
   isSaleStopped: boolean;

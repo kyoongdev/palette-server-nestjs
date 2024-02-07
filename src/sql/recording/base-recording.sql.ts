@@ -44,6 +44,7 @@ export class BaseRecordingSQL {
     recording.isSaleStopped as isSaleStopped,
     recording.isPending as isPending,
     recording.createdAt as createdAt,
+    musicianService.id as serviceId,
     musician.id as musicianId, musician.stageName as stageName,
     musician.name as musicianName, musician.groupType as musicianGroupType,
     musician.isPending as musicianIsPending, musician.isAuthorized as musicianIsAuthorized,
