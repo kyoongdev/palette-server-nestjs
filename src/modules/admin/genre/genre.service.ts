@@ -43,11 +43,13 @@ export class AdminGenreService {
 
   @Transactional()
   async updateGenre(id: string, data: UpdateGenreDTO) {
+    await this.genreRepository.findGenre(id);
     await this.genreRepository.updateGenre(id, data);
   }
 
   @Transactional()
   async deleteGenre(id: string) {
+    await this.genreRepository.findGenre(id);
     await this.genreRepository.deleteGenre(id);
   }
 }

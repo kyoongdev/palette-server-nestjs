@@ -25,13 +25,14 @@ export class ContactRepository {
     return contact;
   }
 
-  async findContacts() {
-    const contacts = await this.database.getRepository().contact.findMany({
-      orderBy: {
-        order: 'asc',
-      },
-    });
+  async findContacts(args = {} as Prisma.ContactFindManyArgs) {
+    const contacts = await this.database.getRepository().contact.findMany(args);
     return contacts;
+  }
+
+  async countContact(args = {} as Prisma.ContactCountArgs) {
+    const count = await this.database.getRepository().contact.count(args);
+    return count;
   }
 
   async createContact(data: Prisma.ContactCreateInput) {
