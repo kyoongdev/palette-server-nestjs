@@ -22,6 +22,12 @@ export class RegionRepository {
     return regions;
   }
 
+  async countRegionLargeGroups(args = {} as Prisma.RegionLargeGroupCountArgs) {
+    const count = await this.database.getRepository().regionLargeGroup.count(args);
+
+    return count;
+  }
+
   async findRegionLargeGroup(id: string) {
     const region = await this.database.getRepository().regionLargeGroup.findUnique({
       where: { id },

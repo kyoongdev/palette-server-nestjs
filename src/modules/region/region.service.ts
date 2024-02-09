@@ -8,7 +8,11 @@ export class RegionService {
   constructor(private readonly regionRepository: RegionRepository) {}
 
   async findRegionLargeGroups() {
-    const regions = await this.regionRepository.findRegionLargeGroups();
+    const regions = await this.regionRepository.findRegionLargeGroups({
+      orderBy: {
+        order: 'asc',
+      },
+    });
     return regions.map(RegionLargeGroupDTO.fromFindRegionLargeGroup);
   }
 
