@@ -21,7 +21,7 @@ export class RegionController {
     return await this.regionService.findRegionLargeGroups();
   }
 
-  @Get('/large-groups/:largeGroupId')
+  @Get('/large-groups/:largeGroupId/detail')
   @ApiOperation({ description: '지역 대분류 상세 조회', summary: '지역 대분류 상세 조회 API' })
   @ResponseApi({
     type: RegionLargeGroupDTO,

@@ -26,8 +26,8 @@ export class AnnouncementController {
     return await this.announcementService.findAnnouncements(paging);
   }
 
-  @Get(':announcementId')
-  @ApiOperation({ summary: '공지사항 조회 API', description: '공지사항을 조회합니다.' })
+  @Get(':announcementId/detail')
+  @ApiOperation({ summary: '공지사항 상세 조회 API', description: '공지사항을 상세 조회합니다.' })
   @ResponseApi({ type: AnnouncementDTO })
   async findAnnouncement(@Param('announcementId') announcementId: string) {
     return await this.announcementService.findAnnouncement(announcementId);

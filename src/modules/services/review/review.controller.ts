@@ -29,7 +29,7 @@ export class ReviewController {
     return await this.reviewService.findReviews(paging, query);
   }
 
-  @Get(':reviewId')
+  @Get(':reviewId/detail')
   @ApiOperation({ summary: '리뷰 조회 API', description: '리뷰를 조회합니다.' })
   @ResponseApi({ type: ReviewDTO })
   async getReview(@Query('reviewId') reviewId: string) {

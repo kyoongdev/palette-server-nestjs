@@ -30,7 +30,7 @@ export class AlbumArtController {
     return await this.albumArtService.findSQLAlbumArt(paging, query);
   }
 
-  @Get(':albumArtId')
+  @Get(':albumArtId/detail')
   @ApiOperation({ summary: '앨범 아트 상세 조회 API', description: '앨범 아트를 상세 조회합니다.' })
   @ResponseApi({ type: AlbumArtDTO })
   async findAlbumArt(@Param('albumArtId') albumArtId: string) {

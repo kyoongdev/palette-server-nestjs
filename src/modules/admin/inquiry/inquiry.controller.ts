@@ -16,7 +16,7 @@ import { AdminInquiryService } from './inquiry.service';
 export class AdminInquiryController {
   constructor(private readonly inquiryService: AdminInquiryService) {}
 
-  @Get(':inquiryId')
+  @Get(':inquiryId/detail')
   @ApiOperation({ summary: '문의사항 상세 조회 API', description: '문의사항 상세를 조회합니다.' })
   @ResponseApi({
     type: InquiryDTO,

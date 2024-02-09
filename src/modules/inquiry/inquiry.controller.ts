@@ -30,7 +30,7 @@ export class InquiryController {
     return this.inquiryService.findInquiries(user.id, paging);
   }
 
-  @Get(':inquiryId')
+  @Get(':inquiryId/detail')
   @ApiOperation({ summary: '나의 문의사항 상세 조회 API', description: '나의 문의사항 상세를 조회합니다.' })
   @ResponseApi({ type: InquiryDTO })
   async findInquiry(@Param('inquiryId') inquiryId: string, @ReqUser() user: RequestUser) {
