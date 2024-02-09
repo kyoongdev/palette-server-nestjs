@@ -693,7 +693,9 @@ model Mood {
 model License {
   id String @id @default(uuid())
 
-  name                 String                @db.VarChar(30)
+  name  String @db.VarChar(30)
+  order Int    @default(0) @db.TinyInt
+
   mrBeatLicenses       MrBeatLicense[]
   artistLicenses       ArtistLicense[]
   recordingLicenses    RecordingLicense[]

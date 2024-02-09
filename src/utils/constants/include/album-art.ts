@@ -42,7 +42,7 @@ export const albumArtInclude = {
     },
     orderBy: {
       license: {
-        name: 'asc',
+        order: 'asc',
       },
     },
   },

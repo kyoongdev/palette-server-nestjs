@@ -59,7 +59,7 @@ export const mrBeatDetailInclude = {
     },
     orderBy: {
       license: {
-        name: 'asc',
+        order: 'asc',
       },
     },
   },

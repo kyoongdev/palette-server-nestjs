@@ -10,7 +10,7 @@ export class LicenseService {
   async findLicenses() {
     const licenses = await this.licenseRepository.findLicenses({
       orderBy: {
-        name: 'asc',
+        order: 'asc',
       },
     });
     return licenses.map((license) => new LicenseDTO(license));

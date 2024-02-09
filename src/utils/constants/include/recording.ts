@@ -16,7 +16,7 @@ export const recordingListInclude = {
   licenses: {
     orderBy: {
       license: {
-        name: 'asc',
+        order: 'asc',
       },
     },
   },
@@ -44,7 +44,7 @@ export const recordingInclude = {
     },
     orderBy: {
       license: {
-        name: 'asc',
+        order: 'asc',
       },
     },
   },

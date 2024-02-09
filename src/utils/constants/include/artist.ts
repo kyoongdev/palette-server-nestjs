@@ -22,7 +22,7 @@ export const artistListInclude = {
     },
     orderBy: {
       license: {
-        name: 'asc',
+        order: 'asc',
       },
     },
   },
@@ -64,7 +64,7 @@ export const artistDetailInclude = {
     },
     orderBy: {
       license: {
-        name: 'asc',
+        order: 'asc',
       },
     },
   },

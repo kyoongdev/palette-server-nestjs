@@ -39,7 +39,7 @@ export const mixMasteringListInclude = {
   licenses: {
     orderBy: {
       license: {
-        name: 'asc',
+        order: 'asc',
       },
     },
   },
@@ -66,7 +66,7 @@ export const mixMasteringInclude = {
     },
     orderBy: {
       license: {
-        name: 'asc',
+        order: 'asc',
       },
     },
   },
