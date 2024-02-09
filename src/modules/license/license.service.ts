@@ -8,7 +8,11 @@ export class LicenseService {
   constructor(private readonly licenseRepository: LicenseRepository) {}
 
   async findLicenses() {
-    const licenses = await this.licenseRepository.findLicenses();
+    const licenses = await this.licenseRepository.findLicenses({
+      orderBy: {
+        name: 'asc',
+      },
+    });
     return licenses.map((license) => new LicenseDTO(license));
   }
 }
