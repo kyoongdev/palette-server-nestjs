@@ -10,6 +10,8 @@ import {
 import { RegionRepository } from '@/modules/region/region.repository';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
+import { AdminRegionLargeGroupDTO } from './dto';
+
 @Injectable()
 export class AdminRegionService {
   constructor(private readonly regionRepository: RegionRepository) {}
@@ -17,7 +19,7 @@ export class AdminRegionService {
   async findRegionLargeGroup(id: string) {
     const region = await this.regionRepository.findRegionLargeGroup(id);
 
-    return new RegionLargeGroupDTO(region);
+    return new AdminRegionLargeGroupDTO(region);
   }
 
   async findRegionLargeGroups(paging: PagingDTO) {
@@ -32,7 +34,7 @@ export class AdminRegionService {
     });
 
     return new PaginationDTO(
-      regions.map((region) => new RegionLargeGroupDTO(region)),
+      regions.map((region) => new AdminRegionLargeGroupDTO(region)),
       { paging, count }
     );
   }

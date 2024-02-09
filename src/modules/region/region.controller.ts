@@ -7,7 +7,7 @@ import { RegionLargeGroupDTO, RegionSmallGroupDTO } from './dto';
 import { RegionService } from './region.service';
 
 @ApiTags('지역')
-@Controller('region')
+@Controller('regions')
 export class RegionController {
   constructor(private readonly regionService: RegionService) {}
 

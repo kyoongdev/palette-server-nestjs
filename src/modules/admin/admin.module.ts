@@ -11,6 +11,7 @@ import { AdminInquiryModule } from './inquiry/inquiry.module';
 import { AdminLicenseModule } from './license/license.module';
 import { AdminMoodModule } from './mood/mood.module';
 import { AdminMusicianModule } from './musician/musician.module';
+import { AdminRegionModule } from './region/region.module';
 import { AdminServiceModule } from './service/service.module';
 import { AdminUserModule } from './user/user.module';
 
@@ -25,6 +26,7 @@ export const AdminModules = [
   AdminContactModule,
   AdminLicenseModule,
   AdminMoodModule,
+  AdminRegionModule,
 ];
 
 @Module({
