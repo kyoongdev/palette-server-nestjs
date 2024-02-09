@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
+import { Prisma } from '@prisma/client';
+
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
 
-import { CreateGenreDTO, GenreDTO } from './dto';
+import { CreateGenreDTO, GenreDTO, UpdateGenreDTO } from './dto';
 import { GENRE_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
@@ -24,16 +26,17 @@ export class GenreRepository {
     return genre;
   }
 
-  async findGenres() {
-    const genres = await this.database.getRepository().genre.findMany({
-      orderBy: {
-        order: 'asc',
-      },
-    });
+  async findGenres(args = {} as Prisma.GenreFindManyArgs) {
+    const genres = await this.database.getRepository().genre.findMany(args);
 
-    return genres.map((genre) => new GenreDTO(genre));
+    return genres;
   }
 
+  async countGenre(args = {} as Prisma.GenreCountArgs) {
+    const count = await this.database.getRepository().genre.count(args);
+
+    return count;
+  }
   async createGenre(data: CreateGenreDTO) {
     const genre = await this.database.getRepository().genre.create({
       data: {
@@ -45,7 +48,7 @@ export class GenreRepository {
     return genre;
   }
 
-  async updateGenre(id: string, data: CreateGenreDTO) {
+  async updateGenre(id: string, data: UpdateGenreDTO) {
     const isExist = await this.findGenre(id);
 
     if (data.order) {

@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client';
-import { camelCase } from 'lodash';
 
 import { ServiceType } from '@/interface/service.interface';
 
