@@ -5,6 +5,7 @@ import { AdminRepository } from './admin.repository';
 import { AdminService } from './admin.service';
 import { AdminAnnouncementModule } from './announcement/announcement.module';
 import { AdminAuthModule } from './auth/auth.module';
+import { AdminGenreModule } from './genre/genre.module';
 import { AdminInquiryModule } from './inquiry/inquiry.module';
 import { AdminMusicianModule } from './musician/musician.module';
 import { AdminServiceModule } from './service/service.module';
@@ -17,6 +18,7 @@ export const AdminModules = [
   AdminUserModule,
   AdminAnnouncementModule,
   AdminInquiryModule,
+  AdminGenreModule,
 ];
 
 @Module({
