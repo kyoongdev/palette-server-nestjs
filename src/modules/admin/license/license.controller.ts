@@ -16,7 +16,7 @@ import { AdminLicenseService } from './license.service';
 
 @ApiTags('[관리자] 라이센스')
 @Auth([JwtAuthGuard, RoleGuard('ADMIN')])
-@Controller('license')
+@Controller('licenses')
 export class AdminLicenseController {
   constructor(private readonly licenseService: AdminLicenseService) {}
 

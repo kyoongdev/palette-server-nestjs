@@ -9,6 +9,7 @@ import { AdminContactModule } from './contact/contact.module';
 import { AdminGenreModule } from './genre/genre.module';
 import { AdminInquiryModule } from './inquiry/inquiry.module';
 import { AdminLicenseModule } from './license/license.module';
+import { AdminMoodModule } from './mood/mood.module';
 import { AdminMusicianModule } from './musician/musician.module';
 import { AdminServiceModule } from './service/service.module';
 import { AdminUserModule } from './user/user.module';
@@ -23,6 +24,7 @@ export const AdminModules = [
   AdminGenreModule,
   AdminContactModule,
   AdminLicenseModule,
+  AdminMoodModule,
 ];
 
 @Module({
