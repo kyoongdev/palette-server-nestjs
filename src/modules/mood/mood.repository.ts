@@ -32,13 +32,13 @@ export class MoodRepository {
     return moods;
   }
 
-  async countMood(args = {} as Prisma.MoodCountArgs) {
+  async countMoods(args = {} as Prisma.MoodCountArgs) {
     const count = await this.database.getRepository().mood.count(args);
 
     return count;
   }
 
-  async createMood(data: CreateMoodDTO) {
+  async createMood(data: Prisma.MoodCreateInput) {
     const mood = await this.database.getRepository().mood.create({
       data,
     });
@@ -46,7 +46,7 @@ export class MoodRepository {
     return mood;
   }
 
-  async updateMood(id: string, data: CreateMoodDTO) {
+  async updateMood(id: string, data: Prisma.MoodUpdateInput) {
     await this.database.getRepository().mood.updateMany({
       where: {
         id,
