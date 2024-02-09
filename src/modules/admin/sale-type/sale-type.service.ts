@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { CreateSaleTypeDTO, SaleTypeDTO, UpdateSaleTypeDTO } from '@/modules/sale-type/dto';
+import { CreateSaleTypeDTO, UpdateSaleTypeDTO } from '@/modules/sale-type/dto';
 import { SaleTypeRepository } from '@/modules/sale-type/sale-type.repository';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
+
+import { AdminSaleTypeDTO } from './dto';
 
 @Injectable()
 export class AdminSaleTypeService {
@@ -11,13 +13,13 @@ export class AdminSaleTypeService {
   async findArtistSaleType(id: string) {
     const saleType = await this.saleTypeRepository.findArtistSaleType(id);
 
-    return new SaleTypeDTO(saleType);
+    return new AdminSaleTypeDTO(saleType);
   }
 
   async findAlbumArtSaleType(id: string) {
     const saleType = await this.saleTypeRepository.findAlbumArtSaleType(id);
 
-    return new SaleTypeDTO(saleType);
+    return new AdminSaleTypeDTO(saleType);
   }
 
   async findArtistSaleTypes(paging: PagingDTO) {
@@ -32,7 +34,7 @@ export class AdminSaleTypeService {
     });
 
     return new PaginationDTO(
-      saleTypes.map((saleType) => new SaleTypeDTO(saleType)),
+      saleTypes.map((saleType) => new AdminSaleTypeDTO(saleType)),
       { paging, count }
     );
   }
@@ -49,7 +51,7 @@ export class AdminSaleTypeService {
     });
 
     return new PaginationDTO(
-      saleTypes.map((saleType) => new SaleTypeDTO(saleType)),
+      saleTypes.map((saleType) => new AdminSaleTypeDTO(saleType)),
       { paging, count }
     );
   }

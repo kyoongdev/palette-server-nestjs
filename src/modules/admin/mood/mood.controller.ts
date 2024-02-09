@@ -19,7 +19,7 @@ import { AdminMoodService } from './mood.service';
 export class AdminMoodController {
   constructor(private readonly moodService: AdminMoodService) {}
 
-  @Get(':moodId')
+  @Get(':moodId/detail')
   @ApiOperation({ summary: ' 분위기 조회 상세 조회 API', description: ' 분위기 상세 조회 API' })
   @ResponseApi({
     type: AdminMoodDTO,

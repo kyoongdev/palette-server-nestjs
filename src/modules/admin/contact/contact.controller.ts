@@ -19,7 +19,7 @@ import { AdminContactDTO } from './dto';
 export class AdminContactController {
   constructor(private readonly contactService: AdminContactService) {}
 
-  @Get(':contactId')
+  @Get(':contactId/detail')
   @ApiOperation({ summary: '연락 수단 조회 상세 조회 API', description: '연락 수단 상세 조회 API' })
   @ResponseApi({
     type: AdminContactDTO,

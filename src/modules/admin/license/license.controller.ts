@@ -20,7 +20,7 @@ import { AdminLicenseService } from './license.service';
 export class AdminLicenseController {
   constructor(private readonly licenseService: AdminLicenseService) {}
 
-  @Get(':licenseId')
+  @Get(':licenseId/detail')
   @ApiOperation({ summary: '라이센스 조회 상세 조회 API', description: '라이센스 상세 조회 API' })
   @ResponseApi({
     type: AdminLicenseDTO,

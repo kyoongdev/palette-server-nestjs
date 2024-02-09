@@ -19,7 +19,7 @@ import { AdminGenreService } from './genre.service';
 export class AdminGenreController {
   constructor(private readonly genreService: AdminGenreService) {}
 
-  @Get(':genreId')
+  @Get(':genreId/detail')
   @ApiOperation({ summary: '장르 조회 상세 조회 API', description: '장르 상세 조회 API' })
   @ResponseApi({
     type: AdminGenreDTO,

@@ -25,7 +25,7 @@ import { AdminRegionService } from './region.service';
 export class AdminRegionController {
   constructor(private readonly regionService: AdminRegionService) {}
 
-  @Get('/large-groups/:regionLargeGroupId')
+  @Get('/large-groups/:regionLargeGroupId/detail')
   @ApiOperation({ summary: '지역 대그룹 조회 API', description: '지역 대그룹 조회 API' })
   @ResponseApi({
     type: AdminRegionLargeGroupDTO,
