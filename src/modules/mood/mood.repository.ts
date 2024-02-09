@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
+import { Prisma } from '@prisma/client';
+
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
 
@@ -24,103 +26,36 @@ export class MoodRepository {
     return mood;
   }
 
-  async findMoods() {
-    const moods = await this.database.getRepository().mood.findMany({
-      orderBy: {
-        order: 'asc',
-      },
-    });
+  async findMoods(args = {} as Prisma.MoodFindManyArgs) {
+    const moods = await this.database.getRepository().mood.findMany(args);
 
-    return moods.map((mood) => new MoodDTO(mood));
+    return moods;
   }
+
+  async countMood(args = {} as Prisma.MoodCountArgs) {
+    const count = await this.database.getRepository().mood.count(args);
+
+    return count;
+  }
+
   async createMood(data: CreateMoodDTO) {
     const mood = await this.database.getRepository().mood.create({
-      data: {
-        ...data,
-        order: data.order ?? 0,
-      },
+      data,
     });
 
     return mood;
   }
 
   async updateMood(id: string, data: CreateMoodDTO) {
-    const isExist = await this.findMood(id);
-
-    if (data.order) {
-      await this.database.getRepository().mood.updateMany({
-        where: {
-          ...(isExist.order > data.order
-            ? {
-                AND: [
-                  {
-                    order: {
-                      lt: isExist.order,
-                    },
-                  },
-                  {
-                    order: {
-                      gte: data.order,
-                    },
-                  },
-                ],
-              }
-            : {
-                AND: [
-                  {
-                    order: {
-                      lte: data.order,
-                    },
-                  },
-                  {
-                    order: {
-                      gt: isExist.order,
-                    },
-                  },
-                ],
-              }),
-        },
-        data: {
-          order: {
-            ...(isExist.order > data.order
-              ? {
-                  increment: 1,
-                }
-              : {
-                  decrement: 1,
-                }),
-          },
-        },
-      });
-    }
-
     await this.database.getRepository().mood.updateMany({
       where: {
         id,
       },
-      data: {
-        ...data,
-        order: data.order ?? 0,
-      },
+      data,
     });
   }
 
   async deleteMood(id: string) {
-    const isExist = await this.findMood(id);
-
-    await this.database.getRepository().mood.updateMany({
-      where: {
-        order: {
-          gt: isExist.order,
-        },
-      },
-      data: {
-        order: {
-          decrement: 1,
-        },
-      },
-    });
-
     await this.database.getRepository().mood.delete({
       where: {
         id,
