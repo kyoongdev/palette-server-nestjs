@@ -9,12 +9,12 @@ export class RegionService {
 
   async findRegionLargeGroups() {
     const regions = await this.regionRepository.findRegionLargeGroups();
-    return regions.map((region) => new RegionLargeGroupDTO(region));
+    return regions.map(RegionLargeGroupDTO.fromFindRegionLargeGroup);
   }
 
   async findRegionLargeGroup(id: string) {
     const region = await this.regionRepository.findRegionLargeGroup(id);
-    return new RegionLargeGroupDTO(region);
+    return RegionLargeGroupDTO.fromFindRegionLargeGroup(region);
   }
 
   async findRegionSmallGroupsByLargeGroup(largeGroupId: string) {

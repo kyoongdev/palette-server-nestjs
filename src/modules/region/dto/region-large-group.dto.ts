@@ -1,3 +1,4 @@
+import { FindRegionLargeGroup } from '@/interface/region.interface';
 import { Property } from '@/utils/swagger';
 
 import { RegionSmallGroupDTO, RegionSmallGroupDTOProps } from './region-small-group.dto';
@@ -22,5 +23,13 @@ export class RegionLargeGroupDTO {
     this.id = props.id;
     this.name = props.name;
     this.regions = props.regions.map((region) => new RegionSmallGroupDTO(region));
+  }
+
+  static fromFindRegionLargeGroup(data: FindRegionLargeGroup) {
+    return new RegionLargeGroupDTO({
+      id: data.id,
+      name: data.name,
+      regions: data.regions.map((region) => new RegionSmallGroupDTO(region)),
+    });
   }
 }

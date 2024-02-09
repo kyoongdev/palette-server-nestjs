@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
+import { Prisma } from '@prisma/client';
+
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
+import { regionLargeGroupInclude } from '@/utils/constants/include/region';
 
 import { REGION_ERROR_CODE } from './exception/error-code';
 
@@ -9,18 +12,11 @@ import { REGION_ERROR_CODE } from './exception/error-code';
 export class RegionRepository {
   constructor(private readonly database: PrismaDatabase) {}
 
-  async findRegionLargeGroups() {
+  async findRegionLargeGroups(args = {} as Prisma.RegionLargeGroupFindManyArgs) {
+    const { include, where, select, ...rest } = args;
     const regions = await this.database.getRepository().regionLargeGroup.findMany({
-      include: {
-        regions: {
-          orderBy: {
-            name: 'asc',
-          },
-        },
-      },
-      orderBy: {
-        order: 'asc',
-      },
+      ...rest,
+      include: regionLargeGroupInclude,
     });
 
     return regions;
@@ -29,13 +25,7 @@ export class RegionRepository {
   async findRegionLargeGroup(id: string) {
     const region = await this.database.getRepository().regionLargeGroup.findUnique({
       where: { id },
-      include: {
-        regions: {
-          orderBy: {
-            name: 'asc',
-          },
-        },
-      },
+      include: regionLargeGroupInclude,
     });
 
     if (!region) {
@@ -68,5 +58,47 @@ export class RegionRepository {
     });
 
     return smallRegions;
+  }
+
+  async createRegionLargeGroup(data: Prisma.RegionLargeGroupCreateInput) {
+    const region = await this.database.getRepository().regionLargeGroup.create({
+      data,
+    });
+
+    return region;
+  }
+
+  async createRegionSmallGroup(data: Prisma.RegionSmallGroupCreateInput) {
+    const region = await this.database.getRepository().regionSmallGroup.create({
+      data,
+    });
+
+    return region;
+  }
+
+  async updateRegionLargeGroup(id: string, data: Prisma.RegionLargeGroupUpdateInput) {
+    await this.database.getRepository().regionLargeGroup.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async updateRegionSmallGroup(id: string, data: Prisma.RegionSmallGroupUpdateInput) {
+    await this.database.getRepository().regionSmallGroup.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async deleteRegionLargeGroup(id: string) {
+    await this.database.getRepository().regionLargeGroup.delete({
+      where: { id },
+    });
+  }
+
+  async deleteRegionSmallGroup(id: string) {
+    await this.database.getRepository().regionSmallGroup.delete({
+      where: { id },
+    });
   }
 }

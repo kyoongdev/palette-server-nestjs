@@ -7,6 +7,6 @@ import { AdminMoodService } from './mood.service';
 
 @Module({
   providers: [MoodRepository, AdminMoodService],
-  exports: [AdminMoodController],
+  controllers: [AdminMoodController],
 })
 export class AdminMoodModule {}
