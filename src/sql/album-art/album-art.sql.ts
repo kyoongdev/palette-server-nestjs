@@ -29,7 +29,9 @@ export class AlbumArtSQL extends BaseAlbumArtSQL {
   }
 
   getWhere(isAdmin = false) {
-    const isAdminWhere = isAdmin ? Prisma.sql`1 = 1` : Prisma.sql`albumArt.isAuthorized = 1 AND albumArt.isPending = 0`;
+    const isAdminWhere = isAdmin
+      ? Prisma.sql`1 = 1`
+      : Prisma.sql`albumArt.isAuthorized = 1 AND albumArt.isPending = 0 AND albumArt.isSaleStopped = 0`;
 
     const saleTypeWhere = this.query?.saleTypeId
       ? Prisma.sql`AND albumArtSaleTypeBridge.saleTypeId = ${this.query.saleTypeId}`

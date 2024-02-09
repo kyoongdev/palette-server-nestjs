@@ -31,7 +31,7 @@ export class MixMasteringSQL extends BaseMixMasteringSQL {
   getWhere(isAdmin = false) {
     const isAdminWhere = isAdmin
       ? Prisma.sql`1 = 1`
-      : Prisma.sql`mixMastering.isAuthorized = 1 AND mixMastering.isPending = 0`;
+      : Prisma.sql`mixMastering.isAuthorized = 1 AND mixMastering.isPending = 0 AND mixMastering.isSaleStopped = 0`;
     const genreWhere = this.query.genreId
       ? Prisma.sql`AND mixMasteringGenre.genreId = ${this.query.genreId}`
       : Prisma.empty;

@@ -31,7 +31,7 @@ export class RecordingSQL extends BaseRecordingSQL {
   getWhere(isAdmin = false) {
     const isAdminWhere = isAdmin
       ? Prisma.sql`1 = 1`
-      : Prisma.sql`recording.isAuthorized = 1 AND recording.isPending = 0`;
+      : Prisma.sql`recording.isAuthorized = 1 AND recording.isPending = 0 AND recording.isSaleStopped = 0`;
 
     const regionLargeGroupWhere = this.query.regionLargeGroupId
       ? Prisma.sql`AND recordingRegion.regionLargeGroupId = ${this.query.regionLargeGroupId}`

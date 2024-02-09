@@ -29,7 +29,9 @@ export class ArtistSQL extends BaseArtistSQL {
   }
 
   getWhere(isAdmin = false) {
-    const isAdminWhere = isAdmin ? Prisma.sql`1 = 1` : Prisma.sql`artist.isAuthorized = 1 AND artist.isPending = 0`;
+    const isAdminWhere = isAdmin
+      ? Prisma.sql`1 = 1`
+      : Prisma.sql`artist.isAuthorized = 1 AND artist.isPending = 0 AND artist.isSaleStopped = 0`;
 
     const saleTypeIdWhere = this.query.saleTypeId
       ? Prisma.sql`AND saleType.saleTypeId = ${this.query.saleTypeId}`
