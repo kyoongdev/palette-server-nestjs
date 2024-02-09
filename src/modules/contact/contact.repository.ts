@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
+import { Prisma } from '@prisma/client';
+
 import { CustomException } from '@/common/error/custom.exception';
 import { PrismaDatabase } from '@/database/prisma.repository';
 
@@ -30,5 +32,30 @@ export class ContactRepository {
       },
     });
     return contacts;
+  }
+
+  async createContact(data: Prisma.ContactCreateInput) {
+    const contact = await this.database.getRepository().contact.create({
+      data,
+    });
+
+    return contact;
+  }
+
+  async updateContact(id: string, data: Prisma.ContactUpdateInput) {
+    await this.database.getRepository().contact.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
+
+  async deleteContact(id: string) {
+    await this.database.getRepository().contact.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

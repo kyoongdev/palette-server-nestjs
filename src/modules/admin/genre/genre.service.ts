@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
-import { CreateGenreDTO, GenreDTO, UpdateGenreDTO } from '@/modules/genre/dto';
+import { CreateGenreDTO, UpdateGenreDTO } from '@/modules/genre/dto';
 import { GenreRepository } from '@/modules/genre/genre.repository';
 import { Transactional } from '@/utils/aop/transaction/transaction';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
+
+import { AdminGenreDTO } from './dto';
 
 @Injectable()
 export class AdminGenreService {
@@ -12,7 +14,7 @@ export class AdminGenreService {
   async findGenre(id: string) {
     const genre = await this.genreRepository.findGenre(id);
 
-    return new GenreDTO(genre);
+    return new AdminGenreDTO(genre);
   }
 
   async findGenres(paging: PagingDTO) {
@@ -27,7 +29,7 @@ export class AdminGenreService {
     });
 
     return new PaginationDTO(
-      genres.map((genre) => new GenreDTO(genre)),
+      genres.map((genre) => new AdminGenreDTO(genre)),
       { paging, count }
     );
   }

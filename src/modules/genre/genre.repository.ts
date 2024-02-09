@@ -49,82 +49,15 @@ export class GenreRepository {
   }
 
   async updateGenre(id: string, data: UpdateGenreDTO) {
-    const isExist = await this.findGenre(id);
-
-    if (data.order) {
-      await this.database.getRepository().genre.updateMany({
-        where: {
-          ...(isExist.order > data.order
-            ? {
-                AND: [
-                  {
-                    order: {
-                      lt: isExist.order,
-                    },
-                  },
-                  {
-                    order: {
-                      gte: data.order,
-                    },
-                  },
-                ],
-              }
-            : {
-                AND: [
-                  {
-                    order: {
-                      lte: data.order,
-                    },
-                  },
-                  {
-                    order: {
-                      gt: isExist.order,
-                    },
-                  },
-                ],
-              }),
-        },
-        data: {
-          order: {
-            ...(isExist.order > data.order
-              ? {
-                  increment: 1,
-                }
-              : {
-                  decrement: 1,
-                }),
-          },
-        },
-      });
-    }
-
     await this.database.getRepository().genre.updateMany({
       where: {
         id,
       },
-      data: {
-        ...data,
-        order: data.order ?? 0,
-      },
+      data,
     });
   }
 
   async deleteGenre(id: string) {
-    const isExist = await this.findGenre(id);
-
-    await this.database.getRepository().genre.updateMany({
-      where: {
-        order: {
-          gt: isExist.order,
-        },
-      },
-      data: {
-        order: {
-          decrement: 1,
-        },
-      },
-    });
-
     await this.database.getRepository().genre.delete({
       where: {
         id,

@@ -5,11 +5,12 @@ import { Paging } from '@/common/decorator';
 import { JwtAuthGuard } from '@/common/guards/jwt.guard';
 import { RoleGuard } from '@/common/guards/role.guard';
 import { ResponseWithIdInterceptor } from '@/common/interceptor/response-with-id.interceptor';
-import { CreateGenreDTO, GenreDTO, UpdateGenreDTO } from '@/modules/genre/dto';
+import { CreateGenreDTO, UpdateGenreDTO } from '@/modules/genre/dto';
 import { EmptyResponseDTO, ResponseWithIdDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
 import { Auth, ResponseApi } from '@/utils/swagger';
 
+import { AdminGenreDTO } from './dto';
 import { AdminGenreService } from './genre.service';
 
 @ApiTags('[관리자] 장르')
@@ -21,7 +22,7 @@ export class AdminGenreController {
   @Get(':genreId')
   @ApiOperation({ summary: '장르 조회 상세 조회 API', description: '장르 상세 조회 API' })
   @ResponseApi({
-    type: GenreDTO,
+    type: AdminGenreDTO,
   })
   async findGenre(@Param('genreId') genreId: string) {
     return await this.genreService.findGenre(genreId);
@@ -31,7 +32,7 @@ export class AdminGenreController {
   @ApiQuery({ type: PagingDTO })
   @ApiOperation({ summary: '장르 목록 조회 API', description: '장르 목록 조회 API' })
   @ResponseApi({
-    type: GenreDTO,
+    type: AdminGenreDTO,
     isPaging: true,
   })
   async findGenres(@Paging() paging: PagingDTO) {

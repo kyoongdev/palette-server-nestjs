@@ -1,11 +1,11 @@
-import { Controller, Delete, Get, Param, Patch, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { Paging } from '@/common/decorator';
 import { JwtAuthGuard } from '@/common/guards/jwt.guard';
 import { RoleGuard } from '@/common/guards/role.guard';
 import { ResponseWithIdInterceptor } from '@/common/interceptor/response-with-id.interceptor';
-import { AnnouncementDTO, CreateAnnouncementDTO } from '@/modules/announcement/dto';
+import { AnnouncementDTO, CreateAnnouncementDTO, UpdateAnnouncementDTO } from '@/modules/announcement/dto';
 import { EmptyResponseDTO, ResponseWithIdDTO } from '@/utils';
 import { PagingDTO } from '@/utils/pagination';
 import { Auth, ResponseApi } from '@/utils/swagger';
@@ -42,15 +42,15 @@ export class AdminAnnouncementController {
   @UseInterceptors(ResponseWithIdInterceptor)
   @ApiOperation({ summary: '공지사항 생성 API', description: '공지사항을 생성합니다.' })
   @ResponseApi({ type: ResponseWithIdDTO }, 201)
-  async createAnnouncement(data: CreateAnnouncementDTO) {
-    return await this.announcementService.createAnnouncement(data);
+  async createAnnouncement(@Body() body: CreateAnnouncementDTO) {
+    return await this.announcementService.createAnnouncement(body);
   }
 
   @Patch(':announcementId')
   @ApiOperation({ summary: '공지사항 수정 API', description: '공지사항을 수정합니다.' })
   @ResponseApi({ type: EmptyResponseDTO }, 204)
-  async updateAnnouncement(@Param('announcementId') announcementId: string, data: AnnouncementDTO) {
-    await this.announcementService.updateAnnouncement(announcementId, data);
+  async updateAnnouncement(@Param('announcementId') announcementId: string, @Body() body: UpdateAnnouncementDTO) {
+    await this.announcementService.updateAnnouncement(announcementId, body);
   }
 
   @Delete(':announcementId')
