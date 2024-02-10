@@ -1,4 +1,5 @@
-import { CommonUserDTO, CommonUserDTOProps } from '@/modules/user/dto';
+import { FindChatMessage } from '@/interface/chat.interface';
+import { CommonUserDTO } from '@/modules/user/dto';
 import { Property } from '@/utils/swagger';
 
 export interface ChatMessageDTOProps {
@@ -7,7 +8,7 @@ export interface ChatMessageDTOProps {
   createdAt: Date;
   isRead: boolean;
   chatRoomId: string;
-  sender: CommonUserDTOProps;
+  sender: CommonUserDTO;
 }
 
 export class ChatMessageDTO {
@@ -35,6 +36,17 @@ export class ChatMessageDTO {
     this.createdAt = props.createdAt;
     this.isRead = props.isRead;
     this.chatRoomId = props.chatRoomId;
-    this.sender = new CommonUserDTO(props.sender);
+    this.sender = props.sender;
+  }
+
+  static fromFindChatMessage(data: FindChatMessage) {
+    return new ChatMessageDTO({
+      id: data.id,
+      content: data.content,
+      createdAt: data.createdAt,
+      isRead: data.isRead,
+      chatRoomId: data.chatRoomId,
+      sender: CommonUserDTO.fromFindCommonUser(data.user),
+    });
   }
 }
