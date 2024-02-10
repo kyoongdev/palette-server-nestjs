@@ -1,30 +1,21 @@
 import { Injectable } from '@nestjs/common';
 
-import { Prisma } from '@prisma/client';
-
 import { CustomException } from '@/common/error/custom.exception';
-import { PrismaDatabase } from '@/database/prisma.repository';
 import { FindServiceWithDetailList } from '@/interface/service.interface';
-import { AlbumArtSQL } from '@/sql/album-art/album-art.sql';
-import { Top5SQL } from '@/sql/home/top5.sql';
+import { TopSQL } from '@/sql/top/top5.sql';
 import { Transactional } from '@/utils/aop/transaction/transaction';
 import { serviceWithDetailInclude } from '@/utils/constants/include/service';
 import { findPendingServicesWhere, findServicesWhere } from '@/utils/constants/where/service';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { AlbumArtRepository } from './album-art/album-art.repository';
-import { AlbumArtListDTO } from './album-art/dto';
 import { ArtistRepository } from './artist/artist.repository';
-import { ArtistListDTO } from './artist/dto';
 import { MusicianServiceListDTO } from './dto';
 import { Top5ServiceDTOProps } from './dto/top-5-service.dto';
 import { Top5DTO } from './dto/top-5.dto';
 import { SERVICE_ERROR_CODE } from './exception/error-code';
-import { MixMasteringListDTO } from './mix-mastering/dto';
 import { MixMasteringRepository } from './mix-mastering/mix-mastering.repository';
-import { MrBeatListDTO } from './mr-beat/dto/mr-beat-list.dto';
 import { MrBeatRepository } from './mr-beat/mr-beat.repository';
-import { RecordingListDTO } from './recording/dto';
 import { RecordingRepository } from './recording/recording.repository';
 import { ServiceRepository } from './service.repository';
 
@@ -36,24 +27,25 @@ export class ServiceService {
     private readonly albumArtRepository: AlbumArtRepository,
     private readonly mixMasteringRepository: MixMasteringRepository,
     private readonly recordingRepository: RecordingRepository,
-    private readonly mrBeatRepository: MrBeatRepository
+    private readonly mrBeatRepository: MrBeatRepository,
+    private readonly topSQL: TopSQL
   ) {}
 
   async findTop5Services() {
     const { data: albumArts } = await this.albumArtRepository.findAlbumArtsWithSQL<Top5ServiceDTOProps>(
-      new Top5SQL('ALBUM_ART').getTop5SQL()
+      this.topSQL.getClickedTopSQL('ALBUM_ART')
     );
     const { data: artists } = await this.artistRepository.findArtistsWithSQL<Top5ServiceDTOProps>(
-      new Top5SQL('ARTIST').getTop5SQL()
+      this.topSQL.getClickedTopSQL('ARTIST')
     );
     const { data: mixMasterings } = await this.mixMasteringRepository.findMixMasteringsWithSQL<Top5ServiceDTOProps>(
-      new Top5SQL('MIX_MASTERING').getTop5SQL()
+      this.topSQL.getClickedTopSQL('MIX_MASTERING')
     );
     const { data: mrBeats } = await this.mrBeatRepository.findMrBeatsWithSQL<Top5ServiceDTOProps>(
-      new Top5SQL('MR_BEAT').getTop5SQL()
+      this.topSQL.getClickedTopSQL('MR_BEAT')
     );
     const { data: recordings } = await this.recordingRepository.findRecordingsWithSQL<Top5ServiceDTOProps>(
-      new Top5SQL('RECORDING').getTop5SQL()
+      this.topSQL.getClickedTopSQL('RECORDING')
     );
 
     return new Top5DTO({

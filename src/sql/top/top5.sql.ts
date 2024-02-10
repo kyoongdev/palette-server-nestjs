@@ -1,18 +1,15 @@
+import { Injectable } from '@nestjs/common';
+
 import { Prisma } from '@prisma/client';
 
 import { ServiceType } from '@/interface/service.interface';
 
-export class Top5SQL {
-  table: ServiceType;
-
-  constructor(props: ServiceType) {
-    this.table = props;
-  }
-
-  getTop5SQL() {
+@Injectable()
+export class TopSQL {
+  getClickedTopSQL(table: ServiceType, limit = 5) {
     return Prisma.sql`
       SELECT target.id, target.name, musician.id AS musicianId,  profile.url as musicianProfileUrl, COUNT(clicked.id) AS clickCount
-      ${this.getFrom()}
+      ${this.getFrom(table)}
       LEFT JOIN MusicianService musicianService ON musicianService.id = target.musicianServiceId
       LEFT JOIN MusicianServiceClicked clicked ON clicked.musicianServiceId = musicianService.id 
       LEFT JOIN Musician musician ON musician.id = musicianService.musicianId
@@ -21,18 +18,18 @@ export class Top5SQL {
       WHERE (MONTH(clicked.createdAt) = MONTH(CURRENT_DATE()) AND YEAR(clicked.createdAt) = YEAR(CURRENT_DATE())) OR clicked.createdAt IS NULL
       GROUP BY target.id, clicked.id
       ORDER BY clickCount DESC
-      LIMIT 5
+      LIMIT ${limit}
     `;
   }
 
-  getFrom() {
-    if (this.table === 'ALBUM_ART') {
+  getFrom(table: ServiceType) {
+    if (table === 'ALBUM_ART') {
       return Prisma.sql`FROM AlbumArt target`;
-    } else if (this.table === 'ARTIST') {
+    } else if (table === 'ARTIST') {
       return Prisma.sql`FROM Artist target`;
-    } else if (this.table === 'MIX_MASTERING') {
+    } else if (table === 'MIX_MASTERING') {
       return Prisma.sql`FROM MixMastering target`;
-    } else if (this.table === 'MR_BEAT') {
+    } else if (table === 'MR_BEAT') {
       return Prisma.sql`FROM MrBeat target`;
     } else {
       return Prisma.sql`FROM Recording target`;

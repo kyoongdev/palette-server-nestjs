@@ -33,6 +33,46 @@ model Admin {
   password String @db.VarChar(255)
 }
 
+model ChatRoom {
+  id String @id @default(uuid())
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  messages      ChatMessage[]
+  userChatRooms UserChatRoom[]
+}
+
+model ChatMessage {
+  id String @id @default(uuid())
+
+  content   String   @db.MediumText
+  createdAt DateTime @default(now())
+
+  isRead Boolean @default(false)
+
+  chatRoomId String
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model UserChatRoom {
+  id String @id @default(uuid())
+
+  order Int @default(0) @db.TinyInt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  chatRoomId String
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, chatRoomId])
+}
+
 model User {
   id String @id @default(uuid())
 
@@ -55,6 +95,8 @@ model User {
   serviceReviews ServiceReview[]
   clicks         MusicianServiceClicked[]
   inquiries      Inquiry[]
+  chatMessages   ChatMessage[]
+  userChatRooms  UserChatRoom[]
 }
 
 model UserSocial {

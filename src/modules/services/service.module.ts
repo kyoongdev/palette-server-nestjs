@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 
+import { TopSQL } from '@/sql/top/top5.sql';
+
 import { AlbumArtModule } from './album-art/album-art.module';
 import { AlbumArtRepository } from './album-art/album-art.repository';
 import { ArtistModule } from './artist/artist.module';
@@ -32,6 +34,7 @@ export const ServiceModules = [
     MixMasteringRepository,
     RecordingRepository,
     MrBeatRepository,
+    TopSQL,
   ],
   imports: ServiceModules,
   controllers: [ServiceController],
