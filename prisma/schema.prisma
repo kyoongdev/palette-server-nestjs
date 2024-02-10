@@ -36,9 +36,7 @@ model Admin {
 model ChatRoom {
   id String @id @default(uuid())
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime @default(now())
 
   messages      ChatMessage[]
   userChatRooms UserChatRoom[]
@@ -743,4 +741,11 @@ model License {
   recordingLicenses    RecordingLicense[]
   mixMasteringLicenses MixMasteringLicense[]
   albumArtLicenses     AlbumArtLicense[]
+}
+
+enum SocialType {
+  KAKAO
+  NAVER
+  GOOGLE
+  APPLE
 }
