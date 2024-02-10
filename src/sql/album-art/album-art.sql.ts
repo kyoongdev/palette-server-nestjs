@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common';
+
 import { Prisma } from '@prisma/client';
 
 import { FindAlbumArtQuery } from '@/modules/services/album-art/dto/query/find-album-art.query';
@@ -6,17 +8,17 @@ import { BaseAlbumArtSQL, BaseAlbumArtSQLProps } from './base-album-art.sql';
 
 interface AlbumArtSQLProps extends BaseAlbumArtSQLProps {
   query: FindAlbumArtQuery;
+  isAdmin: boolean;
 }
 
+@Injectable()
 export class AlbumArtSQL extends BaseAlbumArtSQL {
   query: FindAlbumArtQuery;
 
-  constructor(props: AlbumArtSQLProps) {
-    super(props);
-    this.query = props.query;
-  }
+  getSqlQuery({ isAdmin = false, paging, query }: AlbumArtSQLProps) {
+    this.query = query;
+    this.paging = paging;
 
-  getSqlQuery(isAdmin = false) {
     return Prisma.sql`
     ${this.getBaseSelect()}
     FROM AlbumArt albumArt

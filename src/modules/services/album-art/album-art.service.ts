@@ -16,7 +16,8 @@ import { ALBUM_ART_ERROR_CODE } from './exception/error-code';
 export class AlbumArtService {
   constructor(
     private readonly albumArtRepository: AlbumArtRepository,
-    private readonly validateService: ValidateServiceProvider
+    private readonly validateService: ValidateServiceProvider,
+    private readonly albumArtSQL: AlbumArtSQL
   ) {}
 
   async findAlbumArt(id: string) {
@@ -29,10 +30,7 @@ export class AlbumArtService {
     const sqlPaging = paging.getSqlPaging();
 
     const { data, count } = await this.albumArtRepository.findAlbumArtsWithSQL(
-      new AlbumArtSQL({
-        paging: sqlPaging,
-        query,
-      }).getSqlQuery()
+      this.albumArtSQL.getSqlQuery({ paging: sqlPaging, query, isAdmin: false })
     );
 
     return new PaginationDTO<AlbumArtListDTO>(data.map(AlbumArtListDTO.fromFindSQLAlbumArt), { paging, count });
