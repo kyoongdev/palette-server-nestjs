@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common';
+
 import { Prisma } from '@prisma/client';
 
 import { FindArtistListQuery } from '@/modules/services/artist/dto/query';
@@ -6,17 +8,17 @@ import { BaseArtistSQL, BaseArtistSQLProps } from './base-artist.sql';
 
 interface ArtistSQLProps extends BaseArtistSQLProps {
   query: FindArtistListQuery;
+  isAdmin: boolean;
 }
 
+@Injectable()
 export class ArtistSQL extends BaseArtistSQL {
   query: FindArtistListQuery;
 
-  constructor(props: ArtistSQLProps) {
-    super(props);
-    this.query = props.query;
-  }
+  getSqlQuery({ isAdmin = false, query, paging }: ArtistSQLProps) {
+    this.query = query;
+    this.paging = paging;
 
-  getSqlQuery(isAdmin = false) {
     return Prisma.sql`
     ${this.getBaseSelect()}
     FROM Artist artist

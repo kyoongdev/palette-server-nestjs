@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common';
+
 import { Prisma } from '@prisma/client';
 
 import { FindRecordingListQuery } from '@/modules/services/recording/dto/query';
@@ -6,17 +8,17 @@ import { BaseRecordingSQL, BaseRecordingSQLProps } from './base-recording.sql';
 
 interface RecordingSQLProps extends BaseRecordingSQLProps {
   query: FindRecordingListQuery;
+  isAdmin: boolean;
 }
 
+@Injectable()
 export class RecordingSQL extends BaseRecordingSQL {
   query: FindRecordingListQuery;
 
-  constructor(props: RecordingSQLProps) {
-    super(props);
-    this.query = props.query;
-  }
+  getSqlQuery({ isAdmin = false, query, paging }: RecordingSQLProps) {
+    this.query = query;
+    this.paging = paging;
 
-  getSqlQuery(isAdmin = false) {
     return Prisma.sql`
     ${this.getBaseSelect()}
     FROM Recording recording

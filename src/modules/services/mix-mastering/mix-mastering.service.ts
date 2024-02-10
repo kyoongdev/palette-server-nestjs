@@ -16,7 +16,8 @@ import { MixMasteringRepository } from './mix-mastering.repository';
 export class MixMasteringService {
   constructor(
     private readonly mixMasteringRepository: MixMasteringRepository,
-    private readonly validateService: ValidateServiceProvider
+    private readonly validateService: ValidateServiceProvider,
+    private readonly mixMasteringSQL: MixMasteringSQL
   ) {}
 
   async findMixMastering(id: string) {
@@ -29,10 +30,7 @@ export class MixMasteringService {
     const sqlPaging = paging.getSqlPaging();
 
     const { data, count } = await this.mixMasteringRepository.findMixMasteringsWithSQL(
-      new MixMasteringSQL({
-        paging: sqlPaging,
-        query,
-      }).getSqlQuery()
+      this.mixMasteringSQL.getSqlQuery({ paging: sqlPaging, query, isAdmin: false })
     );
 
     return new PaginationDTO<MixMasteringListDTO>(data.map(MixMasteringListDTO.fromFindSQLMixMastering), {

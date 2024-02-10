@@ -17,7 +17,8 @@ import { RecordingRepository } from './recording.repository';
 export class RecordingService {
   constructor(
     private readonly recordingRepository: RecordingRepository,
-    private readonly validateService: ValidateServiceProvider
+    private readonly validateService: ValidateServiceProvider,
+    private readonly recordingSQL: RecordingSQL
   ) {}
 
   async findRecording(id: string) {
@@ -30,10 +31,7 @@ export class RecordingService {
     const sqlPaging = paging.getSqlPaging();
 
     const { data, count } = await this.recordingRepository.findRecordingsWithSQL(
-      new RecordingSQL({
-        paging: sqlPaging,
-        query,
-      }).getSqlQuery()
+      this.recordingSQL.getSqlQuery({ paging: sqlPaging, query, isAdmin: false })
     );
 
     return new PaginationDTO<RecordingListDTO>(data.map(RecordingListDTO.fromFindSQLRecordingList), { count, paging });

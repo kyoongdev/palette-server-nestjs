@@ -9,10 +9,6 @@ export interface BaseRecordingSQLProps {
 export class BaseRecordingSQL {
   paging: PagingDTO;
 
-  constructor(protected readonly props: BaseRecordingSQLProps) {
-    this.paging = props.paging;
-  }
-
   getBaseJoin() {
     return Prisma.sql`
     LEFT JOIN RecordingImage image ON image.recordingId = recording.id AND image.isThumbnail = true

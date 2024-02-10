@@ -8,9 +8,6 @@ export interface BaseMrBeatSQLProps {
 
 export class BaseMrBeatSQL {
   paging: PagingDTO;
-  constructor(protected readonly props: BaseMrBeatSQLProps) {
-    this.paging = props.paging;
-  }
 
   getBaseJoin() {
     return Prisma.sql`

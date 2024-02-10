@@ -9,10 +9,6 @@ export interface BaseMixMasteringSQLProps {
 export class BaseMixMasteringSQL {
   paging: PagingDTO;
 
-  constructor(props: BaseMixMasteringSQLProps) {
-    this.paging = props.paging;
-  }
-
   getBaseJoin() {
     return Prisma.sql`
     LEFT JOIN Image thumbnail ON thumbnail.id = mixMastering.thumbnailId

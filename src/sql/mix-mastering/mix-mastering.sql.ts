@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common';
+
 import { Prisma } from '@prisma/client';
 
 import { FindMixMasteringQuery } from '@/modules/services/mix-mastering/dto/query';
@@ -6,17 +8,16 @@ import { BaseMixMasteringSQL, BaseMixMasteringSQLProps } from './base-mix-master
 
 interface MixMasteringSQLProps extends BaseMixMasteringSQLProps {
   query: FindMixMasteringQuery;
+  isAdmin: boolean;
 }
 
+@Injectable()
 export class MixMasteringSQL extends BaseMixMasteringSQL {
   query: FindMixMasteringQuery;
 
-  constructor(props: MixMasteringSQLProps) {
-    super(props);
-    this.query = props.query;
-  }
-
-  getSqlQuery(isAdmin = false) {
+  getSqlQuery({ isAdmin = false, query, paging }: MixMasteringSQLProps) {
+    this.query = query;
+    this.paging = paging;
     return Prisma.sql`
     ${this.getBaseSelect()}
     FROM MixMastering mixMastering

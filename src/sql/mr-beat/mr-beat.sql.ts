@@ -6,17 +6,16 @@ import { BaseMrBeatSQL, BaseMrBeatSQLProps } from './base-mr-beat.sql';
 
 interface MrBeatSQLProps extends BaseMrBeatSQLProps {
   query: FindMrBeatsQuery;
+  isAdmin: boolean;
 }
 
 export class MrBeatSQL extends BaseMrBeatSQL {
   query: FindMrBeatsQuery;
 
-  constructor(props: MrBeatSQLProps) {
-    super(props);
-    this.query = props.query;
-  }
+  getSqlQuery({ isAdmin = false, query, paging }: MrBeatSQLProps) {
+    this.query = query;
+    this.paging = paging;
 
-  getSqlQuery(isAdmin = false) {
     return Prisma.sql`
     ${this.getBaseSelect()}
     FROM MrBeat mrBeat

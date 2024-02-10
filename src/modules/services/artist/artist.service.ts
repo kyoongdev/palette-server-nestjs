@@ -17,7 +17,8 @@ import { ARTIST_ERROR_CODE } from './exception/error-code';
 export class ArtistService {
   constructor(
     private readonly artistRepository: ArtistRepository,
-    private readonly validateService: ValidateServiceProvider
+    private readonly validateService: ValidateServiceProvider,
+    private readonly artistSQL: ArtistSQL
   ) {}
 
   async findArtist(id: string) {
@@ -29,10 +30,7 @@ export class ArtistService {
   async findArtistsWithSQL(paging: PagingDTO, query: FindArtistListQuery) {
     const sqlPaging = paging.getSqlPaging();
     const { data, count } = await this.artistRepository.findArtistsWithSQL(
-      new ArtistSQL({
-        paging: sqlPaging,
-        query,
-      }).getSqlQuery()
+      this.artistSQL.getSqlQuery({ paging: sqlPaging, query, isAdmin: false })
     );
 
     return new PaginationDTO(data.map(ArtistListDTO.fromFindSQLArtistList), { count, paging });

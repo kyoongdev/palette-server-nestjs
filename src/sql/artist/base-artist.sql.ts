@@ -8,10 +8,6 @@ export interface BaseArtistSQLProps {
 export class BaseArtistSQL {
   paging: PagingDTO;
 
-  constructor(protected readonly props: BaseArtistSQLProps) {
-    this.paging = props.paging;
-  }
-
   getBaseJoin() {
     return Prisma.sql`
     LEFT JOIN ArtistImage image ON image.artistId = artist.id AND image.isThumbnail = true

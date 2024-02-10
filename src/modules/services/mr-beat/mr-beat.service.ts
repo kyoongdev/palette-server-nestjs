@@ -17,7 +17,8 @@ import { MrBeatRepository } from './mr-beat.repository';
 export class MrBeatService {
   constructor(
     private readonly mrBeatRepository: MrBeatRepository,
-    private readonly validateService: ValidateServiceProvider
+    private readonly validateService: ValidateServiceProvider,
+    private readonly mrBeatSQL: MrBeatSQL
   ) {}
 
   async findMrBeat(id: string) {
@@ -27,12 +28,9 @@ export class MrBeatService {
   }
 
   async findMrBeatsWithSQL(paging: PagingDTO, query?: FindMrBeatsQuery) {
-    const sql = new MrBeatSQL({
-      paging: paging.getSqlPaging(),
-      query,
-    });
-
-    const { data, count } = await this.mrBeatRepository.findMrBeatsWithSQL(sql.getSqlQuery());
+    const { data, count } = await this.mrBeatRepository.findMrBeatsWithSQL(
+      this.mrBeatSQL.getSqlQuery({ paging: paging.getSqlPaging(), query, isAdmin: false })
+    );
 
     return new PaginationDTO<MrBeatListDTO>(data.map(MrBeatListDTO.fromFindSQLMrBeatList), { count, paging });
   }
