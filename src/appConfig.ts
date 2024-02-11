@@ -8,6 +8,8 @@ import { SwaggerTheme } from 'swagger-themes';
 
 import { PrismaService } from '@/database/prisma.service';
 
+import { RedisIoAdapter } from './modules/chat/redis.adapter';
+
 @Injectable()
 class AppConfig {
   private app: INestApplication;
@@ -24,9 +26,17 @@ class AppConfig {
 
   async startServer() {
     await this.configureDatabase();
+    await this.configRedisAdapter();
     await this.app.listen(8000, () => {
       console.info(`🔥 Palette ${this.configService.get('NODE_ENV')} 서버 시작!! 🔥`);
     });
+  }
+
+  async configRedisAdapter() {
+    const redisIoAdapter = new RedisIoAdapter(this.app);
+    await redisIoAdapter.connectToRedis();
+
+    this.app.useWebSocketAdapter(redisIoAdapter);
   }
 
   revalidate() {
