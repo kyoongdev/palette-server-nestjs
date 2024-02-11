@@ -4,6 +4,7 @@ import { AOPModule } from '@/utils/aop/aop.module';
 
 import { AnnouncementModule } from './announcement/announcement.module';
 import { AuthModule } from './auth/auth.module';
+import { ChatModule } from './chat/chat.module';
 import { ContactModule } from './contact/contact.module';
 import { FileModule } from './file/file.module';
 import { GenreModule } from './genre/genre.module';
@@ -28,6 +29,7 @@ export const Modules = [
   SaleTypeModule,
   AnnouncementModule,
   InquiryModule,
+  ChatModule,
   AOPModule,
 ];
 
