@@ -36,8 +36,7 @@ const providers: Provider[] = [...Filters, ...Interceptors, AppConfig];
       useFactory: (configService: ConfigService) => {
         return {
           config: {
-            host: configService.get('REDIS_HOST'),
-            port: configService.get('REDIS_PORT'),
+            url: configService.get('REDIS_URL'),
           },
           readyLog: true,
           errorLog: true,

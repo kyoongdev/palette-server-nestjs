@@ -1,3 +1,4 @@
+import { UseFilters } from '@nestjs/common';
 import {
   MessageBody,
   type OnGatewayConnection,
@@ -8,33 +9,44 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 
-import { InjectRedis } from '@liaoliaots/nestjs-redis';
-import { type Redis } from 'ioredis';
 import { Socket, Server as SocketIo } from 'socket.io';
 
+import { SocketException } from '@/common/error/socket.exception';
+import { SocketExceptionFilter } from '@/common/filter/socket-error.filter';
+
+import { ChatRedisService } from './chat.redis';
+import { SOCKET_ERROR_CODE } from './exception/error-code';
+
+@UseFilters(SocketExceptionFilter)
 @WebSocketGateway(80, { namespace: 'chat', cors: '*' })
 export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: SocketIo;
 
-  clients: string[] = [];
-  constructor(@InjectRedis() private readonly client: Redis) {}
+  constructor(private readonly redisService: ChatRedisService) {}
 
   afterInit(server: SocketIo) {
     console.log('SOCKET ON!!');
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
-    console.log('client connected', client.id);
-    this.clients.push(client.id);
+  async handleConnection(client: Socket, ...args: any[]) {
+    await this.redisService.createClient(client.id);
   }
 
-  handleDisconnect(client: Socket) {
-    console.log('client disconnected');
+  async handleDisconnect(client: Socket) {
+    await this.redisService.deleteClient(client.id);
   }
 
-  @SubscribeMessage('chatToServer')
-  handleMessage(client: Socket, @MessageBody() payload: any): void {
+  @SubscribeMessage('join')
+  async joinRoom() {
+    throw new SocketException(SOCKET_ERROR_CODE.TEST);
+  }
+
+  @SubscribeMessage('leave')
+  async leaveRoom() {}
+
+  @SubscribeMessage('sendMessage')
+  async sendMessage(@MessageBody() payload: any) {
     console.log('TEST', { payload });
     // this.server.sockets..to(this.clients[0]).emit('chatToClient', payload);
   }

@@ -54,6 +54,17 @@ export interface BaseErrorCode {
   message: string;
   code: HttpStatus[keyof HttpStatus];
 }
+
+export interface BaseSocketErrorCode extends BaseErrorCode {
+  message: string;
+  code: HttpStatus[keyof HttpStatus];
+  path: string;
+}
+
 export type ErrorCode<T extends object> = {
   [K in keyof T]: BaseErrorCode;
+};
+
+export type SocketErrorCode<T extends object> = {
+  [K in keyof T]: BaseSocketErrorCode;
 };
