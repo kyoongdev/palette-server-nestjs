@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { AOPModule } from '@/utils/aop/aop.module';
+import { CompodocModule } from '@/utils/compodoc/compodoc.module';
 
 import { AnnouncementModule } from './announcement/announcement.module';
 import { AuthModule } from './auth/auth.module';
@@ -31,6 +32,7 @@ export const Modules = [
   InquiryModule,
   ChatModule,
   AOPModule,
+  CompodocModule,
 ];
 
 @Module({
