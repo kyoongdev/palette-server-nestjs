@@ -13,6 +13,7 @@
     "local": "yarn config:local && nest start --watch",
     "dev": "yarn config:dev &&  nest start --watch",
     "prod": "yarn config:prod &&  nest start --watch",
+    "compodoc": "rm -rf documentation && compodoc -p tsconfig.compodoc.json --includes .",
     "test": "yarn seed && jest",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prettier:fix": "prettier **/*.ts   --write",
@@ -63,12 +64,13 @@
     "s3-streamlogger": "^1.9.2",
     "sharp": "^0.32.1",
     "socket.io": "^4.7.4",
-    "swagger-themes": "^1.2.30",
+    "swagger-themes": "1.2.30",
     "winston": "^3.11.0",
     "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^18.4.4",
+    "@compodoc/compodoc": "^1.1.23",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.3.0",

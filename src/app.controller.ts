@@ -1,4 +1,4 @@
-import { Controller, Get, Response } from '@nestjs/common';
+import { Controller, Get, Render, Response } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import type { Response as ResponseType } from 'express';

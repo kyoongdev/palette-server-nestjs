@@ -4,6 +4,7 @@ import { RouterModule } from '@nestjs/core';
 
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { ClsModule } from 'nestjs-cls';
+import { join } from 'path';
 
 import { AppController } from './app.controller';
 import AppConfig from './appConfig';

@@ -1,8 +1,6 @@
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 
-import { camelCase } from 'lodash';
-
 import AppConfig from '@/appConfig';
 import { logger } from '@/log';
 
@@ -14,20 +12,24 @@ import { AppModule } from './app.module';
   });
   const appConfig = app.get(AppConfig);
 
-  await appConfig
-    .init(app)
-    .enableCors({
-      origin: '*',
-    })
-    .configureInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
-    .configurePipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidUnknownValues: true,
-        transform: true,
+  try {
+    await appConfig
+      .init(app)
+      .enableCors({
+        origin: '*',
       })
-    )
-    .startServer();
+      .configureInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
+      .configurePipes(
+        new ValidationPipe({
+          whitelist: true,
+          forbidUnknownValues: true,
+          transform: true,
+        })
+      )
+      .startServer();
+  } catch (er) {
+    console.error(er);
+  }
 })();
 
 //TODO: sort 옵션 기능

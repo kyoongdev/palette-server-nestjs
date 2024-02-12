@@ -1,6 +1,8 @@
 dist
 node_modules
-builds
+builds 
+documentation
+sockets
 
 # Logs
 logs
