@@ -26,10 +26,10 @@ class AppConfig {
 
   async startServer() {
     await this.configureDatabase();
+    await this.configRedisAdapter();
     await this.app.listen(8000, () => {
       console.info(`🔥 Palette ${this.configService.get('NODE_ENV')} 서버 시작!! 🔥`);
     });
-    await this.configRedisAdapter();
   }
 
   async configRedisAdapter() {

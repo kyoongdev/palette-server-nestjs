@@ -1,7 +1,8 @@
 import { MiddlewareConsumer, Module, type NestModule, type Provider, RequestMethod } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RouterModule } from '@nestjs/core';
 
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { ClsModule } from 'nestjs-cls';
 
 import { AppController } from './app.controller';
@@ -30,6 +31,19 @@ const providers: Provider[] = [...Filters, ...Interceptors, AppConfig];
     ServiceModule,
     AdminModule,
     MusicianModule,
+    RedisModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return {
+          config: {
+            host: configService.get('REDIS_HOST'),
+            port: configService.get('REDIS_PORT'),
+          },
+          readyLog: true,
+          errorLog: true,
+        };
+      },
+    }),
     RouterModule.register([
       {
         path: '/api/v2',
