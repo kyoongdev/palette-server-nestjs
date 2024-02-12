@@ -1,4 +1,4 @@
-import { UseFilters } from '@nestjs/common';
+import { UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   MessageBody,
   type OnGatewayConnection,
@@ -12,12 +12,15 @@ import {
 import { Socket, Server as SocketIo } from 'socket.io';
 
 import { SocketException } from '@/common/error/socket.exception';
+import { WSValidationPipe } from '@/common/error/socket.pipe';
 import { SocketExceptionFilter } from '@/common/filter/socket-error.filter';
 
 import { ChatRedisService } from './chat.redis';
+import { JoinRoomDTO } from './dto';
 import { SOCKET_ERROR_CODE } from './exception/error-code';
 
 @UseFilters(SocketExceptionFilter)
+@UsePipes(WSValidationPipe)
 @WebSocketGateway(80, { namespace: 'chat', cors: '*' })
 export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
@@ -38,8 +41,8 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage('join')
-  async joinRoom() {
-    throw new SocketException(SOCKET_ERROR_CODE.TEST);
+  async joinRoom(@MessageBody() body: JoinRoomDTO) {
+    console.log(body);
   }
 
   @SubscribeMessage('leave')
