@@ -1,6 +1,6 @@
 [
   {
-    "title": "A TITLE",
-    "file": "./sockets/a-file.md"
+    "title": "Socket API 문서",
+    "file": "./socket.md"
   }
 ]

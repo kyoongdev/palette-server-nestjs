@@ -10,4 +10,9 @@ export class AppController {
   getHello(@Response() res: ResponseType) {
     res.status(200).json({ status: 'HEALTHY' });
   }
+
+  @Get('/compodoc')
+  getCompodoc(@Response() res: ResponseType) {
+    res.status(200).sendFile('index.html', { root: './documentation' });
+  }
 }

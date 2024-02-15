@@ -1,5 +1,8 @@
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+
+import { join } from 'path';
 
 import AppConfig from '@/appConfig';
 import { logger } from '@/log';
@@ -7,10 +10,12 @@ import { logger } from '@/log';
 import { AppModule } from './app.module';
 
 (async function () {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger,
   });
   const appConfig = app.get(AppConfig);
+  app.useStaticAssets(join(__dirname, '..', 'documentation'));
+  app.setViewEngine('html');
 
   try {
     await appConfig

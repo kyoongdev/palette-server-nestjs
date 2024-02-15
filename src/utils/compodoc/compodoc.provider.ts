@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit, Type } from '@nestjs/common';
 import { DiscoveryService, MetadataScanner, Reflector } from '@nestjs/core';
 
-import { appendFile, unlink, writeFile } from 'fs';
+import { writeFile } from 'fs';
 
 import {
   CompodocBodyProps,
@@ -35,7 +35,6 @@ export class CompodocProvider implements OnModuleInit {
       });
     });
     const markDown = this.makeMarkDown();
-    unlink('socket.md', (err) => {});
 
     writeFile('socket.md', markDown, (err) => {
       console.log(err);
@@ -44,27 +43,26 @@ export class CompodocProvider implements OnModuleInit {
 
   makeMarkDown() {
     return this.markDown.reduce<string>((acc, item) => {
-      acc += `# ${item.title}\n\n`;
+      acc += `# ${item.title}\n\n\n\n`;
+      acc += ``;
       acc +=
         item.items.reduce<string>((acc, item) => {
           acc += `## ${item.title}\n\n`;
           acc += `### 설명\n${item.description ?? '-'}\n`;
-          acc += `### 요청\n\n`;
+          acc += `### 요청\n\n
+| Name | 타입 | Nullable | 설명 |
+| --- | --- | --- | --- |\n`;
           acc += item.body.reduce<string>((acc, item) => {
-            acc += `#### ${item.name}\n`;
-            acc += `##### Type: ${item.type}\n`;
-            acc += `##### 설명: ${item.description ?? '-'}\n`;
-            acc += `##### Nullable: ${item.nullable}\n\n`;
+            acc += `| ${item.name} | ${item.type} | ${item.nullable} | ${item.description ?? '-'} |\n`;
             return acc;
           }, ``);
 
-          acc += `\n\n### 응답\n\n`;
+          acc += `\n\n### 응답\n\n
+| Name | 타입 | Nullable | 설명 |
+| --- | --- | --- | --- |\n`;
 
           acc += item.response.reduce<string>((acc, item) => {
-            acc += `#### ${item.name}\n`;
-            acc += `##### Type: ${item.type}\n`;
-            acc += `##### 설명: ${item.description ?? '-'}\n`;
-            acc += `##### Nullable: ${item.nullable}\n\n`;
+            acc += `| ${item.name} | ${item.type} | ${item.nullable} | ${item.description ?? '-'} |\n`;
             return acc;
           }, ``);
 

@@ -13,7 +13,7 @@
     "local": "yarn config:local && nest start --watch",
     "dev": "yarn config:dev &&  nest start --watch",
     "prod": "yarn config:prod &&  nest start --watch",
-    "compodoc": "rm -rf documentation && compodoc -p tsconfig.compodoc.json --includes .",
+    "compodoc": "rm -rf documentation && compodoc -p tsconfig.compodoc.json --includes . -y ./styles",
     "test": "yarn seed && jest",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prettier:fix": "prettier **/*.ts   --write",
