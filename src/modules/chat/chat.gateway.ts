@@ -13,14 +13,14 @@ import { Socket, Server as SocketIo } from 'socket.io';
 
 import { WSValidationPipe } from '@/common/error/socket.pipe';
 import { SocketExceptionFilter } from '@/common/filter/socket-error.filter';
-import { ApplyCommonDoc, CommonDocBody, CommonDocResponse } from '@/utils/compodoc/decorators';
+import { ApplyCompodoc, CompodocBody, CompodocOperation, CompodocResponse } from '@/utils/compodoc/decorators';
 
 import { ChatRedisService } from './chat.redis';
 import { JoinRoomDTO } from './dto';
 
 @UseFilters(SocketExceptionFilter)
 @UsePipes(WSValidationPipe)
-@ApplyCommonDoc('Chatting Socket API')
+@ApplyCompodoc('Chatting Socket API')
 @WebSocketGateway(80, { namespace: 'chat', cors: '*' })
 export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
@@ -41,8 +41,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   }
 
   @SubscribeMessage('join')
-  @CommonDocBody({ type: JoinRoomDTO })
-  @CommonDocResponse({ type: JoinRoomDTO })
+  @CompodocOperation({ description: '채팅방에 입장할 때 사용합니다.' })
+  @CompodocBody({ type: JoinRoomDTO })
+  @CompodocResponse({ type: JoinRoomDTO })
   async joinRoom(@MessageBody() body: JoinRoomDTO) {
     console.log(body);
   }

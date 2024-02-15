@@ -1,18 +1,41 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit, Type } from '@nestjs/common';
 import { DiscoveryService, MetadataScanner, Reflector } from '@nestjs/core';
 
-import { COMPO_DOC } from './decorators';
+import {
+  CompodocBodyProps,
+  CompodocFieldValue,
+  CompodocItem,
+  CompodocMarkDown,
+  CompodocOperationProps,
+  CompodocProperty,
+  CompodocResponseProps,
+} from '@/interface/compodoc.interface';
+
+import { COMPO_DOC, COMPO_DOC_BODY, COMPO_DOC_OPERATION, COMPO_DOC_PROPERTIES, COMPO_DOC_RESPONSE } from './decorators';
 
 @Injectable()
 export class CompodocProvider implements OnModuleInit {
+  markDown: CompodocMarkDown[] = [];
+
   constructor(
     private readonly discovery: DiscoveryService,
     private readonly scanner: MetadataScanner,
     private readonly reflect: Reflector
   ) {}
 
-  onModuleInit() {
-    const gateways = this.discovery
+  async onModuleInit() {
+    this.getGateways().forEach(({ instance, metatype }) => {
+      const compo = this.reflect.get<string>(COMPO_DOC, metatype);
+      const methodNames = this.scanner.getAllMethodNames(instance);
+      this.markDown.push({
+        title: compo,
+        items: this.getCompodocItemsByMethods(instance, methodNames),
+      });
+    });
+  }
+
+  getGateways() {
+    return this.discovery
       .getProviders()
       .filter(({ instance }) => instance && Object.getPrototypeOf(instance))
       .filter((wrapper) => wrapper.isDependencyTreeStatic())
@@ -24,15 +47,51 @@ export class CompodocProvider implements OnModuleInit {
         if (!compo) {
           return false;
         }
-        console.log({ compo });
 
         return instance;
       });
+  }
 
-    console.log(gateways);
-    gateways.forEach(({ instance }) => {
-      const methodNames = this.scanner.getAllMethodNames(instance);
-      console.log({ methodNames });
+  getCompodocItemsByMethods(instance: any, methodNames: string[]): CompodocItem[] {
+    return methodNames.reduce<CompodocItem[]>((acc, methodName) => {
+      const body = this.reflect.get<CompodocBodyProps | undefined>(COMPO_DOC_BODY, instance[methodName]);
+      const response = this.reflect.get<CompodocResponseProps | undefined>(COMPO_DOC_RESPONSE, instance[methodName]);
+      const operation = this.reflect.get<CompodocOperationProps | undefined>(COMPO_DOC_OPERATION, instance[methodName]);
+
+      if (!body && !response && !operation) return acc;
+      const item: CompodocItem = {
+        title: methodName,
+        description: operation?.description,
+        body: body ? this.getCompodocFieldValue(this.getProperties(body.type as Type<unknown>)) : [],
+        response: response ? this.getCompodocFieldValue(this.getProperties(response.type as Type<unknown>)) : [],
+      };
+
+      acc.push(item);
+      return acc;
+    }, []);
+  }
+
+  getProperties(type: Type<unknown>): CompodocProperty[] {
+    return this.reflect.get<CompodocProperty[]>(COMPO_DOC_PROPERTIES, type.prototype);
+  }
+
+  getCompodocFieldValue(items: CompodocProperty[]): CompodocFieldValue[] {
+    return items.map<CompodocFieldValue>((item) => {
+      if (typeof item.type === 'string') {
+        return {
+          name: item.name,
+          type: item.type,
+          description: item.description,
+          nullable: item.nullable,
+        };
+      } else {
+        return {
+          name: item.name,
+          type: item.type.toString(),
+          description: item.description,
+          nullable: item.nullable,
+        };
+      }
     });
   }
 }

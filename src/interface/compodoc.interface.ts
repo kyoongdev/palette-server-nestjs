@@ -1,11 +1,17 @@
 import { Type } from '@nestjs/common';
 
-export interface CompodocBody {
-  type?: Type<unknown> | Function | [Function] | string;
+import { ApiProperty } from '@/utils/swagger/property-type';
+
+export interface CompodocBodyProps {
+  type: Type<unknown> | Function | [Function] | string;
 }
 
-export interface CompodocResponse {
-  type?: Type<unknown> | Function | [Function] | string;
+export interface CompodocResponseProps {
+  type: Type<unknown> | Function | [Function] | string;
+}
+
+export interface CompodocOperationProps {
+  description: string;
 }
 
 export interface CompodocFieldValue {
@@ -24,5 +30,9 @@ export interface CompodocItem {
 
 export interface CompodocMarkDown {
   title: string;
-  items: any[];
+  items: CompodocItem[];
+}
+
+export interface CompodocProperty extends ApiProperty {
+  name: string;
 }
