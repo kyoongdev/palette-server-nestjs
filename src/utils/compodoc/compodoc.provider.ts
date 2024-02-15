@@ -1,6 +1,8 @@
 import { Injectable, OnModuleInit, Type } from '@nestjs/common';
 import { DiscoveryService, MetadataScanner, Reflector } from '@nestjs/core';
 
+import { appendFile, unlink, writeFile } from 'fs';
+
 import {
   CompodocBodyProps,
   CompodocFieldValue,
@@ -32,6 +34,45 @@ export class CompodocProvider implements OnModuleInit {
         items: this.getCompodocItemsByMethods(instance, methodNames),
       });
     });
+    const markDown = this.makeMarkDown();
+    unlink('socket.md', (err) => {});
+
+    writeFile('socket.md', markDown, (err) => {
+      console.log(err);
+    });
+  }
+
+  makeMarkDown() {
+    return this.markDown.reduce<string>((acc, item) => {
+      acc += `# ${item.title}\n\n`;
+      acc +=
+        item.items.reduce<string>((acc, item) => {
+          acc += `## ${item.title}\n\n`;
+          acc += `### 설명\n${item.description ?? '-'}\n`;
+          acc += `### 요청\n\n`;
+          acc += item.body.reduce<string>((acc, item) => {
+            acc += `#### ${item.name}\n`;
+            acc += `##### Type: ${item.type}\n`;
+            acc += `##### 설명: ${item.description ?? '-'}\n`;
+            acc += `##### Nullable: ${item.nullable}\n\n`;
+            return acc;
+          }, ``);
+
+          acc += `\n\n### 응답\n\n`;
+
+          acc += item.response.reduce<string>((acc, item) => {
+            acc += `#### ${item.name}\n`;
+            acc += `##### Type: ${item.type}\n`;
+            acc += `##### 설명: ${item.description ?? '-'}\n`;
+            acc += `##### Nullable: ${item.nullable}\n\n`;
+            return acc;
+          }, ``);
+
+          return acc;
+        }, ``) + '---';
+
+      return acc;
+    }, ``);
   }
 
   getGateways() {
