@@ -8,10 +8,21 @@ import type { RedisChatRoom, RedisClient } from '@/interface/contact.interface';
 export class ChatRedisService {
   constructor(@InjectRedis() private readonly redis: Redis) {}
 
+  async init() {
+    await this.redis.set('clients', JSON.stringify([]));
+    await this.redis.set('rooms', JSON.stringify([]));
+  }
+
   async findClient(id: string): Promise<RedisClient | undefined> {
     const clients = await this.findAllClients();
+    console.log(clients);
+    return clients.find((client) => client.clientId === id);
+  }
 
-    return clients.find((client) => client === id);
+  async findClientByUserId(userId: string): Promise<RedisClient | undefined> {
+    const clients = await this.findAllClients();
+
+    return clients.find((client) => client.userId === userId);
   }
 
   async findAllClients(): Promise<RedisClient[]> {
@@ -24,25 +35,28 @@ export class ChatRedisService {
     return JSON.parse(clients) as RedisClient[];
   }
 
-  async createClient(id: string) {
+  async createClient(clientId: string, userId: string) {
     const clients = await this.findAllClients();
 
-    if (clients.includes(id)) {
+    if (clients.map((client) => client.clientId).includes(clientId)) {
       return;
     }
 
-    clients.push(id);
+    clients.push({
+      userId,
+      clientId,
+    });
     await this.redis.set('clients', JSON.stringify(clients));
   }
 
   async deleteClient(id: string) {
     const clients = await this.findAllClients();
 
-    if (!clients.includes(id)) {
+    if (!clients.map((client) => client.clientId).includes(id)) {
       return;
     }
 
-    await this.redis.set('clients', JSON.stringify(clients.filter((client) => client !== id)));
+    await this.redis.set('clients', JSON.stringify(clients.filter((client) => client.clientId !== id)));
   }
 
   async findAllRooms(): Promise<RedisChatRoom[]> {
@@ -76,7 +90,7 @@ export class ChatRedisService {
     }
     const newRoom: RedisChatRoom = {
       roomId,
-      users: [userId, opponentId],
+      users: [user, opponent],
     };
 
     await this.redis.set('rooms', JSON.stringify([...(await this.findAllRooms()), newRoom]));

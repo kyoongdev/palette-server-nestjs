@@ -4,7 +4,10 @@ export interface FindContact {
   order: number;
 }
 
-export type RedisClient = string;
+export interface RedisClient {
+  userId: string;
+  clientId: string;
+}
 export interface RedisChatRoom {
   roomId: string;
   users: RedisClient[];

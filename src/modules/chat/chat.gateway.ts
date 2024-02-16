@@ -28,7 +28,7 @@ import { UserService } from '../user/user.service';
 
 import { ChatRedisService } from './chat.redis';
 import { ChatService } from './chat.service';
-import { JoinRoomDTO, SendMessageDTO } from './dto';
+import { JoinRoomDTO, ReceiveMessageDTO, SendMessageDTO } from './dto';
 import { JoinedRoomDTO } from './dto/joined-room.dto';
 
 @UseFilters(SocketExceptionFilter)
@@ -41,19 +41,25 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
   constructor(
     private readonly redisService: ChatRedisService,
-    private readonly chatService: ChatService
+    private readonly chatService: ChatService,
+    private readonly wsAuthGuard: WsAuthGuard
   ) {}
 
-  afterInit(client: Socket) {
+  afterInit() {
+    this.redisService.init();
     console.log('SOCKET ON!!');
   }
 
-  @UseGuards(WsAuthGuard, WsRoleGuard('USER'))
-  async handleConnection(client: Socket, ...args: any[]) {
-    await this.redisService.createClient(client.id);
+  async handleConnection(client: Socket) {
+    try {
+      const { isExist } = await this.wsAuthGuard.getUser(client.handshake.headers.authorization);
+
+      await this.redisService.createClient(client.id, isExist.id);
+    } catch (err) {
+      client.emit('error', err);
+    }
   }
 
-  @UseGuards(WsAuthGuard, WsRoleGuard('USER'))
   async handleDisconnect(client: Socket) {
     await this.redisService.deleteClient(client.id);
   }
@@ -82,7 +88,24 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @UseGuards(WsAuthGuard, WsRoleGuard('USER'))
   @CompodocBody({ type: SendMessageDTO })
   @SocketPrisma()
-  async sendMessage(@WsReqUser() user: RequestUser, @MessageBody() body: SendMessageDTO) {
-    // this.server.sockets..to(this.clients[0]).emit('chatToClient', payload);
+  async sendMessage(
+    @ConnectedSocket() client: Socket,
+    @WsReqUser() user: RequestUser,
+    @MessageBody() body: SendMessageDTO
+  ) {
+    const opponent = await this.redisService.findClientByUserId(body.opponentId);
+
+    await this.chatService.createMessage(user.id, body);
+
+    if (opponent) {
+      client.to(opponent.clientId).emit(
+        'receiveMessage',
+        new ReceiveMessageDTO({
+          senderId: user.id,
+          content: body.content,
+          createdAt: new Date(),
+        })
+      );
+    }
   }
 }

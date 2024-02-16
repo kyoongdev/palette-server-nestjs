@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 
 import { CustomException } from '@/common/error/custom.exception';
 import { SocketException } from '@/common/error/socket.exception';
+import { Transactional } from '@/utils/aop/transaction/transaction';
 import { PaginationDTO, PagingDTO } from '@/utils/pagination';
 
 import { UserRepository } from '../user/user.repository';
 
 import { ChatRepository } from './chat.repository';
-import { ChatRoomDTO, JoinRoomDTO } from './dto';
+import { ChatRoomDTO, JoinRoomDTO, SendMessageDTO } from './dto';
 import { JoinedRoomDTO } from './dto/joined-room.dto';
 import { CHAT_ERROR_CODE, SOCKET_ERROR_CODE } from './exception/error-code';
 
@@ -17,6 +18,16 @@ export class ChatService {
     private readonly chatRepository: ChatRepository,
     private readonly userRepository: UserRepository
   ) {}
+
+  async findUser(id: string) {
+    try {
+      const user = await this.userRepository.findUser(id);
+
+      return user;
+    } catch (err) {
+      throw new SocketException(err);
+    }
+  }
 
   async findChatRooms(userId: string, paging: PagingDTO) {
     const { skip, take } = paging.getSkipTake();
@@ -69,9 +80,10 @@ export class ChatService {
     return new PaginationDTO(chatMessages, { count, paging });
   }
 
+  @Transactional()
   async joinRoom(userId: string, data: JoinRoomDTO) {
     if (data.opponentId) {
-      await this.userRepository.findUser(data.opponentId);
+      await this.findUser(data.opponentId);
 
       const isExist = await this.chatRepository.checkChatRoomByUserAndOpponentId(userId, data.opponentId);
 
@@ -113,6 +125,7 @@ export class ChatService {
     }
   }
 
+  @Transactional()
   async deleteRoom(userId: string, roomId: string) {
     const room = await this.chatRepository.findChatRoom(roomId);
 
@@ -122,5 +135,29 @@ export class ChatService {
     }
 
     await this.chatRepository.deleteChatRoom(roomId);
+  }
+
+  @Transactional()
+  async createMessage(userId: string, data: SendMessageDTO) {
+    await this.findUser(data.opponentId);
+    const room = await this.chatRepository.findChatRoom(data.roomId);
+
+    const isMyRoom = room.userChatRooms.find((userChatRoom) => userChatRoom.userId === userId);
+    if (!isMyRoom) {
+      throw new CustomException(SOCKET_ERROR_CODE.NOT_MY_ROOM);
+    }
+    await this.chatRepository.createChatMessage({
+      content: data.content,
+      chatRoom: {
+        connect: {
+          id: data.roomId,
+        },
+      },
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    });
   }
 }

@@ -4,3 +4,4 @@ export * from './create-chat-message.dto';
 export * from './join-room.dto';
 export * from './join-room.dto';
 export * from './send-message.dto';
+export * from './receive-message.dto';

@@ -17,9 +17,16 @@ export class WsAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const client = context.switchToWs().getClient();
+    const { isExist, role } = await this.getUser(client.handshake.headers.authorization);
+    client.user = {
+      id: isExist.id,
+      role,
+    };
 
-    const authorization = client.handshake.headers.authorization;
+    return true;
+  }
 
+  async getUser(authorization: string) {
     if (!authorization) {
       throw new SocketException({
         message: 'TOKEN_EMPTY',
@@ -93,11 +100,6 @@ export class WsAuthGuard implements CanActivate {
       });
     }
 
-    client.user = {
-      id: decoded.id,
-      role: decoded.role,
-    };
-
-    return true;
+    return { isExist, role };
   }
 }
