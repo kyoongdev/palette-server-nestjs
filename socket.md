@@ -11,8 +11,8 @@
 
 | Name | 타입 | Nullable | 설명 |
 | --- | --- | --- | --- |
-| userId | string | true | - |
-| roomId | string | true | - |
+| opponentId | string | true | 채팅방이 없을 경우 상대방 user id |
+| roomId | string | true | 채팅방이 있을 경우 채팅방 id |
 
 
 ### 응답
@@ -20,6 +20,6 @@
 
 | Name | 타입 | Nullable | 설명 |
 | --- | --- | --- | --- |
-| userId | string | true | - |
-| roomId | string | true | - |
+| opponentId | string | true | 채팅방이 없을 경우 상대방 user id |
+| roomId | string | true | 채팅방이 있을 경우 채팅방 id |
 ---

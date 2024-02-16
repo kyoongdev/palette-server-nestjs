@@ -19,13 +19,19 @@ export const CHAT_ERROR_CODE: ErrorCode<typeof CHAT_ERROR> = {
 };
 
 export const SOCKET_ERROR = {
-  TEST: 'test error',
+  JOIN_ROOM_BODY: '채팅방 입장 요청이 잘못되었습니다.',
+  NOT_MY_ROOM: '내 채팅방이 아닙니다.',
 };
 
 export const SOCKET_ERROR_CODE: SocketErrorCode<typeof SOCKET_ERROR> = {
-  TEST: {
+  JOIN_ROOM_BODY: {
+    code: HttpStatus.BAD_REQUEST,
+    message: SOCKET_ERROR.JOIN_ROOM_BODY,
+    path: 'join',
+  },
+  NOT_MY_ROOM: {
     code: HttpStatus.FORBIDDEN,
-    message: SOCKET_ERROR.TEST,
-    path: 'test',
+    message: SOCKET_ERROR.NOT_MY_ROOM,
+    path: 'join',
   },
 };

@@ -23,7 +23,7 @@ export class JwtProvider {
 
       return jwt.sign(value, this.configService.get<string>('JWT_KEY') as string, options ?? {});
     } catch (error) {
-      return new JsonWebTokenError('sign Failed');
+      throw new JsonWebTokenError('sign Failed');
     }
   }
 
@@ -31,7 +31,7 @@ export class JwtProvider {
     try {
       return jwt.verify(token, this.configService.get<string>('JWT_KEY') as string, options ?? {}) as T;
     } catch (error) {
-      return new JsonWebTokenError('sign Failed');
+      throw new JsonWebTokenError('sign Failed');
     }
   }
 
