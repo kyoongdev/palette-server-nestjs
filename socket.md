@@ -21,4 +21,23 @@
 | Name | 타입 | Nullable | 설명 |
 | --- | --- | --- | --- |
 | roomId | string | true | 채팅방 id |
+## sendMessage
+
+### 설명
+-
+### 요청
+
+
+| Name | 타입 | Nullable | 설명 |
+| --- | --- | --- | --- |
+| content | string | undefined | 메세지 내용 |
+| roomId | string | undefined | 채팅방 id |
+| opponentId | string | undefined | 상대방 id |
+
+
+### 응답
+
+
+| Name | 타입 | Nullable | 설명 |
+| --- | --- | --- | --- |
 ---

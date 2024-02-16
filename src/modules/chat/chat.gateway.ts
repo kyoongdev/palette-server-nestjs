@@ -28,7 +28,7 @@ import { UserService } from '../user/user.service';
 
 import { ChatRedisService } from './chat.redis';
 import { ChatService } from './chat.service';
-import { JoinRoomDTO } from './dto';
+import { JoinRoomDTO, SendMessageDTO } from './dto';
 import { JoinedRoomDTO } from './dto/joined-room.dto';
 
 @UseFilters(SocketExceptionFilter)
@@ -79,8 +79,10 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async deleteRoom() {}
 
   @SubscribeMessage('sendMessage')
+  @UseGuards(WsAuthGuard, WsRoleGuard('USER'))
+  @CompodocBody({ type: SendMessageDTO })
   @SocketPrisma()
-  async sendMessage(@MessageBody() payload: any) {
+  async sendMessage(@WsReqUser() user: RequestUser, @MessageBody() body: SendMessageDTO) {
     // this.server.sockets..to(this.clients[0]).emit('chatToClient', payload);
   }
 }
