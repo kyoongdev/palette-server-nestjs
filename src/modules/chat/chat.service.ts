@@ -105,4 +105,15 @@ export class ChatService {
       throw new SocketException(SOCKET_ERROR_CODE.JOIN_ROOM_BODY);
     }
   }
+
+  async deleteRoom(userId: string, roomId: string) {
+    const room = await this.chatRepository.findChatRoom(roomId);
+
+    const isMyRoom = room.userChatRooms.find((userChatRoom) => userChatRoom.userId === userId);
+    if (!isMyRoom) {
+      throw new CustomException(SOCKET_ERROR_CODE.NOT_MY_ROOM);
+    }
+
+    await this.chatRepository.deleteChatRoom(roomId);
+  }
 }

@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 
+import { ClsModule } from 'nestjs-cls';
+
 import { AOPModule } from '@/utils/aop/aop.module';
 import { CompodocModule } from '@/utils/compodoc/compodoc.module';
 

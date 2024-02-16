@@ -1,5 +1,3 @@
-import { ConfigService } from '@nestjs/config';
-
 import { ClsService } from 'nestjs-cls';
 
 import { PrismaService } from '@/database/prisma.service';

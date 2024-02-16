@@ -12,6 +12,8 @@ export class PrismaDatabase {
   constructor(private readonly cls: ClsService) {}
 
   getRepository() {
+    console.log('repository', this.cls, typeof this.cls.get(PRISMA_CLS_KEY));
+
     return this.cls.get(PRISMA_CLS_KEY) as PrismaService | TransactionPrisma;
   }
 }

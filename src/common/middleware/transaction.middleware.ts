@@ -14,6 +14,7 @@ export class TransactionMiddleware implements NestMiddleware {
   ) {}
   use(_req: Request, _res: Response, next: (error?: any) => void) {
     this.cls.run(() => {
+      console.log('middleware');
       this.cls.set(PRISMA_CLS_KEY, this.database);
       next();
     });

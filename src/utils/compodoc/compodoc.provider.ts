@@ -36,9 +36,7 @@ export class CompodocProvider implements OnModuleInit {
     });
     const markDown = this.makeMarkDown();
 
-    writeFile('socket.md', markDown, (err) => {
-      console.log(err);
-    });
+    writeFile('socket.md', markDown, (err) => {});
   }
 
   makeMarkDown() {

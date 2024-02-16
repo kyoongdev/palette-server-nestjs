@@ -1,8 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 
 import { JsonWebTokenError } from 'jsonwebtoken';
-import { Observable } from 'rxjs';
-import { Socket } from 'socket.io';
 
 import { PrismaService } from '@/database/prisma.service';
 import { RequestAdmin, RequestMusician, ReqUserType, RoleType, TokenPayload } from '@/interface/token.interface';
@@ -21,7 +19,6 @@ export class WsAuthGuard implements CanActivate {
     const client = context.switchToWs().getClient();
 
     const authorization = client.handshake.headers.authorization;
-    console.log({ authorization });
 
     if (!authorization) {
       throw new SocketException({

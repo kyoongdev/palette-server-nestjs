@@ -7,7 +7,6 @@ import { PrismaDatabase } from '@/database/prisma.repository';
 import { FindCommonUser } from '@/interface/user.interface';
 import { checkUserBySocialIdInclude, commonUserInclude } from '@/utils/constants/include/user';
 
-import { CommonUserDTO, CreateUserDTO, UpdateUserDTO, UserDTO } from './dto';
 import { CreateSocialUserDTO } from './dto/create-social-user.dto';
 import { USER_ERROR_CODE } from './exception/error-code';
 

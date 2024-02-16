@@ -1,5 +1,6 @@
 import { UseFilters, UseGuards, UsePipes } from '@nestjs/common';
 import {
+  ConnectedSocket,
   MessageBody,
   type OnGatewayConnection,
   type OnGatewayDisconnect,
@@ -9,6 +10,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 
+import { ClsService } from 'nestjs-cls';
 import { Socket, Server as SocketIo } from 'socket.io';
 
 import { WsReqUser } from '@/common/decorator/ws-user.decorator';
@@ -16,6 +18,10 @@ import { WSValidationPipe } from '@/common/error/socket.pipe';
 import { SocketExceptionFilter } from '@/common/filter/socket-error.filter';
 import { WsRoleGuard } from '@/common/guards/ws-role.guard';
 import { WsAuthGuard } from '@/common/guards/ws.guard';
+import { PrismaService } from '@/database/prisma.service';
+import { RequestUser } from '@/interface/token.interface';
+import { SocketPrisma, SocketPrismaDecorator } from '@/utils/aop/socket/prisma';
+import { PRISMA_CLS_KEY } from '@/utils/aop/transaction/transaction';
 import { ApplyCompodoc, CompodocBody, CompodocOperation, CompodocResponse } from '@/utils/compodoc/decorators';
 
 import { UserService } from '../user/user.service';
@@ -23,6 +29,7 @@ import { UserService } from '../user/user.service';
 import { ChatRedisService } from './chat.redis';
 import { ChatService } from './chat.service';
 import { JoinRoomDTO } from './dto';
+import { JoinedRoomDTO } from './dto/joined-room.dto';
 
 @UseFilters(SocketExceptionFilter)
 @UsePipes(WSValidationPipe)
@@ -37,7 +44,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     private readonly chatService: ChatService
   ) {}
 
-  afterInit() {
+  afterInit(client: Socket) {
     console.log('SOCKET ON!!');
   }
 
@@ -55,15 +62,24 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @UseGuards(WsAuthGuard, WsRoleGuard('USER'))
   @CompodocOperation({ description: '채팅방에 입장할 때 사용합니다.' })
   @CompodocBody({ type: JoinRoomDTO })
-  @CompodocResponse({ type: JoinRoomDTO })
-  async joinRoom(@WsReqUser() user: any, @MessageBody() body: JoinRoomDTO) {}
+  @CompodocResponse({ type: JoinedRoomDTO })
+  @SocketPrisma()
+  async joinRoom(@ConnectedSocket() client: Socket, @WsReqUser() user: RequestUser, @MessageBody() body: JoinRoomDTO) {
+    const room = await this.chatService.joinRoom(user.id, body);
+    return room.id;
+  }
+
+  @SubscribeMessage('leave')
+  @UseGuards(WsAuthGuard, WsRoleGuard('USER'))
+  @SocketPrisma()
+  async leaveRoom() {}
 
   @SubscribeMessage('deleteRoom')
+  @SocketPrisma()
   async deleteRoom() {}
 
   @SubscribeMessage('sendMessage')
   async sendMessage(@MessageBody() payload: any) {
-    console.log('TEST', { payload });
     // this.server.sockets..to(this.clients[0]).emit('chatToClient', payload);
   }
 }

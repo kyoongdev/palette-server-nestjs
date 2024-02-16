@@ -55,9 +55,36 @@ export class ChatRedisService {
     return JSON.parse(rooms) as RedisChatRoom[];
   }
 
-  async findRoom(id: string) {}
+  async findRoom(id: string) {
+    const rooms = await this.findAllRooms();
 
-  async createRoom() {}
+    return rooms.find((room) => room.roomId === id);
+  }
 
-  async deleteRoom() {}
+  async createRoom(roomId: string, userId: string, opponentId: string) {
+    const room = await this.findRoom(roomId);
+
+    if (room) {
+      return null;
+    }
+
+    const user = await this.findClient(userId);
+    const opponent = await this.findClient(opponentId);
+
+    if (!user || !opponent) {
+      return null;
+    }
+    const newRoom: RedisChatRoom = {
+      roomId,
+      users: [userId, opponentId],
+    };
+
+    await this.redis.set('rooms', JSON.stringify([...(await this.findAllRooms()), newRoom]));
+  }
+
+  async deleteRoom(roomId: string) {
+    const rooms = await this.findAllRooms();
+
+    await this.redis.set('rooms', JSON.stringify(rooms.filter((room) => room.roomId !== roomId)));
+  }
 }
