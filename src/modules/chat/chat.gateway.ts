@@ -66,7 +66,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   @SocketPrisma()
   async joinRoom(@ConnectedSocket() client: Socket, @WsReqUser() user: RequestUser, @MessageBody() body: JoinRoomDTO) {
     const room = await this.chatService.joinRoom(user.id, body);
-    return room.id;
+    client.emit('join', room);
   }
 
   @SubscribeMessage('leave')
@@ -79,6 +79,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
   async deleteRoom() {}
 
   @SubscribeMessage('sendMessage')
+  @SocketPrisma()
   async sendMessage(@MessageBody() payload: any) {
     // this.server.sockets..to(this.clients[0]).emit('chatToClient', payload);
   }

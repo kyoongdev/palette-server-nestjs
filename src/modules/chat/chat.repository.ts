@@ -27,6 +27,32 @@ export class ChatRepository {
     return chatRoom;
   }
 
+  async checkChatRoomByUserAndOpponentId(userId: string, opponentId: string) {
+    const chatRoom = this.database.getRepository().chatRoom.findFirst({
+      where: {
+        userChatRooms: {
+          some: {
+            AND: [
+              {
+                userId,
+              },
+              {
+                userId: opponentId,
+              },
+            ],
+          },
+        },
+      },
+      include: chatRoomInclude,
+    });
+
+    if (!chatRoom) {
+      return null;
+    }
+
+    return chatRoom;
+  }
+
   async findChatRooms(args = {} as Prisma.UserChatRoomFindManyArgs) {
     const { include, where, select, ...rest } = args;
     const chatRooms = this.database.getRepository().userChatRoom.findMany({

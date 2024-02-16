@@ -8,6 +8,7 @@ import { UserRepository } from '../user/user.repository';
 
 import { ChatRepository } from './chat.repository';
 import { ChatRoomDTO, JoinRoomDTO } from './dto';
+import { JoinedRoomDTO } from './dto/joined-room.dto';
 import { CHAT_ERROR_CODE, SOCKET_ERROR_CODE } from './exception/error-code';
 
 @Injectable()
@@ -72,6 +73,12 @@ export class ChatService {
     if (data.opponentId) {
       await this.userRepository.findUser(data.opponentId);
 
+      const isExist = await this.chatRepository.checkChatRoomByUserAndOpponentId(userId, data.opponentId);
+
+      if (isExist) {
+        return new JoinedRoomDTO({ roomId: isExist.id });
+      }
+
       const room = await this.chatRepository.createChatRoom({
         userChatRooms: {
           create: [
@@ -92,7 +99,7 @@ export class ChatService {
           ],
         },
       });
-      return room;
+      return new JoinedRoomDTO({ roomId: room.id });
     } else if (data.roomId) {
       const room = await this.chatRepository.findChatRoom(data.roomId);
 
@@ -100,7 +107,7 @@ export class ChatService {
       if (!isMyRoom) {
         throw new CustomException(SOCKET_ERROR_CODE.NOT_MY_ROOM);
       }
-      return room;
+      return new JoinedRoomDTO({ roomId: room.id });
     } else {
       throw new SocketException(SOCKET_ERROR_CODE.JOIN_ROOM_BODY);
     }
