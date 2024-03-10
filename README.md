@@ -13,7 +13,9 @@
 ![palette-nestjs-erd](https://github.com/kyoongdev/roof-lupin-server/assets/68049802/c843b873-5438-42df-b3c8-83512a18a57d)
 
 ## Open AI
-배포가 진행되어있지 않아 사진으로 대체하도록 하겠습니다.
+배포가 진행되어있지 않아 사진으로 대체합니다.
+
+
 <img width="1587" alt="스크린샷 2024-03-10 오후 5 44 51" src="https://github.com/kyoongdev/roof-lupin-server/assets/68049802/03d971d3-48c7-4479-a7c4-56e6892cd21a">
 <img width="1487" alt="스크린샷 2024-03-10 오후 5 46 25" src="https://github.com/kyoongdev/roof-lupin-server/assets/68049802/38c11b23-393c-4a57-8251-b87c98d88ef0">
 <img width="1500" alt="스크린샷 2024-03-10 오후 5 46 20" src="https://github.com/kyoongdev/roof-lupin-server/assets/68049802/ab6b6dec-32fd-4893-b02f-874c34d9df51">
