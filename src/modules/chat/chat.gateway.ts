@@ -108,4 +108,27 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
       );
     }
   }
+
+  @SubscribeMessage('purchase')
+  @UseGuards(WsAuthGuard, WsRoleGuard('USER'))
+  @CompodocBody({ type: SendMessageDTO })
+  @SocketPrisma()
+  async sendMessage2(
+    @ConnectedSocket() client: Socket,
+    @WsReqUser() user: RequestUser,
+    @MessageBody() body: SendMessageDTO
+  ) {
+    const opponent = await this.redisService.findClientByUserId(body.opponentId);
+
+    if (opponent) {
+      client.to(opponent.clientId).emit(
+        'receiveMessage',
+        new ReceiveMessageDTO({
+          senderId: user.id,
+          content: body.content,
+          createdAt: new Date(),
+        })
+      );
+    }
+  }
 }
